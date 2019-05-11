@@ -141,18 +141,74 @@ for (i in 1:length(unique_concepts)){
 
 # Multi-Word Strings -----------------------------------------------------
 
-#looks like VB NN
-# maybe VB JJ NN
+multi_words <- data.frame(Word=character(),
+                        Feature=character(), 
+                        Frequency=numeric(), 
+                        stringsAsFactors=FALSE) 
+## Install dplyr
+#install.packages("dplyr")
 
-temp = treetag(c(lemmas$answer[i], "NULL"), 
-        ## Control the parameters of treetagger
-        treetagger="manual", format="obj",
-        TT.tknz=FALSE, lang="en",
-        TT.options=list(path="~/TreeTagger", preset="en"))
-View(temp@TT.res)
+library(dplyr)
 
+## Loop over each word
+for (i in 1:length(unique_concepts)){
 
-##process the lemma text
-##take out determiners, conjunctions, preps, comma, punctuation 
+  ## Create parts of speech for clustering together
+  temp_tag <- suppressWarnings(
+    suppressMessages(
+      treetag(c(lemmas$answer[lemmas$word  == unique_concepts[i]], "NULL"), 
+          ## Control the parameters of treetagger
+          treetagger="manual", format="obj",
+          TT.tknz=FALSE, lang="en",
+          TT.options=list(path="~/TreeTagger", preset="en"))))
+
+  ## Save only the data.frame, remove NULL
+  temp_tag <- temp_tag@TT.res[-nrow(temp_tag@TT.res) , ]
+  
+  ## Subset out information you don't need
+  temp_tag <- subset(temp_tag, 
+                     wclass != "comma" & wclass != "determiner" & 
+                       wclass != "preposition" & wclass != "modal" &
+                       wclass != "predeterminer" & wclass != "particle" &
+                       wclass != "to" & wclass != "punctuation" & 
+                       wclass != "fullstop" & wclass != "conjunction" & 
+                       wclass != "pronoun")
+
+  ## Create a temporary tibble 
+  temp_tag_tibble <- as_tibble(temp_tag)
+  ## Create part of speech and features combined
+  temp_tag_tibble <- mutate(temp_tag_tibble, 
+                            two_words = paste(token, lead(token), sep = "_"))
+  temp_tag_tibble <- mutate(temp_tag_tibble, 
+                            three_words = paste(token, lead(token), lead(token, n = 2L), sep = "_"))
+  temp_tag_tibble <- mutate(temp_tag_tibble, 
+                            two_words_pos = paste(wclass, lead(wclass), sep = "_"))
+  temp_tag_tibble <- mutate(temp_tag_tibble, 
+                            three_words_pos = paste(wclass, lead(wclass), lead(wclass, n = 2L), sep = "_"))
+
+  ## Find verb noun or verb adjective nouns to cluster on 
+  verb_nouns <- grep("\\bverb_noun", temp_tag_tibble$two_words_pos)
+  verb_adj_nouns <- grep("\\bverb_adjective_noun", temp_tag_tibble$three_words_pos)
+
+  ## Use combined and left over features
+  features_for_table <- c(temp_tag_tibble$two_words[verb_nouns], 
+                          temp_tag_tibble$three_words[verb_adj_nouns],
+                          temp_tag_tibble$token[-c(verb_nouns, verb_nouns+1, 
+                                                   verb_adj_nouns, verb_adj_nouns+1, verb_adj_nouns+2)])
+
+  ## Create a table of frequencies
+  word_table <- as.data.frame(table(features_for_table))
+  
+  ## Clean up the table
+  word_table$Word <- unique_concepts[i]
+  colnames(word_table) = c("Feature", "Frequency", "Word")
+  
+  multi_words <- rbind(multi_words, word_table[ , c(3, 1, 2)])
+
+}
+
+## Remove stop words
+multi_words <- subset(multi_words, 
+                      !(Feature %in% stopwords(language = "en", source = "snowball")))
 
 
