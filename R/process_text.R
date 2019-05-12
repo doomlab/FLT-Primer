@@ -212,3 +212,72 @@ multi_words <- subset(multi_words,
                       !(Feature %in% stopwords(language = "en", source = "snowball")))
 
 
+# Examine against previous work --------------------------------------------
+
+library(readxl)
+b_data <- read.csv("../data/final words 2017.csv", stringsAsFactors = F)
+
+## Reduce down only to overlap words
+b_data <- subset(b_data, cue %in% unique_concepts)
+b_data <- b_data[ , c("where", "cue", "feature", "translated",
+                      "frequency_feature", "frequency_translated") ]
+
+library(lsa)
+
+cosine_values <- data.frame(word=unique_concepts,
+                            raw_b=1:length(unique_concepts), 
+                            raw_m=1:length(unique_concepts),
+                            raw_v=1:length(unique_concepts),
+                            translated_b=1:length(unique_concepts), 
+                            translated_m=1:length(unique_concepts), 
+                            translated_v=1:length(unique_concepts), 
+                            stringsAsFactors=FALSE)
+
+for (i in 1:length(unique_concepts)){
+ 
+  temp_b <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "b", ]
+  temp_m <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "m", ] 
+  temp_v <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "v", ]
+  temp_bag <- bag_words[bag_words$Word == unique_concepts[i], ]
+  colnames(temp_bag)[2] = "feature"
+  
+  ## Based on unprocessed data 
+  temp_merge_b <- merge(temp_b, temp_bag, by = "feature", all = T)
+  temp_merge_m <- merge(temp_m, temp_bag, by = "feature", all = T)
+  temp_merge_v <- merge(temp_v, temp_bag, by = "feature", all = T)
+  
+  temp_merge_b[c("frequency_feature", "Frequency")][is.na(temp_merge_b[c("frequency_feature", "Frequency")])] <- 0
+  temp_merge_m[c("frequency_feature", "Frequency")][is.na(temp_merge_m[c("frequency_feature", "Frequency")])] <- 0
+  temp_merge_v[c("frequency_feature", "Frequency")][is.na(temp_merge_v[c("frequency_feature", "Frequency")])] <- 0
+  
+  cosine_values$raw_b[i] <- cosine(temp_merge_b$frequency_feature, temp_merge_b$Frequency)
+  cosine_values$raw_m[i] <- cosine(temp_merge_m$frequency_feature, temp_merge_m$Frequency)
+  cosine_values$raw_v[i] <- cosine(temp_merge_v$frequency_feature, temp_merge_v$Frequency)
+  
+  ## Based on processed data
+  colnames(temp_bag)[2] = "translated"
+  temp_merge_b <- merge(temp_b, temp_bag, by = "translated", all = T)
+  temp_merge_m <- merge(temp_m, temp_bag, by = "translated", all = T)
+  temp_merge_v <- merge(temp_v, temp_bag, by = "translated", all = T)
+  
+  temp_merge_b[c("frequency_translated", "Frequency")][is.na(temp_merge_b[c("frequency_translated", "Frequency")])] <- 0
+  temp_merge_m[c("frequency_translated", "Frequency")][is.na(temp_merge_m[c("frequency_translated", "Frequency")])] <- 0
+  temp_merge_v[c("frequency_translated", "Frequency")][is.na(temp_merge_v[c("frequency_translated", "Frequency")])] <- 0
+  
+  ### This process creates duplicates
+  temp_merge_b <- temp_merge_b[!duplicated(temp_merge_b$translated), ]
+  temp_merge_m <- temp_merge_m[!duplicated(temp_merge_m$translated), ]
+  temp_merge_v <- temp_merge_v[!duplicated(temp_merge_v$translated), ]
+  
+  cosine_values$translated_b[i] <- cosine(temp_merge_b$frequency_translated, temp_merge_b$Frequency)
+  cosine_values$translated_m[i] <- cosine(temp_merge_m$frequency_translated, temp_merge_m$Frequency)
+  cosine_values$translated_v[i] <- cosine(temp_merge_v$frequency_translated, temp_merge_v$Frequency)
+  
+  }
+
+cosine_values$raw_m[is.nan(cosine_values$raw_m)] <- NA
+cosine_values$raw_v[is.nan(cosine_values$raw_v)] <- NA
+cosine_values$translated_m[is.nan(cosine_values$translated_m)] <- NA
+cosine_values$translated_v[is.nan(cosine_values$translated_v)] <- NA
+
+apply(cosine_values[ , -1], 2, mean, na.rm = T)
