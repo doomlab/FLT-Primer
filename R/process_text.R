@@ -281,3 +281,49 @@ cosine_values$translated_m[is.nan(cosine_values$translated_m)] <- NA
 cosine_values$translated_v[is.nan(cosine_values$translated_v)] <- NA
 
 apply(cosine_values[ , -1], 2, mean, na.rm = T)
+
+
+# Comparison to MEN -------------------------------------------------------
+
+men_data <- read.table("../data/MEN_dataset_natural_form_full.txt",
+                       quote="\"", comment.char="", stringsAsFactors=FALSE)
+
+library(tidyr)
+bag_words_spread <- spread(bag_words, key = Word, value = Frequency, fill = 0)
+bag_words_cosine <- cosine(as.matrix(bag_words_spread[ , -1]))
+bag_words_cosine <- as_tibble(bag_words_cosine)
+bag_words_cosine$cue <- colnames(bag_words_cosine)
+bag_words_cosine <- gather(bag_words_cosine, key = target, 
+                           value = cosine, airplane:zebra)
+bag_words_cosine$key <- paste(bag_words_cosine$cue, bag_words_cosine$target, sep = " ")
+men_data$key <- paste(men_data$V1, men_data$V2)
+colnames(men_data) <- c("cue", "target", "rating", "key")
+  
+men_merge = merge(men_data, bag_words_cosine, by = "key")
+
+
+# Clustering --------------------------------------------------------------
+
+library(cluster)
+
+bag_words_dist <- dist(bag_words_spread[ , -1], method = "euclidean")
+bag_words_cluster <- hclust(bag_words_dist, method = "ward.D2")
+#plot(bag_words_cluster, hang = -1)
+
+sapply(2:34, #34 in wu_barsalou 
+       function(x) summary(
+         silhouette(cutree(bag_words_cluster, k = x),
+                    bag_words_dist))$avg.width #find the widths
+)
+
+#probaby 6ish clusters can go more defined
+bag_words_category <- as.data.frame(cutree(bag_words_cluster, k = 6))
+bag_words_category$feature <- bag_words_spread$Feature
+colnames(bag_words_category)[1] <- "category"
+bag_words_category$totals <- rowSums(bag_words_spread[ , -1])
+table(bag_words_category$category)
+hist(bag_words_category$totals[bag_words_category$category == 1], breaks = 40)
+tapply(bag_words_category$totals, bag_words_category$category, mean)
+tapply(bag_words_category$totals, bag_words_category$category, sd)
+tapply(bag_words_category$totals, bag_words_category$category, min)
+tapply(bag_words_category$totals, bag_words_category$category, max)
