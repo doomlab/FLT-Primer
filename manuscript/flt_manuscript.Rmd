@@ -97,7 +97,7 @@ This data was collected using the instructions provided by @Mcrae2005, however, 
 
 ## Spelling 
 
-Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018], which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each `answer` can be checked for misspellings across an entire column of answers, which is located in the `master` dataset. The default dictionary is American English, and the `hunspell` vignettes provide details on how to import your own dictionary for non-English languages.   
+Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018], which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each `answer` can be checked for misspellings across an entire column of answers, which is located in the `master` dataset. The default dictionary is American English, and the `hunspell` vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the `"en_GB"` would convert to British English spellings. 
 
 ```{r check_spelling, echo = T}
 ## Install the hunspell package if necessary
@@ -116,7 +116,7 @@ The result from the `hunspell()` function is a list object of spelling errors fo
 spelling_suggest <- lapply(spelling_errors, hunspell_suggest)
 ```
 
-For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[175]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[175]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[175]][2]`*. The suggestions are presented in most probable order, and using a few loops with the a substitute function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. 
+For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[175]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[175]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[175]][2]`*. The suggestions are presented in most probable order, and using a few loops with the a substitute function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms. 
 
 ```{r fix_errors, echo = T}
 ## Replace with most likely suggestion
@@ -137,10 +137,70 @@ for (i in 1:nrow(spell_checked)){
 }
 ```
 
+## Lemmatization
+
+The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the langauge, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. Several packages for *R* include customizable stemmers, notably the `hunspell`, `corpus` [@Perry2017], and `tm` [@Feinerer2018] packages. 
+
+Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` library in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple langauges. 
+
+```{r}
+# Lemmatization -----------------------------------------------------------
+
+lemmas <- spell_checked
+
+## Install the koRpus package
+#install.packages("koRpus")
+#install.packages("koRpus.lang.en")
+#install.packages("tokenizers")
+
+## You must load both packages separately
+library(koRpus)
+library(koRpus.lang.en)
+library(tokenizers)
+
+## Install TreeTagger 
+#https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/
+
+## Find all types for faster lookup
+all_answers <- paste0(lemmas$answer, collapse = " ")
+all_answers <- unlist(tokenize_words(all_answers))
+all_answers <- unique(all_answers)
+
+## This function has both suppressWarnings & suppressMessages
+## You should first view these to ensure proper processing
+temp_tag <- suppressWarnings(
+  suppressMessages(
+    ## Note: the NULL option is to control for the <unknown> that appears
+    ## to occur with the last word in each text
+    treetag(c(all_answers, "NULL"), 
+            ## Control the parameters of treetagger
+            treetagger="manual", format="obj",
+            TT.tknz=FALSE, lang="en",
+            TT.options=list(path="~/TreeTagger", preset="en"))))
+
+## Remove all tags not using
+replacement_lemmas <- temp_tag@TT.res
+replacement_lemmas <- subset(replacement_lemmas, 
+                             #unknown values
+                             lemma != "<unknown>" & 
+                             #numbers
+                             lemma!= "@card@" & 
+                             #token should change more than case
+                             token != tolower(lemma)) 
+
+## Install the stringi package
+#install.packages("stringi")
+
+## Replace all the original tokens with new lemmas
+lemmas$answer <- stri_replace_all_regex(lemmas$answer, 
+                       pattern = paste("\\b", replacement_lemmas$token, "\\b", sep = ""),
+                       replacement = replacement_lemmas$lemma,
+                       F, list(case_insensitive = TRUE))
+```
+
 
 a.	stemming, spelling, normalization
-i.	exceptions dictionary 
-ii.	bing spell checker service
+
 b.	Weighting 
 c.	feature type ontologies
 d.	identify cut off for idiosyncratic features (should it be necessary?) 
