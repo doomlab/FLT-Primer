@@ -91,7 +91,7 @@ head(master)
 
 The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @Mcrae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer. 
 
-`r kable(head(master), "latex", booktabs = T) %>% kable_styling(full_width = F) %>% column_spec(2, width = "30em")`
+`r kable(head(master), "latex", booktabs = T, row.names = F) %>% kable_styling(full_width = F) %>% column_spec(2, width = "30em") %>%  kable_styling(position = "center")`
 
 This data was collected using the instructions provided by @Mcrae2005, however, in contrast to the suggestions for consistency detailed above [@Devereaux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced. 
 
@@ -103,7 +103,6 @@ Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018], 
 ## Install the hunspell package if necessary
 #install.packages("hunspell")
 library(hunspell)
-
 ## Check the participant answers
 ## The output is a list of spelling errors for each line
 spelling_errors <- hunspell(master$answer, dict = dictionary("en_US"))
@@ -116,12 +115,11 @@ The result from the `hunspell()` function is a list object of spelling errors fo
 spelling_suggest <- lapply(spelling_errors, hunspell_suggest)
 ```
 
-For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[175]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[175]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[175]][2]`*. The suggestions are presented in most probable order, and using a few loops with the a substitute function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms. 
+For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[175]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[175]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[175]][2]`*. The suggestions are presented in most probable order, and using a few loops with the substitute (`gsub`) function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms. 
 
 ```{r fix_errors, echo = T}
 ## Replace with most likely suggestion
 spell_checked <- master
-
 ### Loop over the data.frame
 for (i in 1:nrow(spell_checked)){
   ### See if there are spelling errors
@@ -141,31 +139,26 @@ for (i in 1:nrow(spell_checked)){
 
 The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the langauge, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. Several packages for *R* include customizable stemmers, notably the `hunspell`, `corpus` [@Perry2017], and `tm` [@Feinerer2018] packages. 
 
-Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` library in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple langauges. 
+Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` package in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple langauges. The koRpus package includes functionality to use TreeTagger in *R*. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation. 
 
-```{r}
-# Lemmatization -----------------------------------------------------------
-
+```{r lemma, echo = T}
 lemmas <- spell_checked
-
 ## Install the koRpus package
 #install.packages("koRpus")
 #install.packages("koRpus.lang.en")
-#install.packages("tokenizers")
-
 ## You must load both packages separately
 library(koRpus)
 library(koRpus.lang.en)
-library(tokenizers)
-
 ## Install TreeTagger 
 #https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/
-
 ## Find all types for faster lookup
-all_answers <- paste0(lemmas$answer, collapse = " ")
-all_answers <- unlist(tokenize_words(all_answers))
+all_answers <- tokenize(lemmas$answer, format = "obj", tag = F)
 all_answers <- unique(all_answers)
+```
 
+The `treetag()` function calls the installation of TreeTagger to provide part of speech tags and lemmas for each token. Importantly, the `path` option should be the directory of the TreeTagger installation. 
+
+```{r lemma_treetag, echo = T}
 ## This function has both suppressWarnings & suppressMessages
 ## You should first view these to ensure proper processing
 temp_tag <- suppressWarnings(
@@ -177,29 +170,43 @@ temp_tag <- suppressWarnings(
             treetagger="manual", format="obj",
             TT.tknz=FALSE, lang="en",
             TT.options=list(path="~/TreeTagger", preset="en"))))
+```
 
+This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subseting out these from the dataset. 
+
+```{r lemma_remove, echo = T}
 ## Remove all tags not using
 replacement_lemmas <- temp_tag@TT.res
 replacement_lemmas <- subset(replacement_lemmas, 
+                             #ignore punctuation
+                             wclass != "punctuation" &
                              #unknown values
                              lemma != "<unknown>" & 
                              #numbers
                              lemma!= "@card@" & 
                              #token should change more than case
-                             token != tolower(lemma)) 
-
-## Install the stringi package
-#install.packages("stringi")
-
-## Replace all the original tokens with new lemmas
-lemmas$answer <- stri_replace_all_regex(lemmas$answer, 
-                       pattern = paste("\\b", replacement_lemmas$token, "\\b", sep = ""),
-                       replacement = replacement_lemmas$lemma,
-                       F, list(case_insensitive = TRUE))
+                             tolower(token) != tolower(lemma)) 
 ```
 
+`r kable(head(replacement_lemmas[ , 2:6]), "latex", booktabs = T, row.names = F) %>% kable_styling(position = "center")`
 
-a.	stemming, spelling, normalization
+From this dataset, you can use the `stringi` package [@Gagolewski2019] to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions. 
+
+```{r}
+## Install the stringi package
+#install.packages("stringi")
+library(stringi)
+## Replace all the original tokens with new lemmas
+lemmas$answer <- stri_replace_all_regex(str = lemmas$answer, 
+                       pattern = paste("\\b", replacement_lemmas$token, "\\b", sep = ""),
+                       replacement = replacement_lemmas$lemma,
+                       vectorize_all = F, list(case_insensitive = TRUE))
+```
+
+`r kable(head(lemmas), "latex", booktabs = T, row.names = F) %>% kable_styling(full_width = F) %>% column_spec(2, width = "30em") %>%  kable_styling(position = "center")`
+
+
+
 
 b.	Weighting 
 c.	feature type ontologies

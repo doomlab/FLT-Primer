@@ -215,6 +215,7 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
 The data for this tutorial includes 9553 unique concept-feature responses for 104 concepts from ({\textbf{???}}) that were included in ({\textbf{???}}), ({\textbf{???}}), and ({\textbf{???}}). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable ({\textbf{???}}). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer.
 
 \begin{table}[H]
+\centering\begin{table}[H]
 \centering
 \begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
 \toprule
@@ -230,20 +231,20 @@ airplane & wings  body  flies  travel\\
 \bottomrule
 \end{tabular}
 \end{table}
+\end{table}
 
 This data was collected using the instructions provided by ({\textbf{???}}), however, in contrast to the suggestions for consistency detailed above ({\textbf{???}}), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
 
 \hypertarget{spelling}{%
 \subsection{Spelling}\label{spelling}}
 
-Spell checking can be automated with the \texttt{hunspell} package in \emph{R} ({\textbf{???}}), which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages.
+Spell checking can be automated with the \texttt{hunspell} package in \emph{R} ({\textbf{???}}), which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{## Install the hunspell package if necessary}
 \CommentTok{#install.packages("hunspell")}
 \KeywordTok{library}\NormalTok{(hunspell)}
-
 \CommentTok{## Check the participant answers}
 \CommentTok{## The output is a list of spelling errors for each line}
 \NormalTok{spelling_errors <-}\StringTok{ }\KeywordTok{hunspell}\NormalTok{(master}\OperatorTok{$}\NormalTok{answer, }\DataTypeTok{dict =} \KeywordTok{dictionary}\NormalTok{(}\StringTok{"en_US"}\NormalTok{))}
@@ -259,13 +260,12 @@ The result from the \texttt{hunspell()} function is a list object of spelling er
 \end{Highlighting}
 \end{Shaded}
 
-For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the a substitute function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}.
+For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{## Replace with most likely suggestion}
 \NormalTok{spell_checked <-}\StringTok{ }\NormalTok{master}
-
 \CommentTok{### Loop over the data.frame}
 \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(spell_checked))\{}
   \CommentTok{### See if there are spelling errors}
@@ -282,22 +282,103 @@ For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel car
 \end{Highlighting}
 \end{Shaded}
 
-\begin{enumerate}
-\def\labelenumi{\alph{enumi}.}
-\tightlist
-\item
-  stemming, spelling, normalization
-\item
-  exceptions dictionary
-\end{enumerate}
+\hypertarget{lemmatization}{%
+\subsection{Lemmatization}\label{lemmatization}}
 
-\begin{enumerate}
-\def\labelenumi{\roman{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  bing spell checker service
-\end{enumerate}
+The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, \emph{am, are, is}) to convert into a common lemma (i.e., \emph{be}) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as \emph{ing} or \emph{s}. The stem or root word may not reflect an actual word in the langauge, as simply removing an affix does not necessarily produce the lemma. For example, in response to \emph{airplane}, \emph{flying} can be easily converted to \emph{fly} by removing the \emph{ing} inflection. However, this same heuristic converts the feature \emph{wings} into \emph{w} after removing both the \emph{s} for a plural marker and the \emph{ing} participle marker. Several packages for \emph{R} include customizable stemmers, notably the \texttt{hunspell}, \texttt{corpus} ({\textbf{???}}), and \texttt{tm} ({\textbf{???}}) packages.
+
+Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing \texttt{TreeTagger} ({\textbf{???}}) and the \texttt{koRpus} package in \emph{R} ({\textbf{???}}). TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple langauges. The koRpus package includes functionality to use TreeTagger in \emph{R}. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lemmas <-}\StringTok{ }\NormalTok{spell_checked}
+\CommentTok{## Install the koRpus package}
+\CommentTok{#install.packages("koRpus")}
+\CommentTok{#install.packages("koRpus.lang.en")}
+\CommentTok{## You must load both packages separately}
+\KeywordTok{library}\NormalTok{(koRpus)}
+\KeywordTok{library}\NormalTok{(koRpus.lang.en)}
+\CommentTok{## Install TreeTagger }
+\CommentTok{#https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/}
+\CommentTok{## Find all types for faster lookup}
+\NormalTok{all_answers <-}\StringTok{ }\KeywordTok{tokenize}\NormalTok{(lemmas}\OperatorTok{$}\NormalTok{answer, }\DataTypeTok{format =} \StringTok{"obj"}\NormalTok{, }\DataTypeTok{tag =}\NormalTok{ F)}
+\NormalTok{all_answers <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(all_answers)}
+\end{Highlighting}
+\end{Shaded}
+
+The \texttt{treetag()} function calls the installation of TreeTagger to provide part of speech tags and lemmas for each token. Importantly, the \texttt{path} option should be the directory of the TreeTagger installation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## This function has both suppressWarnings & suppressMessages}
+\CommentTok{## You should first view these to ensure proper processing}
+\NormalTok{temp_tag <-}\StringTok{ }\KeywordTok{suppressWarnings}\NormalTok{(}
+  \KeywordTok{suppressMessages}\NormalTok{(}
+    \CommentTok{## Note: the NULL option is to control for the <unknown> that appears}
+    \CommentTok{## to occur with the last word in each text}
+    \KeywordTok{treetag}\NormalTok{(}\KeywordTok{c}\NormalTok{(all_answers, }\StringTok{"NULL"}\NormalTok{), }
+            \CommentTok{## Control the parameters of treetagger}
+            \DataTypeTok{treetagger=}\StringTok{"manual"}\NormalTok{, }\DataTypeTok{format=}\StringTok{"obj"}\NormalTok{,}
+            \DataTypeTok{TT.tknz=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{lang=}\StringTok{"en"}\NormalTok{,}
+            \DataTypeTok{TT.options=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{path=}\StringTok{"~/TreeTagger"}\NormalTok{, }\DataTypeTok{preset=}\StringTok{"en"}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subseting out these from the dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## Remove all tags not using}
+\NormalTok{replacement_lemmas <-}\StringTok{ }\NormalTok{temp_tag}\OperatorTok{@}\NormalTok{TT.res}
+\NormalTok{replacement_lemmas <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(replacement_lemmas, }
+                             \CommentTok{#ignore punctuation}
+\NormalTok{                             wclass }\OperatorTok{!=}\StringTok{ "punctuation"} \OperatorTok{&}
+\StringTok{                             }\CommentTok{#unknown values}
+\StringTok{                             }\NormalTok{lemma }\OperatorTok{!=}\StringTok{ "<unknown>"} \OperatorTok{&}\StringTok{ }
+\StringTok{                             }\CommentTok{#numbers}
+\StringTok{                             }\NormalTok{lemma}\OperatorTok{!=}\StringTok{ "@card@"} \OperatorTok{&}\StringTok{ }
+\StringTok{                             }\CommentTok{#token should change more than case}
+\StringTok{                             }\KeywordTok{tolower}\NormalTok{(token) }\OperatorTok{!=}\StringTok{ }\KeywordTok{tolower}\NormalTok{(lemma)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lllrl}
+\toprule
+token & tag & lemma & lttr & wclass\\
+\midrule
+is & VBZ & be & 2 & verb\\
+are & VBP & be & 3 & verb\\
+trained & VBN & train & 7 & verb\\
+lots & NNS & lot & 4 & noun\\
+seats & NNS & seat & 5 & noun\\
+\addlinespace
+wings & NNS & wing & 5 & noun\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+From this dataset, you can use the \texttt{stringi} package {[}{]} to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions.
+
+\begin{table}[H]
+\centering\begin{table}[H]
+\centering
+\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
+\toprule
+word & answer\\
+\midrule
+airplane & you fly in it  its big  it be fast  they be expensive  they be at an airport  you have to be train to fly it  there be lot of seat  they get very high up\\
+airplane & wing engine pilot cockpit tail\\
+airplane & wing  it fly  modern technology  have passenger  require a pilot  can be dangerous  run on gas  use for travel\\
+airplane & wing  fly  pilot  cockpit  use gas  fast travel\\
+airplane & wing  engine  passenger  pilot(s)  vary in size and color\\
+\addlinespace
+airplane & wing  body  fly  travel\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{table}
 
 \begin{enumerate}
 \def\labelenumi{\alph{enumi}.}

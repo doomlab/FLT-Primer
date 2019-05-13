@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  13 MAY 2019 11:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  13 MAY 2019 15:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1203,34 +1203,38 @@ LaTeX Font Info:    Try loading font information for T1+lmtt on input line 215.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 3250) has occurred while \output is active []
 
 [4]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 245.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 247.
 
 Underfull \vbox (badness 1616) has occurred while \output is active []
 
-[5]
-Underfull \vbox (badness 3965) has occurred while \output is active []
+[5] [6] [7]
+Underfull \vbox (badness 10000) detected at line 343
+ []
 
-[6] [7] AED endfloat: Processing end Figures and Tables [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 387.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 387.
+
+Underfull \vbox (badness 3895) has occurred while \output is active []
+
+[8] [9] [10] AED endfloat: Processing end Figures and Tables [11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 468.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 468.
 (./flt_manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 387.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 387.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 468.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 468.
 Package rerunfilecheck Info: File `flt_manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: C4F022AD1999B5EBC5A82D3CB1D7883B;922.
+(rerunfilecheck)             Checksum: 6078776D82FA0A146971514D2FEC0180;1043.
  ) 
 Here is how much of TeX's memory you used:
- 16207 strings out of 492995
- 239165 string characters out of 6132704
- 356898 words of memory out of 5000000
- 19394 multiletter control sequences out of 15000+600000
- 50788 words of font info for 73 fonts, out of 8000000 for 9000
+ 16223 strings out of 492995
+ 239361 string characters out of 6132704
+ 356938 words of memory out of 5000000
+ 19396 multiletter control sequences out of 15000+600000
+ 51152 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,11n,47p,1796b,481s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,12n,47p,1796b,483s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
 texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</usr/local/texlive/2017/
 texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2017/texmf-dist
@@ -1240,10 +1244,10 @@ lmri12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmss8.pfb>
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/loca
 l/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr/local/texlive/
 2017/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on flt_manuscript.pdf (8 pages, 188353 bytes).
+Output written on flt_manuscript.pdf (11 pages, 203547 bytes).
 PDF statistics:
- 140 PDF objects out of 1000 (max. 8388607)
- 120 compressed objects within 2 object streams
- 39 named destinations out of 1000 (max. 500000)
- 6193 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 159 PDF objects out of 1000 (max. 8388607)
+ 136 compressed objects within 2 object streams
+ 45 named destinations out of 1000 (max. 500000)
+ 6201 words of extra memory for PDF output out of 10000 (max. 10000000)
 
