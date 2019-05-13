@@ -1,0 +1,20 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[H]
+\centering
+\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
+\toprule
+word & answer\\
+\midrule
+airplane & you fly in it  its big  it is fast  they are expensive  they are at an airport  you have to be trained to fly it  there are lots of seats  they get very high up\\
+airplane & wings engine pilot cockpit tail\\
+airplane & wings  it flys  modern technology  has passengers  requires a pilot  can be dangerous  runs on gas  used for travel\\
+airplane & wings  flys  pilot  cockpit  uses gas  faster travel\\
+airplane & wings  engines  passengers  pilot(s)  vary in size and color\\
+\addlinespace
+airplane & wings  body  flies  travel\\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 

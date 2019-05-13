@@ -27,13 +27,13 @@ authornote: |
   Enter author note here.
 
 abstract: |
-  Semantic property listing tasks require participants to generate short propositions (e.g., <barks>, <has fur>) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them.  This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g. reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). Example data and the impact of choice decisions will be provided. This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
+  Semantic property listing tasks require participants to generate short propositions (e.g., \<barks\>, \<has fur\>) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them.  This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g. reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). Example data and the impact of choice decisions will be provided. This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
   
 keywords          : "semantic, property norm task, tutorial"
 
 #bibliography      : ["r-references.bib"] add this later
 
-floatsintext      : no
+floatsintext      : yes
 figurelist        : no
 tablelist         : no
 footnotelist      : no
@@ -47,7 +47,9 @@ output            : papaja::apa6_pdf
 ---
 
 ```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = TRUE)
 library("papaja")
+library(kableExtra)
 ```
 
 1.	Available feature norms and their format
@@ -61,7 +63,9 @@ library("papaja")
 - Dutch: @Ruts2004
 - Blind participants: @Lenci2013
 
-I'm sure there are more, here's what we cited recently 
+I'm sure there are more, here's what we cited recently.
+
+Define concept, feature for clarity throughout - make sure you use these two terms consistently. 
 
 2.	Pointers about how to collect the data
 a.	instructions, generation, verification, importance
@@ -72,6 +76,66 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
 
 3.	Typical operations performed on features
 
+## Materials and Data Format
+
+```{r data, include = F}
+
+## Importing the data in the provided data folder
+master <- read.csv("../data/tidy_words.csv", stringsAsFactors = F)
+
+## Show data structure
+## Data is in tidy format with concept in the word column
+## Participant answer in the answer column
+head(master)
+```
+
+The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @Mcrae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer. 
+
+`r kable(head(master), "latex", booktabs = T) %>% kable_styling(full_width = F) %>% column_spec(2, width = "30em")`
+
+This data was collected using the instructions provided by @Mcrae2005, however, in contrast to the suggestions for consistency detailed above [@Devereaux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced. 
+
+## Spelling 
+
+Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018], which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each `answer` can be checked for misspellings across an entire column of answers, which is located in the `master` dataset. The default dictionary is American English, and the `hunspell` vignettes provide details on how to import your own dictionary for non-English languages.   
+
+```{r check_spelling, echo = T}
+## Install the hunspell package if necessary
+#install.packages("hunspell")
+library(hunspell)
+
+## Check the participant answers
+## The output is a list of spelling errors for each line
+spelling_errors <- hunspell(master$answer, dict = dictionary("en_US"))
+```
+
+The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to *`r master$word[175]`*, a participant wrote *`r trimws(gsub("  ", " ", master$answer[175]))`*, and the spelling errors were denoted as *`r paste0(spelling_errors[[175]], collapse = " ")`*. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error. 
+
+```{r get_suggestions, echo = T}
+## Check for suggestions
+spelling_suggest <- lapply(spelling_errors, hunspell_suggest)
+```
+
+For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[175]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[175]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[175]][2]`*. The suggestions are presented in most probable order, and using a few loops with the a substitute function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. 
+
+```{r fix_errors, echo = T}
+## Replace with most likely suggestion
+spell_checked <- master
+
+### Loop over the data.frame
+for (i in 1:nrow(spell_checked)){
+  ### See if there are spelling errors
+  if (length(spelling_errors[[i]]) > 0) {
+    ### Loop over all errors
+    for (q in 1:length(spelling_errors[[i]])){
+      ### Replace with the first answer
+      spell_checked$answer[i] <- gsub(spelling_errors[[i]][q], 
+                                      spelling_suggest[[i]][[q]][1],
+                                      spell_checked$answer[i])
+    }
+  }
+}
+```
 
 
 a.	stemming, spelling, normalization

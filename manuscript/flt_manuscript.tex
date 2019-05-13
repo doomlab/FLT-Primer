@@ -1,0 +1,387 @@
+\documentclass[man,floatsintext]{apa6}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={A practical primer on processing semantic property norm data},
+            pdfauthor={Erin M. Buchanan, Simon De Deyne, \& Maria Montefinese},
+            pdfkeywords={semantic, property norm task, tutorial},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+
+  \title{A practical primer on processing semantic property norm data}
+    \author{Erin M. Buchanan\textsuperscript{1}, Simon De Deyne\textsuperscript{2}, \& Maria Montefinese\textsuperscript{3}}
+    \date{}
+  
+\shorttitle{Processing Norms}
+\affiliation{
+\vspace{0.5cm}
+\textsuperscript{1} Harrisburg University of Science and Technology\\\textsuperscript{2} University of Melbourne\\\textsuperscript{3} University of Padua}
+\keywords{semantic, property norm task, tutorial}
+\usepackage{csquotes}
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+\usepackage{longtable}
+\usepackage{lscape}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage[flushleft]{threeparttable}
+\usepackage{threeparttablex}
+
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
+
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+
+\usepackage{lineno}
+
+\linenumbers
+
+\authornote{Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+
+Enter author note here.
+
+Correspondence concerning this article should be addressed to Erin M. Buchanan, 326 Market St., Harrisburg, PA 17101. E-mail: \href{mailto:ebuchanan@harrisburgu.edu}{\nolinkurl{ebuchanan@harrisburgu.edu}}}
+
+\abstract{
+Semantic property listing tasks require participants to generate short propositions (e.g., \textless{}barks\textgreater{}, \textless{}has fur\textgreater{}) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them. This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g.~reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). Example data and the impact of choice decisions will be provided. This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
+
+
+}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Available feature norms and their format
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Property listing task original work: ({\textbf{???}}); ({\textbf{???}}); ({\textbf{???}}); ({\textbf{???}})
+\item
+  English: ({\textbf{???}}), ({\textbf{???}}), ({\textbf{???}}), ({\textbf{???}}), ({\textbf{???}})
+\item
+  Italian: ({\textbf{???}}); ({\textbf{???}}), ({\textbf{???}})
+\item
+  German: ({\textbf{???}})
+\item
+  Portuguese: ({\textbf{???}})
+\item
+  Spanish: ({\textbf{???}})
+\item
+  Dutch: ({\textbf{???}})
+\item
+  Blind participants: ({\textbf{???}})
+\end{itemize}
+
+I'm sure there are more, here's what we cited recently.
+
+Define concept, feature for clarity throughout - make sure you use these two terms consistently.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Pointers about how to collect the data
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  instructions, generation, verification, importance
+\end{enumerate}
+
+I really like the way the CSLB did it: \url{https://cslb.psychol.cam.ac.uk/propnorms}
+
+They showed the concept, then had a drop down menu for is/has/does, and then the participant typed in a final window. That type of system would solve about half the problems I am going to describe below about using multi-word sequences. Might be some other suggestions, but for that type of processing, you could do combinations and have more consistent data easily.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Typical operations performed on features
+\end{enumerate}
+
+\hypertarget{materials-and-data-format}{%
+\subsection{Materials and Data Format}\label{materials-and-data-format}}
+
+The data for this tutorial includes 9553 unique concept-feature responses for 104 concepts from ({\textbf{???}}) that were included in ({\textbf{???}}), ({\textbf{???}}), and ({\textbf{???}}). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable ({\textbf{???}}). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
+\toprule
+word & answer\\
+\midrule
+airplane & you fly in it  its big  it is fast  they are expensive  they are at an airport  you have to be trained to fly it  there are lots of seats  they get very high up\\
+airplane & wings engine pilot cockpit tail\\
+airplane & wings  it flys  modern technology  has passengers  requires a pilot  can be dangerous  runs on gas  used for travel\\
+airplane & wings  flys  pilot  cockpit  uses gas  faster travel\\
+airplane & wings  engines  passengers  pilot(s)  vary in size and color\\
+\addlinespace
+airplane & wings  body  flies  travel\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This data was collected using the instructions provided by ({\textbf{???}}), however, in contrast to the suggestions for consistency detailed above ({\textbf{???}}), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
+
+\hypertarget{spelling}{%
+\subsection{Spelling}\label{spelling}}
+
+Spell checking can be automated with the \texttt{hunspell} package in \emph{R} ({\textbf{???}}), which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## Install the hunspell package if necessary}
+\CommentTok{#install.packages("hunspell")}
+\KeywordTok{library}\NormalTok{(hunspell)}
+
+\CommentTok{## Check the participant answers}
+\CommentTok{## The output is a list of spelling errors for each line}
+\NormalTok{spelling_errors <-}\StringTok{ }\KeywordTok{hunspell}\NormalTok{(master}\OperatorTok{$}\NormalTok{answer, }\DataTypeTok{dict =} \KeywordTok{dictionary}\NormalTok{(}\StringTok{"en_US"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+The result from the \texttt{hunspell()} function is a list object of spelling errors for each row of data. For example, when responding to \emph{apple}, a participant wrote \emph{fruit grocery store orchard red green yelloe good with peanut butter good with caramell}, and the spelling errors were denoted as \emph{yelloe caramell}. After checking for errors, the \texttt{hunspell\_suggest()} function was used to determine the most likely replacement for each error.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## Check for suggestions}
+\NormalTok{spelling_suggest <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(spelling_errors, hunspell_suggest)}
+\end{Highlighting}
+\end{Shaded}
+
+For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the a substitute function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## Replace with most likely suggestion}
+\NormalTok{spell_checked <-}\StringTok{ }\NormalTok{master}
+
+\CommentTok{### Loop over the data.frame}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(spell_checked))\{}
+  \CommentTok{### See if there are spelling errors}
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(spelling_errors[[i]]) }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
+    \CommentTok{### Loop over all errors}
+    \ControlFlowTok{for}\NormalTok{ (q }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(spelling_errors[[i]]))\{}
+      \CommentTok{### Replace with the first answer}
+\NormalTok{      spell_checked}\OperatorTok{$}\NormalTok{answer[i] <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(spelling_errors[[i]][q], }
+\NormalTok{                                      spelling_suggest[[i]][[q]][}\DecValTok{1}\NormalTok{],}
+\NormalTok{                                      spell_checked}\OperatorTok{$}\NormalTok{answer[i])}
+\NormalTok{    \}}
+\NormalTok{  \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  stemming, spelling, normalization
+\item
+  exceptions dictionary
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  bing spell checker service
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Weighting
+\item
+  feature type ontologies
+\item
+  identify cut off for idiosyncratic features (should it be necessary?)
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Specification of how this is automated (package description)
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  tests to see if things work: e.g.~manual spell checks vs automated ones
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Evaluation of the approach
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  internal (quality, size, consistency) - ?
+\item
+  feature size number of features work
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  classifier for ontology, compare results to previous work
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  externally (categorization, similarity) -- MEN dataset, Lapata categorization task
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Challenges and opportunities
+\end{enumerate}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+\newpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\hypertarget{refs}{}
+
+\endgroup
+
+
+\end{document}
