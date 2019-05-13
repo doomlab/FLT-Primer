@@ -50,28 +50,45 @@ output            : papaja::apa6_pdf
 library("papaja")
 ```
 
-```{r analysis-preferences}
-# Seed for random number generation
-set.seed(42)
-knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
-```
+1.	Available feature norms and their format
+
+- Property listing task original work: @Toglia1978; @Toglia2009; @Rosch1975; @Ashcraft1978a 
+- English: @McRae2005, @Vinson2008, @Buchanan2013, @Devereux2014, @Buchanan2019
+- Italian: @Montefinese2013; @Reverberi2004, @Kremer2011a
+- German: @Kremer2011a
+- Portuguese: @Stein2009
+- Spanish: @Vivas2017
+- Dutch: @Ruts2004
+- Blind participants: @Lenci2013
+
+I'm sure there are more, here's what we cited recently 
+
+2.	Pointers about how to collect the data
+a.	instructions, generation, verification, importance
+
+I really like the way the CSLB did it: https://cslb.psychol.cam.ac.uk/propnorms
+
+They showed the concept, then had a drop down menu for is/has/does, and then the participant typed in a final window. That type of system would solve about half the problems I am going to describe below about using multi-word sequences. Might be some other suggestions, but for that type of processing, you could do combinations and have more consistent data easily. 
+
+3.	Typical operations performed on features
 
 
 
-# Methods
-We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
+a.	stemming, spelling, normalization
+i.	exceptions dictionary 
+ii.	bing spell checker service
+b.	Weighting 
+c.	feature type ontologies
+d.	identify cut off for idiosyncratic features (should it be necessary?) 
+4.	Specification of how this is automated (package description)
+a.	tests to see if things work: e.g. manual spell checks vs automated ones
+5.	Evaluation of the approach
+a.	internal (quality, size, consistency) - ? 
+i.	feature size number of features work 
+ii.	classifier for ontology, compare results to previous work 
+b.	externally (categorization, similarity) – MEN dataset, Lapata categorization task 
+6.	Challenges and opportunities
 
-## Participants
-
-## Material
-
-## Procedure
-
-## Data analysis
-We used `r cite_r("r-references.bib")` for all our analyses.
-
-
-# Results
 
 # Discussion
 
