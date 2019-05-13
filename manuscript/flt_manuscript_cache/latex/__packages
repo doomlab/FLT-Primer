@@ -6,3 +6,5 @@ sylly
 koRpus
 koRpus.lang.en
 stringi
+dplyr
+stopwords

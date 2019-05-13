@@ -209,6 +209,14 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
   Typical operations performed on features
 \end{enumerate}
 
+\begin{figure}
+\centering
+\includegraphics{flow_chart.png}
+\caption{(\#fig:flow\_chart)Flow chart of proposed semantic processing feature steps.}
+\end{figure}
+
+In the next several sections, we provide a tutorial using \emph{R} on how data from the semantic property norm task might be processed from raw input to finalized output. Figure @ref(fig:flow\_chart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach.
+
 \hypertarget{materials-and-data-format}{%
 \subsection{Materials and Data Format}\label{materials-and-data-format}}
 
@@ -359,7 +367,20 @@ wings & NNS & wing & 5 & noun\\
 \end{tabular}
 \end{table}
 
-From this dataset, you can use the \texttt{stringi} package {[}{]} to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions.
+From this dataset, you can use the \texttt{stringi} package ({\textbf{???}}) to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## Install the stringi package}
+\CommentTok{#install.packages("stringi")}
+\KeywordTok{library}\NormalTok{(stringi)}
+\CommentTok{## Replace all the original tokens with new lemmas using \textbackslash{}\textbackslash{}b for word boundaries}
+\NormalTok{lemmas}\OperatorTok{$}\NormalTok{answer <-}\StringTok{ }\KeywordTok{stri_replace_all_regex}\NormalTok{(}\DataTypeTok{str =}\NormalTok{ lemmas}\OperatorTok{$}\NormalTok{answer, }
+                       \DataTypeTok{pattern =} \KeywordTok{paste}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{, replacement_lemmas}\OperatorTok{$}\NormalTok{token, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{),}
+                       \DataTypeTok{replacement =}\NormalTok{ replacement_lemmas}\OperatorTok{$}\NormalTok{lemma,}
+                       \DataTypeTok{vectorize_all =}\NormalTok{ F, }\KeywordTok{list}\NormalTok{(}\DataTypeTok{case_insensitive =} \OtherTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{table}[H]
 \centering\begin{table}[H]
@@ -379,6 +400,380 @@ airplane & wing  body  fly  travel\\
 \end{tabular}
 \end{table}
 \end{table}
+
+\hypertarget{word-sequences}{%
+\subsection{Word Sequences}\label{word-sequences}}
+
+Multi-word sequences are often coded to mimic a ({\textbf{???}}) style model, with \enquote{is-a} and \enquote{has-a} type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the \enquote{is-a} and \enquote{has-a} strings. An examination of the coding in ({\textbf{???}}) and ({\textbf{???}}) indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With \texttt{dplyr} ({\textbf{???}}), new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the \texttt{table()} function is used to tabulate the final count of n-grams and their frequency.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{multi_words <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Word=}\KeywordTok{character}\NormalTok{(),}
+                        \DataTypeTok{Feature=}\KeywordTok{character}\NormalTok{(), }
+                        \DataTypeTok{Frequency=}\KeywordTok{numeric}\NormalTok{(), }
+                        \DataTypeTok{stringsAsFactors=}\OtherTok{FALSE}\NormalTok{) }
+\NormalTok{unique_concepts <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(lemmas}\OperatorTok{$}\NormalTok{word)}
+\CommentTok{## Install dplyr}
+\CommentTok{#install.packages("dplyr")}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\CommentTok{## Loop over each word}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(unique_concepts))\{}
+  \CommentTok{## Create parts of speech for clustering together}
+\NormalTok{  temp_tag <-}\StringTok{ }\KeywordTok{suppressWarnings}\NormalTok{(}
+    \KeywordTok{suppressMessages}\NormalTok{(}
+      \KeywordTok{treetag}\NormalTok{(}\KeywordTok{c}\NormalTok{(lemmas}\OperatorTok{$}\NormalTok{answer[lemmas}\OperatorTok{$}\NormalTok{word  }\OperatorTok{==}\StringTok{ }\NormalTok{unique_concepts[i]], }\StringTok{"NULL"}\NormalTok{), }
+          \CommentTok{## Control the parameters of treetagger}
+          \DataTypeTok{treetagger=}\StringTok{"manual"}\NormalTok{, }\DataTypeTok{format=}\StringTok{"obj"}\NormalTok{,}
+          \DataTypeTok{TT.tknz=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{lang=}\StringTok{"en"}\NormalTok{,}
+          \DataTypeTok{TT.options=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{path=}\StringTok{"~/TreeTagger"}\NormalTok{, }\DataTypeTok{preset=}\StringTok{"en"}\NormalTok{))))}
+  \CommentTok{## Save only the data.frame, remove NULL}
+\NormalTok{  temp_tag <-}\StringTok{ }\NormalTok{temp_tag}\OperatorTok{@}\NormalTok{TT.res[}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(temp_tag}\OperatorTok{@}\NormalTok{TT.res) , ]}
+  \CommentTok{## Subset out information you don't need}
+\NormalTok{  temp_tag <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(temp_tag, }
+\NormalTok{                     wclass }\OperatorTok{!=}\StringTok{ "comma"} \OperatorTok{&}\StringTok{ }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "determiner"} \OperatorTok{&}\StringTok{ }
+\StringTok{                       }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "preposition"} \OperatorTok{&}\StringTok{ }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "modal"} \OperatorTok{&}
+\StringTok{                       }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "predeterminer"} \OperatorTok{&}\StringTok{ }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "particle"} \OperatorTok{&}
+\StringTok{                       }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "to"} \OperatorTok{&}\StringTok{ }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "punctuation"} \OperatorTok{&}\StringTok{ }
+\StringTok{                       }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "fullstop"} \OperatorTok{&}\StringTok{ }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "conjunction"} \OperatorTok{&}\StringTok{ }
+\StringTok{                       }\NormalTok{wclass }\OperatorTok{!=}\StringTok{ "pronoun"}\NormalTok{)}
+  \CommentTok{## Create a temporary tibble }
+\NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(temp_tag)}
+  \CommentTok{## Create part of speech and features combined}
+\NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
+                            \DataTypeTok{two_words =} \KeywordTok{paste}\NormalTok{(token, }\KeywordTok{lead}\NormalTok{(token), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+\NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
+                            \DataTypeTok{three_words =} \KeywordTok{paste}\NormalTok{(token, }\KeywordTok{lead}\NormalTok{(token), }\KeywordTok{lead}\NormalTok{(token, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+\NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
+                            \DataTypeTok{two_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }\KeywordTok{lead}\NormalTok{(wclass), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+\NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
+                            \DataTypeTok{three_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }\KeywordTok{lead}\NormalTok{(wclass), }\KeywordTok{lead}\NormalTok{(wclass, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+  \CommentTok{## Find verb noun or verb adjective nouns to cluster on }
+\NormalTok{  verb_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words_pos)}
+\NormalTok{  verb_adj_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_adjective_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{three_words_pos)}
+  \CommentTok{## Use combined and left over features}
+\NormalTok{  features_for_table <-}\StringTok{ }\KeywordTok{c}\NormalTok{(temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words[verb_nouns], }
+\NormalTok{                          temp_tag_tibble}\OperatorTok{$}\NormalTok{three_words[verb_adj_nouns],}
+\NormalTok{                          temp_tag_tibble}\OperatorTok{$}\NormalTok{token[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(verb_nouns, verb_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{, }
+\NormalTok{                                                   verb_adj_nouns, verb_adj_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{, verb_adj_nouns}\OperatorTok{+}\DecValTok{2}\NormalTok{)])}
+  \CommentTok{## Create a table of frequencies}
+\NormalTok{  word_table <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(features_for_table))}
+  \CommentTok{## Clean up the table}
+\NormalTok{  word_table}\OperatorTok{$}\NormalTok{Word <-}\StringTok{ }\NormalTok{unique_concepts[i]}
+  \KeywordTok{colnames}\NormalTok{(word_table) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Feature"}\NormalTok{, }\StringTok{"Frequency"}\NormalTok{, }\StringTok{"Word"}\NormalTok{)}
+\NormalTok{  multi_words <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(multi_words, word_table[ , }\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{)])}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+This procedure does produce some positive output, such as \emph{fingers-have\_fingernails} and \emph{couches-have\_cushions}. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for \emph{zebra} shown below may require fuzzy logic matching to ensure that the different codings for \emph{is-a-horse} are all combined together.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{llr}
+\toprule
+Word & Feature & Frequency\\
+\midrule
+zebra & 2 & 1\\
+zebra & 4 & 6\\
+zebra & 4-leg & 1\\
+zebra & ace & 1\\
+zebra & Africa & 28\\
+\addlinespace
+zebra & animal & 43\\
+zebra & area & 1\\
+zebra & around & 1\\
+zebra & baby & 1\\
+zebra & be & 21\\
+\addlinespace
+zebra & be\_animal & 8\\
+zebra & be\_animal\_life & 1\\
+zebra & be\_black\_white & 2\\
+zebra & be\_exotic\_leg & 1\\
+zebra & be\_funny\_character & 1\\
+\addlinespace
+zebra & be\_grass & 1\\
+zebra & be\_herbivore & 2\\
+zebra & be\_horse & 1\\
+zebra & be\_inhabitant & 1\\
+zebra & be\_logo & 2\\
+\addlinespace
+zebra & be\_mama & 1\\
+zebra & be\_mammal & 4\\
+zebra & be\_omnivore & 1\\
+zebra & be\_plastic\_kitchen & 1\\
+zebra & be\_plastic\_metal & 1\\
+\addlinespace
+zebra & be\_similar\_horse & 1\\
+zebra & be\_stripe & 2\\
+zebra & be\_type & 1\\
+zebra & be\_utensil & 1\\
+zebra & be\_white\_black & 1\\
+\addlinespace
+zebra & be\_zoo & 1\\
+zebra & bendable & 1\\
+zebra & big & 2\\
+zebra & black & 60\\
+zebra & blank & 1\\
+\addlinespace
+zebra & breathe\_oxygen & 1\\
+zebra & bubble & 1\\
+zebra & build\_horse & 1\\
+zebra & cake & 1\\
+zebra & canter & 1\\
+\addlinespace
+zebra & certain & 1\\
+zebra & climate & 1\\
+zebra & clothing & 1\\
+zebra & color & 5\\
+zebra & come\_different\_size & 1\\
+\addlinespace
+zebra & common & 1\\
+zebra & creature & 1\\
+zebra & cute & 1\\
+zebra & dangerous & 1\\
+zebra & desert & 1\\
+\addlinespace
+zebra & different & 2\\
+zebra & dirty & 1\\
+zebra & Disney & 1\\
+zebra & do & 1\\
+zebra & domestic & 1\\
+\addlinespace
+zebra & donkey & 1\\
+zebra & ear & 2\\
+zebra & easily & 1\\
+zebra & eat & 2\\
+zebra & eat\_animal & 1\\
+\addlinespace
+zebra & eat\_food & 2\\
+zebra & eat\_grass & 9\\
+zebra & eat\_lion & 1\\
+zebra & eat\_lot & 1\\
+zebra & eater & 1\\
+\addlinespace
+zebra & eating & 3\\
+zebra & eating\_food & 1\\
+zebra & energy & 1\\
+zebra & equestrian & 1\\
+zebra & exotic & 1\\
+\addlinespace
+zebra & eye & 1\\
+zebra & family & 1\\
+zebra & fast & 3\\
+zebra & find & 1\\
+zebra & find\_zoo & 4\\
+\addlinespace
+zebra & food & 2\\
+zebra & four & 15\\
+zebra & four-legged & 1\\
+zebra & fruit & 1\\
+zebra & funky & 1\\
+\addlinespace
+zebra & fur & 1\\
+zebra & gallop & 2\\
+zebra & gentle & 1\\
+zebra & get & 1\\
+zebra & grassland & 1\\
+\addlinespace
+zebra & graze & 1\\
+zebra & group & 1\\
+zebra & grunt & 1\\
+zebra & gum & 2\\
+zebra & hairy & 1\\
+\addlinespace
+zebra & hard & 2\\
+zebra & have & 16\\
+zebra & have\_black\_stripe & 1\\
+zebra & have\_ear & 1\\
+zebra & have\_fur & 1\\
+\addlinespace
+zebra & have\_hair & 1\\
+zebra & have\_hoof & 5\\
+zebra & have\_mane & 3\\
+zebra & have\_Mohawk & 1\\
+zebra & have\_point & 1\\
+\addlinespace
+zebra & have\_predator & 1\\
+zebra & have\_sharp\_mammal & 1\\
+zebra & have\_short\_hair & 1\\
+zebra & have\_strip & 1\\
+zebra & have\_stripe & 14\\
+\addlinespace
+zebra & have\_tail & 5\\
+zebra & have\_tongue & 1\\
+zebra & head & 1\\
+zebra & herbivore & 2\\
+zebra & herd & 2\\
+\addlinespace
+zebra & hoof & 4\\
+zebra & hoof\_large\_graze & 1\\
+zebra & hoofed & 1\\
+zebra & horse & 22\\
+zebra & horse-like & 1\\
+\addlinespace
+zebra & hot & 1\\
+zebra & hunt & 2\\
+zebra & hunting & 1\\
+zebra & in & 1\\
+zebra & jaguar & 1\\
+\addlinespace
+zebra & keep & 1\\
+zebra & kind & 1\\
+zebra & kinda & 2\\
+zebra & knife & 2\\
+zebra & large & 3\\
+\addlinespace
+zebra & leg & 19\\
+zebra & legged & 2\\
+zebra & life & 25\\
+zebra & like & 1\\
+zebra & line & 1\\
+\addlinespace
+zebra & lion & 3\\
+zebra & live & 4\\
+zebra & live\_zoo & 1\\
+zebra & long & 1\\
+zebra & look & 5\\
+\addlinespace
+zebra & look\_similar\_horse & 1\\
+zebra & lot & 1\\
+zebra & Madagascar & 2\\
+zebra & make\_metal & 1\\
+zebra & make\_plastic & 1\\
+\addlinespace
+zebra & mama & 1\\
+zebra & mammal & 10\\
+zebra & mane & 2\\
+zebra & medium & 1\\
+zebra & metal & 4\\
+\addlinespace
+zebra & metallic & 1\\
+zebra & move & 1\\
+zebra & movie & 2\\
+zebra & napkin & 1\\
+zebra & neck & 1\\
+\addlinespace
+zebra & neigh & 1\\
+zebra & not & 4\\
+zebra & often & 1\\
+zebra & one & 1\\
+zebra & open & 1\\
+\addlinespace
+zebra & organism & 1\\
+zebra & other & 1\\
+zebra & pack & 1\\
+zebra & part & 1\\
+zebra & peaceful & 1\\
+\addlinespace
+zebra & pet & 1\\
+zebra & physical & 1\\
+zebra & pick & 1\\
+zebra & pick\_food & 1\\
+zebra & plain & 1\\
+\addlinespace
+zebra & planet & 1\\
+zebra & plant & 1\\
+zebra & plastic & 1\\
+zebra & plate & 1\\
+zebra & pointy & 2\\
+\addlinespace
+zebra & pony & 1\\
+zebra & predator & 1\\
+zebra & predominantly & 1\\
+zebra & pretty & 2\\
+zebra & prey & 3\\
+\addlinespace
+zebra & prong & 1\\
+zebra & pronged & 1\\
+zebra & quiet & 1\\
+zebra & referee & 1\\
+zebra & related & 1\\
+\addlinespace
+zebra & related\_horse & 1\\
+zebra & resemble\_body & 1\\
+zebra & resemble\_donkey & 1\\
+zebra & resemble\_small\_horse & 1\\
+zebra & ridden\_stripe & 1\\
+\addlinespace
+zebra & river & 1\\
+zebra & road & 1\\
+zebra & roam & 1\\
+zebra & rug & 1\\
+zebra & run & 8\\
+\addlinespace
+zebra & run\_fast\_horse & 1\\
+zebra & run\_horse & 1\\
+zebra & saddle & 1\\
+zebra & safari & 1\\
+zebra & Savannah & 1\\
+\addlinespace
+zebra & see & 1\\
+zebra & see\_zoo & 1\\
+zebra & sharp & 1\\
+zebra & silver & 3\\
+zebra & silverware & 1\\
+\addlinespace
+zebra & similar & 1\\
+zebra & size & 2\\
+zebra & small & 1\\
+zebra & smell & 1\\
+zebra & sound\_horse & 1\\
+\addlinespace
+zebra & spoon & 2\\
+zebra & spot & 1\\
+zebra & stop & 1\\
+zebra & strip & 3\\
+zebra & stripe & 52\\
+\addlinespace
+zebra & stripe\_similar\_horse & 1\\
+zebra & style & 1\\
+zebra & sun & 1\\
+zebra & survive & 1\\
+zebra & tail & 3\\
+\addlinespace
+zebra & tall & 1\\
+zebra & thin & 1\\
+zebra & time & 1\\
+zebra & tool & 1\\
+zebra & torso & 1\\
+\addlinespace
+zebra & travel\_pack & 1\\
+zebra & triage & 1\\
+zebra & trot\_gallop & 1\\
+zebra & two & 2\\
+zebra & type & 1\\
+\addlinespace
+zebra & use & 8\\
+zebra & usually & 2\\
+zebra & utensil & 5\\
+zebra & venture & 1\\
+zebra & very & 1\\
+\addlinespace
+zebra & walk & 1\\
+zebra & walk\_animal & 1\\
+zebra & walk\_life & 1\\
+zebra & water & 1\\
+zebra & weird & 1\\
+\addlinespace
+zebra & white & 59\\
+zebra & wild & 15\\
+zebra & wilderness & 1\\
+zebra & young & 1\\
+zebra & zebra & 2\\
+\addlinespace
+zebra & zoo & 15\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(stopwords)}
+\CommentTok{## Remove stop words}
+\NormalTok{multi_words <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(multi_words, }
+                      \OperatorTok{!}\NormalTok{(Feature }\OperatorTok{%in%}\StringTok{ }\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }\DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{enumerate}
 \def\labelenumi{\alph{enumi}.}
