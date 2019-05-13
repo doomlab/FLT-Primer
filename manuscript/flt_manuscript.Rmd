@@ -31,7 +31,7 @@ abstract: |
   
 keywords          : "semantic, property norm task, tutorial"
 
-#bibliography      : ["r-references.bib"] add this later
+bibliography      : ["flt_bib.bib"]
 
 floatsintext      : yes
 figurelist        : no
@@ -101,11 +101,11 @@ master <- read.csv("../data/tidy_words.csv", stringsAsFactors = F)
 head(master)
 ```
 
-The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @Mcrae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer. 
+The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @McRae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer. 
 
 `r kable(head(master), "latex", booktabs = T, row.names = F) %>% kable_styling(full_width = F) %>% column_spec(2, width = "30em") %>%  kable_styling(position = "center")`
 
-This data was collected using the instructions provided by @Mcrae2005, however, in contrast to the suggestions for consistency detailed above [@Devereaux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced. 
+This data was collected using the instructions provided by @McRae2005, however, in contrast to the suggestions for consistency detailed above [@Devereux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced. 
 
 ## Spelling 
 
@@ -219,7 +219,7 @@ lemmas$answer <- stri_replace_all_regex(str = lemmas$answer,
 
 ## Word Sequences
 
-Multi-word sequences are often coded to mimic a @Collins1969 style model, with "is-a" and "has-a" type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the "is-a" and "has-a" strings. An examination of the coding in @Mcrae2005 and @Devereaux2014 indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With `dplyr` [@Wickham2019], new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the `table()` function is used to tabulate the final count of n-grams and their frequency. 
+Multi-word sequences are often coded to mimic a @Collins1969 style model, with "is-a" and "has-a" type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the "is-a" and "has-a" strings. An examination of the coding in @McRae2005 and @Devereux2014 indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With `dplyr` [@Wickham2019], new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the `table()` function is used to tabulate the final count of n-grams and their frequency. 
 
 ```{r multi_words, echo = T, size="scriptsize"}
 multi_words <- data.frame(Word=character(),
@@ -316,7 +316,7 @@ multi_words <- subset(multi_words,
 
 ```{r}
 # Bag of Words ------------------------------------------------------------
-
+library(tokenizers)
 bag_words <- data.frame(Word=character(),
                         Feature=character(), 
                         Frequency=numeric(), 

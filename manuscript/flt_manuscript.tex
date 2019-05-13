@@ -161,21 +161,21 @@ Semantic property listing tasks require participants to generate short propositi
 \begin{itemize}
 \tightlist
 \item
-  Property listing task original work: ({\textbf{???}}); ({\textbf{???}}); ({\textbf{???}}); ({\textbf{???}})
+  Property listing task original work: Toglia and Battig (1978); Toglia (2009); Rosch and Mervis (1975); Ashcraft (1978)
 \item
-  English: ({\textbf{???}}), ({\textbf{???}}), ({\textbf{???}}), ({\textbf{???}}), ({\textbf{???}})
+  English: McRae, Cree, Seidenberg, and McNorgan (2005), Vinson and Vigliocco (2008), Buchanan, Holmes, Teasley, and Hutchison (2013), Devereux, Tyler, Geertzen, and Randall (2014), Buchanan, Valentine, and Maxwell (2019)
 \item
-  Italian: ({\textbf{???}}); ({\textbf{???}}), ({\textbf{???}})
+  Italian: Montefinese, Ambrosini, Fairfield, and Mammarella (2013); Reverberi, Capitani, and Laiacona (2004), Kremer and Baroni (2011)
 \item
-  German: ({\textbf{???}})
+  German: Kremer and Baroni (2011)
 \item
-  Portuguese: ({\textbf{???}})
+  Portuguese: Stein and de Azevedo Gomes (2009)
 \item
-  Spanish: ({\textbf{???}})
+  Spanish: Vivas, Vivas, Comesaña, Coni, and Vorano (2017)
 \item
-  Dutch: ({\textbf{???}})
+  Dutch: Ruts et al. (2004)
 \item
-  Blind participants: ({\textbf{???}})
+  Blind participants: Lenci, Baroni, Cazzolli, and Marotta (2013)
 \end{itemize}
 
 I'm sure there are more, here's what we cited recently.
@@ -220,7 +220,7 @@ In the next several sections, we provide a tutorial using \emph{R} on how data f
 \hypertarget{materials-and-data-format}{%
 \subsection{Materials and Data Format}\label{materials-and-data-format}}
 
-The data for this tutorial includes 9553 unique concept-feature responses for 104 concepts from ({\textbf{???}}) that were included in ({\textbf{???}}), ({\textbf{???}}), and ({\textbf{???}}). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable ({\textbf{???}}). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer.
+The data for this tutorial includes 9553 unique concept-feature responses for 104 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer.
 
 \begin{table}[H]
 \centering\begin{table}[H]
@@ -241,12 +241,12 @@ airplane & wings  body  flies  travel\\
 \end{table}
 \end{table}
 
-This data was collected using the instructions provided by ({\textbf{???}}), however, in contrast to the suggestions for consistency detailed above ({\textbf{???}}), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
+This data was collected using the instructions provided by McRae et al. (2005), however, in contrast to the suggestions for consistency detailed above (Devereux et al., 2014), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
 
 \hypertarget{spelling}{%
 \subsection{Spelling}\label{spelling}}
 
-Spell checking can be automated with the \texttt{hunspell} package in \emph{R} ({\textbf{???}}), which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
+Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (Ooms, 2018), which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
 
 \scriptsize
 
@@ -265,6 +265,8 @@ Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (
 
 The result from the \texttt{hunspell()} function is a list object of spelling errors for each row of data. For example, when responding to \emph{apple}, a participant wrote \emph{fruit grocery store orchard red green yelloe good with peanut butter good with caramell}, and the spelling errors were denoted as \emph{yelloe caramell}. After checking for errors, the \texttt{hunspell\_suggest()} function was used to determine the most likely replacement for each error.
 
+\scriptsize
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{## Check for suggestions}
@@ -272,7 +274,11 @@ The result from the \texttt{hunspell()} function is a list object of spelling er
 \end{Highlighting}
 \end{Shaded}
 
+\normalsize
+
 For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms.
+
+\scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -294,12 +300,16 @@ For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel car
 \end{Highlighting}
 \end{Shaded}
 
+\normalsize
+
 \hypertarget{lemmatization}{%
 \subsection{Lemmatization}\label{lemmatization}}
 
-The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, \emph{am, are, is}) to convert into a common lemma (i.e., \emph{be}) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as \emph{ing} or \emph{s}. The stem or root word may not reflect an actual word in the langauge, as simply removing an affix does not necessarily produce the lemma. For example, in response to \emph{airplane}, \emph{flying} can be easily converted to \emph{fly} by removing the \emph{ing} inflection. However, this same heuristic converts the feature \emph{wings} into \emph{w} after removing both the \emph{s} for a plural marker and the \emph{ing} participle marker. Several packages for \emph{R} include customizable stemmers, notably the \texttt{hunspell}, \texttt{corpus} ({\textbf{???}}), and \texttt{tm} ({\textbf{???}}) packages.
+The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, \emph{am, are, is}) to convert into a common lemma (i.e., \emph{be}) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as \emph{ing} or \emph{s}. The stem or root word may not reflect an actual word in the langauge, as simply removing an affix does not necessarily produce the lemma. For example, in response to \emph{airplane}, \emph{flying} can be easily converted to \emph{fly} by removing the \emph{ing} inflection. However, this same heuristic converts the feature \emph{wings} into \emph{w} after removing both the \emph{s} for a plural marker and the \emph{ing} participle marker. Several packages for \emph{R} include customizable stemmers, notably the \texttt{hunspell}, \texttt{corpus} (Perry, 2017), and \texttt{tm} (Feinerer, Hornik, \& Artifex Software, 2018) packages.
 
-Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing \texttt{TreeTagger} ({\textbf{???}}) and the \texttt{koRpus} package in \emph{R} ({\textbf{???}}). TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple langauges. The koRpus package includes functionality to use TreeTagger in \emph{R}. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation.
+Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing \texttt{TreeTagger} (Schmid, 1994) and the \texttt{koRpus} package in \emph{R} (Michalke, 2018). TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple langauges. The koRpus package includes functionality to use TreeTagger in \emph{R}. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation.
+
+\scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -318,7 +328,11 @@ Lemmatization is the likely choice for processing property norms, and this proce
 \end{Highlighting}
 \end{Shaded}
 
+\normalsize
+
 The \texttt{treetag()} function calls the installation of TreeTagger to provide part of speech tags and lemmas for each token. Importantly, the \texttt{path} option should be the directory of the TreeTagger installation.
+
+\scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -336,7 +350,11 @@ The \texttt{treetag()} function calls the installation of TreeTagger to provide 
 \end{Highlighting}
 \end{Shaded}
 
+\normalsize
+
 This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subseting out these from the dataset.
+
+\scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -353,6 +371,8 @@ This function returns a tagged corpus object, which can be converted into a data
 \StringTok{                             }\KeywordTok{tolower}\NormalTok{(token) }\OperatorTok{!=}\StringTok{ }\KeywordTok{tolower}\NormalTok{(lemma)) }
 \end{Highlighting}
 \end{Shaded}
+
+\normalsize
 
 \begin{table}[H]
 \centering
@@ -371,7 +391,9 @@ wings & NNS & wing & 5 & noun\\
 \end{tabular}
 \end{table}
 
-From this dataset, you can use the \texttt{stringi} package ({\textbf{???}}) to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions.
+From this dataset, you can use the \texttt{stringi} package (Gagolewski \& Tartanus, 2019) to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions.
+
+\scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -385,6 +407,8 @@ From this dataset, you can use the \texttt{stringi} package ({\textbf{???}}) to 
                        \DataTypeTok{vectorize_all =}\NormalTok{ F, }\KeywordTok{list}\NormalTok{(}\DataTypeTok{case_insensitive =} \OtherTok{TRUE}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+\normalsize
 
 \begin{table}[H]
 \centering\begin{table}[H]
@@ -408,7 +432,9 @@ airplane & wing  body  fly  travel\\
 \hypertarget{word-sequences}{%
 \subsection{Word Sequences}\label{word-sequences}}
 
-Multi-word sequences are often coded to mimic a ({\textbf{???}}) style model, with \enquote{is-a} and \enquote{has-a} type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the \enquote{is-a} and \enquote{has-a} strings. An examination of the coding in ({\textbf{???}}) and ({\textbf{???}}) indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With \texttt{dplyr} ({\textbf{???}}), new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the \texttt{table()} function is used to tabulate the final count of n-grams and their frequency.
+Multi-word sequences are often coded to mimic a Collins and Quillian (1969) style model, with \enquote{is-a} and \enquote{has-a} type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the \enquote{is-a} and \enquote{has-a} strings. An examination of the coding in McRae et al. (2005) and Devereux et al. (2014) indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With \texttt{dplyr} (Wickham, Francios, Henry, Muller, \& Rstudio, 2019), new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the \texttt{table()} function is used to tabulate the final count of n-grams and their frequency.
+
+\scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -474,6 +500,8 @@ Multi-word sequences are often coded to mimic a ({\textbf{???}}) style model, wi
 \end{Highlighting}
 \end{Shaded}
 
+\normalsize
+
 This procedure does produce some positive output, such as \emph{fingers-have\_fingernails} and \emph{couches-have\_cushions}. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for \emph{zebra} shown below may require fuzzy logic matching to ensure that the different codings for \emph{is-a-horse} are all combined together.
 
 \begin{table}[H]
@@ -482,333 +510,59 @@ This procedure does produce some positive output, such as \emph{fingers-have\_fi
 \toprule
 Word & Feature & Frequency\\
 \midrule
-zebra & 2 & 1\\
-zebra & 4 & 6\\
-zebra & 4-leg & 1\\
-zebra & ace & 1\\
-zebra & Africa & 28\\
-\addlinespace
-zebra & animal & 43\\
-zebra & area & 1\\
-zebra & around & 1\\
-zebra & baby & 1\\
-zebra & be & 21\\
-\addlinespace
-zebra & be\_animal & 8\\
-zebra & be\_animal\_life & 1\\
-zebra & be\_black\_white & 2\\
-zebra & be\_exotic\_leg & 1\\
-zebra & be\_funny\_character & 1\\
-\addlinespace
-zebra & be\_grass & 1\\
-zebra & be\_herbivore & 2\\
 zebra & be\_horse & 1\\
-zebra & be\_inhabitant & 1\\
-zebra & be\_logo & 2\\
-\addlinespace
-zebra & be\_mama & 1\\
-zebra & be\_mammal & 4\\
-zebra & be\_omnivore & 1\\
-zebra & be\_plastic\_kitchen & 1\\
-zebra & be\_plastic\_metal & 1\\
-\addlinespace
 zebra & be\_similar\_horse & 1\\
-zebra & be\_stripe & 2\\
-zebra & be\_type & 1\\
-zebra & be\_utensil & 1\\
-zebra & be\_white\_black & 1\\
-\addlinespace
-zebra & be\_zoo & 1\\
-zebra & bendable & 1\\
-zebra & big & 2\\
-zebra & black & 60\\
-zebra & blank & 1\\
-\addlinespace
-zebra & breathe\_oxygen & 1\\
-zebra & bubble & 1\\
 zebra & build\_horse & 1\\
-zebra & cake & 1\\
-zebra & canter & 1\\
-\addlinespace
-zebra & certain & 1\\
-zebra & climate & 1\\
-zebra & clothing & 1\\
-zebra & color & 5\\
-zebra & come\_different\_size & 1\\
-\addlinespace
-zebra & common & 1\\
-zebra & creature & 1\\
-zebra & cute & 1\\
-zebra & dangerous & 1\\
-zebra & desert & 1\\
-\addlinespace
-zebra & different & 2\\
-zebra & dirty & 1\\
-zebra & Disney & 1\\
-zebra & do & 1\\
-zebra & domestic & 1\\
-\addlinespace
-zebra & donkey & 1\\
-zebra & ear & 2\\
-zebra & easily & 1\\
-zebra & eat & 2\\
-zebra & eat\_animal & 1\\
-\addlinespace
-zebra & eat\_food & 2\\
-zebra & eat\_grass & 9\\
-zebra & eat\_lion & 1\\
-zebra & eat\_lot & 1\\
-zebra & eater & 1\\
-\addlinespace
-zebra & eating & 3\\
-zebra & eating\_food & 1\\
-zebra & energy & 1\\
-zebra & equestrian & 1\\
-zebra & exotic & 1\\
-\addlinespace
-zebra & eye & 1\\
-zebra & family & 1\\
-zebra & fast & 3\\
-zebra & find & 1\\
-zebra & find\_zoo & 4\\
-\addlinespace
-zebra & food & 2\\
-zebra & four & 15\\
-zebra & four-legged & 1\\
-zebra & fruit & 1\\
-zebra & funky & 1\\
-\addlinespace
-zebra & fur & 1\\
-zebra & gallop & 2\\
-zebra & gentle & 1\\
-zebra & get & 1\\
-zebra & grassland & 1\\
-\addlinespace
-zebra & graze & 1\\
-zebra & group & 1\\
-zebra & grunt & 1\\
-zebra & gum & 2\\
-zebra & hairy & 1\\
-\addlinespace
-zebra & hard & 2\\
-zebra & have & 16\\
-zebra & have\_black\_stripe & 1\\
-zebra & have\_ear & 1\\
-zebra & have\_fur & 1\\
-\addlinespace
-zebra & have\_hair & 1\\
-zebra & have\_hoof & 5\\
-zebra & have\_mane & 3\\
-zebra & have\_Mohawk & 1\\
-zebra & have\_point & 1\\
-\addlinespace
-zebra & have\_predator & 1\\
-zebra & have\_sharp\_mammal & 1\\
-zebra & have\_short\_hair & 1\\
-zebra & have\_strip & 1\\
-zebra & have\_stripe & 14\\
-\addlinespace
-zebra & have\_tail & 5\\
-zebra & have\_tongue & 1\\
-zebra & head & 1\\
-zebra & herbivore & 2\\
-zebra & herd & 2\\
-\addlinespace
-zebra & hoof & 4\\
-zebra & hoof\_large\_graze & 1\\
-zebra & hoofed & 1\\
 zebra & horse & 22\\
 zebra & horse-like & 1\\
 \addlinespace
-zebra & hot & 1\\
-zebra & hunt & 2\\
-zebra & hunting & 1\\
-zebra & in & 1\\
-zebra & jaguar & 1\\
-\addlinespace
-zebra & keep & 1\\
-zebra & kind & 1\\
-zebra & kinda & 2\\
-zebra & knife & 2\\
-zebra & large & 3\\
-\addlinespace
-zebra & leg & 19\\
-zebra & legged & 2\\
-zebra & life & 25\\
-zebra & like & 1\\
-zebra & line & 1\\
-\addlinespace
-zebra & lion & 3\\
-zebra & live & 4\\
-zebra & live\_zoo & 1\\
-zebra & long & 1\\
-zebra & look & 5\\
-\addlinespace
 zebra & look\_similar\_horse & 1\\
-zebra & lot & 1\\
-zebra & Madagascar & 2\\
-zebra & make\_metal & 1\\
-zebra & make\_plastic & 1\\
-\addlinespace
-zebra & mama & 1\\
-zebra & mammal & 10\\
-zebra & mane & 2\\
-zebra & medium & 1\\
-zebra & metal & 4\\
-\addlinespace
-zebra & metallic & 1\\
-zebra & move & 1\\
-zebra & movie & 2\\
-zebra & napkin & 1\\
-zebra & neck & 1\\
-\addlinespace
-zebra & neigh & 1\\
-zebra & not & 4\\
-zebra & often & 1\\
-zebra & one & 1\\
-zebra & open & 1\\
-\addlinespace
-zebra & organism & 1\\
-zebra & other & 1\\
-zebra & pack & 1\\
-zebra & part & 1\\
-zebra & peaceful & 1\\
-\addlinespace
-zebra & pet & 1\\
-zebra & physical & 1\\
-zebra & pick & 1\\
-zebra & pick\_food & 1\\
-zebra & plain & 1\\
-\addlinespace
-zebra & planet & 1\\
-zebra & plant & 1\\
-zebra & plastic & 1\\
-zebra & plate & 1\\
-zebra & pointy & 2\\
-\addlinespace
-zebra & pony & 1\\
-zebra & predator & 1\\
-zebra & predominantly & 1\\
-zebra & pretty & 2\\
-zebra & prey & 3\\
-\addlinespace
-zebra & prong & 1\\
-zebra & pronged & 1\\
-zebra & quiet & 1\\
-zebra & referee & 1\\
-zebra & related & 1\\
-\addlinespace
 zebra & related\_horse & 1\\
-zebra & resemble\_body & 1\\
-zebra & resemble\_donkey & 1\\
 zebra & resemble\_small\_horse & 1\\
-zebra & ridden\_stripe & 1\\
-\addlinespace
-zebra & river & 1\\
-zebra & road & 1\\
-zebra & roam & 1\\
-zebra & rug & 1\\
-zebra & run & 8\\
-\addlinespace
 zebra & run\_fast\_horse & 1\\
 zebra & run\_horse & 1\\
-zebra & saddle & 1\\
-zebra & safari & 1\\
-zebra & Savannah & 1\\
 \addlinespace
-zebra & see & 1\\
-zebra & see\_zoo & 1\\
-zebra & sharp & 1\\
-zebra & silver & 3\\
-zebra & silverware & 1\\
-\addlinespace
-zebra & similar & 1\\
-zebra & size & 2\\
-zebra & small & 1\\
-zebra & smell & 1\\
 zebra & sound\_horse & 1\\
-\addlinespace
-zebra & spoon & 2\\
-zebra & spot & 1\\
-zebra & stop & 1\\
-zebra & strip & 3\\
-zebra & stripe & 52\\
-\addlinespace
 zebra & stripe\_similar\_horse & 1\\
-zebra & style & 1\\
-zebra & sun & 1\\
-zebra & survive & 1\\
-zebra & tail & 3\\
-\addlinespace
-zebra & tall & 1\\
-zebra & thin & 1\\
-zebra & time & 1\\
-zebra & tool & 1\\
-zebra & torso & 1\\
-\addlinespace
-zebra & travel\_pack & 1\\
-zebra & triage & 1\\
-zebra & trot\_gallop & 1\\
-zebra & two & 2\\
-zebra & type & 1\\
-\addlinespace
-zebra & use & 8\\
-zebra & usually & 2\\
-zebra & utensil & 5\\
-zebra & venture & 1\\
-zebra & very & 1\\
-\addlinespace
-zebra & walk & 1\\
-zebra & walk\_animal & 1\\
-zebra & walk\_life & 1\\
-zebra & water & 1\\
-zebra & weird & 1\\
-\addlinespace
-zebra & white & 59\\
-zebra & wild & 15\\
-zebra & wilderness & 1\\
-zebra & young & 1\\
-zebra & zebra & 2\\
-\addlinespace
-zebra & zoo & 15\\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\hypertarget{stopwords}{%
+\subsection{Stopwords}\label{stopwords}}
+
+\scriptsize
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(stopwords)}
-\CommentTok{## Remove stop words}
+\CommentTok{## Install the stopwords package or use tm}
+\CommentTok{#install.packages("stopwords")}
+\NormalTok{no_stop <-}\StringTok{ }\NormalTok{lemmas}
+\CommentTok{## Exclude all stopwords}
+\NormalTok{no_stop}\OperatorTok{$}\NormalTok{answer <-}\StringTok{ }\KeywordTok{stri_replace_all_regex}\NormalTok{(no_stop}\OperatorTok{$}\NormalTok{answer, }
+                                        \DataTypeTok{pattern =} \KeywordTok{paste}\NormalTok{(}\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
+                                                                  \DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{), }
+                                                        \DataTypeTok{collapse =} \StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{b|}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{),}
+                                        \DataTypeTok{replacement =} \StringTok{""}\NormalTok{,}
+\NormalTok{                                        F, }\KeywordTok{list}\NormalTok{(}\DataTypeTok{case_insensitive =} \OtherTok{TRUE}\NormalTok{))}
+\CommentTok{## Remove stop words from multi-word sequences}
 \NormalTok{multi_words <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(multi_words, }
                       \OperatorTok{!}\NormalTok{(Feature }\OperatorTok{%in%}\StringTok{ }\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }\DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{)))}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{enumerate}
-\def\labelenumi{\alph{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  Weighting
-\item
-  feature type ontologies
-\item
-  identify cut off for idiosyncratic features (should it be necessary?)
-\end{enumerate}
+\normalsize
+
+\hypertarget{bag-of-words}{%
+\subsection{Bag of Words}\label{bag-of-words}}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
+\def\labelenumi{\alph{enumi}.}
 \setcounter{enumi}{3}
 \tightlist
 \item
-  Specification of how this is automated (package description)
-\end{enumerate}
-
-\begin{enumerate}
-\def\labelenumi{\alph{enumi}.}
-\tightlist
-\item
-  tests to see if things work: e.g.~manual spell checks vs automated ones
+  identify cut off for idiosyncratic features (should it be necessary?)
 \end{enumerate}
 
 \begin{enumerate}
@@ -842,7 +596,12 @@ zebra & zoo & 15\\
 \tightlist
 \item
   externally (categorization, similarity) -- MEN dataset, Lapata categorization task
+\item
+  feature type ontologies
 \end{enumerate}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -851,9 +610,6 @@ zebra & zoo & 15\\
 \item
   Challenges and opportunities
 \end{enumerate}
-
-\hypertarget{discussion}{%
-\section{Discussion}\label{discussion}}
 
 \newpage
 
@@ -865,6 +621,83 @@ zebra & zoo & 15\\
 \setlength{\leftskip}{0.5in}
 
 \hypertarget{refs}{}
+\leavevmode\hypertarget{ref-Ashcraft1978a}{}%
+Ashcraft, M. H. (1978). Property norms for typical and atypical items from 17 categories: A description and discussion. \emph{Memory \& Cognition}, \emph{6}(3), 227--232. doi:\href{https://doi.org/10.3758/BF03197450}{10.3758/BF03197450}
+
+\leavevmode\hypertarget{ref-Bruni2014}{}%
+Bruni, E., Tran, N. K., \& Baroni, M. (2014). Multimodal Distributional Semantics. \emph{Journal of Artificial Intelligence Research}, \emph{49}, 1--47. doi:\href{https://doi.org/10.1613/jair.4135}{10.1613/jair.4135}
+
+\leavevmode\hypertarget{ref-Buchanan2013}{}%
+Buchanan, E. M., Holmes, J. L., Teasley, M. L., \& Hutchison, K. A. (2013). English semantic word-pair norms and a searchable Web portal for experimental stimulus creation. \emph{Behavior Research Methods}, \emph{45}(3), 746--757. doi:\href{https://doi.org/10.3758/s13428-012-0284-z}{10.3758/s13428-012-0284-z}
+
+\leavevmode\hypertarget{ref-Buchanan2019}{}%
+Buchanan, E. M., Valentine, K. D., \& Maxwell, N. P. (2019). English semantic feature production norms: An extended database of 4436 concepts. \emph{Behavior Research Methods}. doi:\href{https://doi.org/10.3758/s13428-019-01243-z}{10.3758/s13428-019-01243-z}
+
+\leavevmode\hypertarget{ref-Collins1969}{}%
+Collins, A. M., \& Quillian, M. R. (1969). Retrieval time from semantic memory. \emph{Journal of Verbal Learning and Verbal Behavior}, \emph{8}(2), 240--247. doi:\href{https://doi.org/10.1016/S0022-5371(69)80069-1}{10.1016/S0022-5371(69)80069-1}
+
+\leavevmode\hypertarget{ref-Devereux2014}{}%
+Devereux, B. J., Tyler, L. K., Geertzen, J., \& Randall, B. (2014). The Centre for Speech, Language and the Brain (CSLB) concept property norms. \emph{Behavior Research Methods}, \emph{46}(4), 1119--1127. doi:\href{https://doi.org/10.3758/s13428-013-0420-4}{10.3758/s13428-013-0420-4}
+
+\leavevmode\hypertarget{ref-Feinerer2018}{}%
+Feinerer, I., Hornik, K., \& Artifex Software, I. (2018). tm: Text Mining Package. Retrieved from \url{https://cran.r-project.org/web/packages/tm/index.html}
+
+\leavevmode\hypertarget{ref-Gagolewski2019}{}%
+Gagolewski, M., \& Tartanus, B. (2019). stringi: Character String Processing Facilities. Retrieved from \url{https://cran.r-project.org/web/packages/stringi/index.html}
+
+\leavevmode\hypertarget{ref-Kremer2011a}{}%
+Kremer, G., \& Baroni, M. (2011). A set of semantic norms for German and Italian. \emph{Behavior Research Methods}, \emph{43}(1), 97--109. doi:\href{https://doi.org/10.3758/s13428-010-0028-x}{10.3758/s13428-010-0028-x}
+
+\leavevmode\hypertarget{ref-Lenci2013}{}%
+Lenci, A., Baroni, M., Cazzolli, G., \& Marotta, G. (2013). BLIND: A set of semantic feature norms from the congenitally blind. \emph{Behavior Research Methods}, \emph{45}(4), 1218--1233. doi:\href{https://doi.org/10.3758/s13428-013-0323-4}{10.3758/s13428-013-0323-4}
+
+\leavevmode\hypertarget{ref-McRae2005}{}%
+McRae, K., Cree, G. S., Seidenberg, M. S., \& McNorgan, C. (2005). Semantic feature production norms for a large set of living and nonliving things. \emph{Behavior Research Methods}, \emph{37}(4), 547--559. doi:\href{https://doi.org/10.3758/BF03192726}{10.3758/BF03192726}
+
+\leavevmode\hypertarget{ref-Michalke2018}{}%
+Michalke, M. (2018). koRpus: An R Package for Text Analysis. Retrieved from \url{https://cran.r-project.org/web/packages/koRpus/index.html}
+
+\leavevmode\hypertarget{ref-Montefinese2013}{}%
+Montefinese, M., Ambrosini, E., Fairfield, B., \& Mammarella, N. (2013). Semantic memory: A feature-based analysis and new norms for Italian. \emph{Behavior Research Methods}, \emph{45}(2), 440--461. doi:\href{https://doi.org/10.3758/s13428-012-0263-4}{10.3758/s13428-012-0263-4}
+
+\leavevmode\hypertarget{ref-Ooms2018}{}%
+Ooms, J. (2018). The hunspell package: High-Performance Stemmer, Tokenizer, and Spell Checker for R. Retrieved from \href{https://cran.r-project.org/web/packages/hunspell/vignettes/intro.html\%7B/\#\%7Dsetting\%7B/_\%7Da\%7B/_\%7Dlanguage}{https://cran.r-project.org/web/packages/hunspell/vignettes/intro.html\{\textbackslash{}\#\}setting\{\textbackslash{}\_\}a\{\textbackslash{}\_\}language}
+
+\leavevmode\hypertarget{ref-Perry2017}{}%
+Perry, P. O. (2017). corpus: Text Corpus Analysis. Retrieved from \url{http://corpustext.com/}
+
+\leavevmode\hypertarget{ref-Reverberi2004}{}%
+Reverberi, C., Capitani, E., \& Laiacona, E. (2004). Variabili semantico lessicali relative a tutti gli elementi di una categoria semantica: Indagine su soggetti normali italiani per la categoria ``frutta". \emph{Giornale Italiano Di Psicologia}, \emph{31}, 497--522.
+
+\leavevmode\hypertarget{ref-Rosch1975}{}%
+Rosch, E., \& Mervis, C. B. (1975). Family resemblances: Studies in the internal structure of categories. \emph{Cognitive Psychology}, \emph{7}(4), 573--605. doi:\href{https://doi.org/10.1016/0010-0285(75)90024-9}{10.1016/0010-0285(75)90024-9}
+
+\leavevmode\hypertarget{ref-Ruts2004}{}%
+Ruts, W., De Deyne, S., Ameel, E., Vanpaemel, W., Verbeemen, T., \& Storms, G. (2004). Dutch norm data for 13 semantic categories and 338 exemplars. \emph{Behavior Research Methods, Instruments, \& Computers}, \emph{36}(3), 506--515. doi:\href{https://doi.org/10.3758/BF03195597}{10.3758/BF03195597}
+
+\leavevmode\hypertarget{ref-Schmid1994}{}%
+Schmid, H. (1994). Probabilistic Part-of-Speech Tagging Using Decision Trees. doi:\href{https://doi.org/10.1.1.28.1139}{10.1.1.28.1139}
+
+\leavevmode\hypertarget{ref-Stein2009}{}%
+Stein, L., \& de Azevedo Gomes, C. (2009). Normas Brasileiras para listas de palavras associadas: Associação semântica, concretude, frequência e emocionalidade. \emph{Psicologia: Teoria E Pesquisa}, \emph{25}, 537--546. doi:\href{https://doi.org/10.1590/S0102-37722009000400009}{10.1590/S0102-37722009000400009}
+
+\leavevmode\hypertarget{ref-Toglia2009}{}%
+Toglia, M. P. (2009). Withstanding the test of time: The 1978 semantic word norms. \emph{Behavior Research Methods}, \emph{41}(2), 531--533. doi:\href{https://doi.org/10.3758/BRM.41.2.531}{10.3758/BRM.41.2.531}
+
+\leavevmode\hypertarget{ref-Toglia1978}{}%
+Toglia, M. P., \& Battig, W. F. (1978). \emph{Handbook of semantic word norms}. Hillside, NJ: Earlbaum.
+
+\leavevmode\hypertarget{ref-Vinson2008}{}%
+Vinson, D. P., \& Vigliocco, G. (2008). Semantic feature production norms for a large set of objects and events. \emph{Behavior Research Methods}, \emph{40}(1), 183--190. doi:\href{https://doi.org/10.3758/BRM.40.1.183}{10.3758/BRM.40.1.183}
+
+\leavevmode\hypertarget{ref-Vivas2017}{}%
+Vivas, J., Vivas, L., Comesaña, A., Coni, A. G., \& Vorano, A. (2017). Spanish semantic feature production norms for 400 concrete concepts. \emph{Behavior Research Methods}, \emph{49}(3), 1095--1106. doi:\href{https://doi.org/10.3758/s13428-016-0777-2}{10.3758/s13428-016-0777-2}
+
+\leavevmode\hypertarget{ref-Wickham2014}{}%
+Wickham, H. (2014). Tidy Data. \emph{Journal of Statistical Software}, \emph{59}(10), 1--23. doi:\href{https://doi.org/10.18637/jss.v059.i10}{10.18637/jss.v059.i10}
+
+\leavevmode\hypertarget{ref-Wickham2019}{}%
+Wickham, H., Francios, R., Henry, L., Muller, K., \& Rstudio. (2019). dplyr: A Grammar of Data Manipulation. Retrieved from \url{https://cloud.r-project.org/web/packages/dplyr/index.html}
 
 \endgroup
 
