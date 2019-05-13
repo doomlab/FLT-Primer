@@ -248,6 +248,8 @@ This data was collected using the instructions provided by ({\textbf{???}}), how
 
 Spell checking can be automated with the \texttt{hunspell} package in \emph{R} ({\textbf{???}}), which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
 
+\scriptsize
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{## Install the hunspell package if necessary}
@@ -258,6 +260,8 @@ Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (
 \NormalTok{spelling_errors <-}\StringTok{ }\KeywordTok{hunspell}\NormalTok{(master}\OperatorTok{$}\NormalTok{answer, }\DataTypeTok{dict =} \KeywordTok{dictionary}\NormalTok{(}\StringTok{"en_US"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+\normalsize
 
 The result from the \texttt{hunspell()} function is a list object of spelling errors for each row of data. For example, when responding to \emph{apple}, a participant wrote \emph{fruit grocery store orchard red green yelloe good with peanut butter good with caramell}, and the spelling errors were denoted as \emph{yelloe caramell}. After checking for errors, the \texttt{hunspell\_suggest()} function was used to determine the most likely replacement for each error.
 
@@ -440,13 +444,17 @@ Multi-word sequences are often coded to mimic a ({\textbf{???}}) style model, wi
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(temp_tag)}
   \CommentTok{## Create part of speech and features combined}
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
-                            \DataTypeTok{two_words =} \KeywordTok{paste}\NormalTok{(token, }\KeywordTok{lead}\NormalTok{(token), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+                            \DataTypeTok{two_words =} \KeywordTok{paste}\NormalTok{(token, }
+                                              \KeywordTok{lead}\NormalTok{(token), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
-                            \DataTypeTok{three_words =} \KeywordTok{paste}\NormalTok{(token, }\KeywordTok{lead}\NormalTok{(token), }\KeywordTok{lead}\NormalTok{(token, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+                            \DataTypeTok{three_words =} \KeywordTok{paste}\NormalTok{(token, }
+                                                \KeywordTok{lead}\NormalTok{(token), }\KeywordTok{lead}\NormalTok{(token, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
-                            \DataTypeTok{two_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }\KeywordTok{lead}\NormalTok{(wclass), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+                            \DataTypeTok{two_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }
+                                                  \KeywordTok{lead}\NormalTok{(wclass), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
-                            \DataTypeTok{three_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }\KeywordTok{lead}\NormalTok{(wclass), }\KeywordTok{lead}\NormalTok{(wclass, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+                            \DataTypeTok{three_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }
+                                                    \KeywordTok{lead}\NormalTok{(wclass), }\KeywordTok{lead}\NormalTok{(wclass, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
   \CommentTok{## Find verb noun or verb adjective nouns to cluster on }
 \NormalTok{  verb_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words_pos)}
 \NormalTok{  verb_adj_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_adjective_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{three_words_pos)}
@@ -454,7 +462,8 @@ Multi-word sequences are often coded to mimic a ({\textbf{???}}) style model, wi
 \NormalTok{  features_for_table <-}\StringTok{ }\KeywordTok{c}\NormalTok{(temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words[verb_nouns], }
 \NormalTok{                          temp_tag_tibble}\OperatorTok{$}\NormalTok{three_words[verb_adj_nouns],}
 \NormalTok{                          temp_tag_tibble}\OperatorTok{$}\NormalTok{token[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(verb_nouns, verb_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{, }
-\NormalTok{                                                   verb_adj_nouns, verb_adj_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{, verb_adj_nouns}\OperatorTok{+}\DecValTok{2}\NormalTok{)])}
+\NormalTok{                                                   verb_adj_nouns, verb_adj_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{, }
+\NormalTok{                                                   verb_adj_nouns}\OperatorTok{+}\DecValTok{2}\NormalTok{)])}
   \CommentTok{## Create a table of frequencies}
 \NormalTok{  word_table <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(features_for_table))}
   \CommentTok{## Clean up the table}
