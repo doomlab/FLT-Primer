@@ -1,0 +1,11 @@
+base
+papaja
+kableExtra
+hunspell
+sylly
+koRpus
+koRpus.lang.en
+stringi
+dplyr
+stopwords
+tokenizers
