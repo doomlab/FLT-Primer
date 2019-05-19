@@ -132,7 +132,7 @@ For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[17
 ```{r fix_errors, echo = T, size="scriptsize"}
 ## Replace with most likely suggestion
 spell_checked <- master
-### Loop over the data.frame
+### Loop over the dataframe
 for (i in 1:nrow(spell_checked)){
   ### See if there are spelling errors
   if (length(spelling_errors[[i]]) > 0) {
@@ -221,11 +221,13 @@ lemmas$answer <- stri_replace_all_regex(str = lemmas$answer,
 
 Multi-word sequences are often coded to mimic a @Collins1969 style model, with "is-a" and "has-a" type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the "is-a" and "has-a" strings. An examination of the coding in @McRae2005 and @Devereux2014 indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With `dplyr` [@Wickham2019], new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the `table()` function is used to tabulate the final count of n-grams and their frequency. 
 
-```{r multi_words, echo = T, size="scriptsize"}
+```{r multi_words, echo = T, size="scriptsize", message = F}
+## Create an empty dataframe 
 multi_words <- data.frame(Word=character(),
                         Feature=character(), 
                         Frequency=numeric(), 
                         stringsAsFactors=FALSE) 
+## Create unique word list to loop over 
 unique_concepts <- unique(lemmas$word)
 ## Install dplyr
 #install.packages("dplyr")
@@ -240,7 +242,7 @@ for (i in 1:length(unique_concepts)){
           treetagger="manual", format="obj",
           TT.tknz=FALSE, lang="en",
           TT.options=list(path="~/TreeTagger", preset="en"))))
-  ## Save only the data.frame, remove NULL
+  ## Save only the dataframe, remove NULL
   temp_tag <- temp_tag@TT.res[-nrow(temp_tag@TT.res) , ]
   ## Subset out information you don't need
   temp_tag <- subset(temp_tag, 
@@ -258,13 +260,15 @@ for (i in 1:length(unique_concepts)){
                                               lead(token), sep = "_"))
   temp_tag_tibble <- mutate(temp_tag_tibble, 
                             three_words = paste(token, 
-                                                lead(token), lead(token, n = 2L), sep = "_"))
+                                                lead(token), lead(token, n = 2L), 
+                                                sep = "_"))
   temp_tag_tibble <- mutate(temp_tag_tibble, 
                             two_words_pos = paste(wclass, 
                                                   lead(wclass), sep = "_"))
   temp_tag_tibble <- mutate(temp_tag_tibble, 
                             three_words_pos = paste(wclass, 
-                                                    lead(wclass), lead(wclass, n = 2L), sep = "_"))
+                                                    lead(wclass), lead(wclass, n = 2L), 
+                                                    sep = "_"))
   ## Find verb noun or verb adjective nouns to cluster on 
   verb_nouns <- grep("\\bverb_noun", temp_tag_tibble$two_words_pos)
   verb_adj_nouns <- grep("\\bverb_adjective_noun", temp_tag_tibble$three_words_pos)
@@ -283,7 +287,7 @@ for (i in 1:length(unique_concepts)){
 }
 ```
 
-This procedure does produce some positive output, such as *fingers-have_fingernails* and *couches-have_cushions*. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for *zebra* shown below may require fuzzy logic matching to ensure that the different codings for *is-a-horse* are all combined together.
+This procedure produces mostly positive output, such as *fingers-have_fingernails* and *couches-have_cushions*. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for *zebra* shown below may require fuzzy logic matching to ensure that the different codings for *is-a-horse* are all combined together.
 
 ```{r get_zebra, echo = F}
 zebra <- multi_words[ grep("horse", multi_words$Feature) , ]
@@ -292,12 +296,55 @@ zebra <- zebra[zebra$Word == "zebra", ]
 
 `r kable(zebra, "latex", booktabs = T, row.names = F) %>%  kable_styling(position = "center")`
 
+## Bag of Words 
+
+The bag of words approach simply treats each token as 
+
+
+```{r}
+## Create an empty dataframe 
+bag_words <- data.frame(Word=character(),
+                        Feature=character(), 
+                        Frequency=numeric(), 
+                        stringsAsFactors=FALSE) 
+## Loop over each word
+for (i in 1:length(unique_concepts)){
+  ## Create a table of frequencies
+  word_table <- as.data.frame(table(
+    ## Tokenize the words
+    tokenize(
+      ## Put all answers together in one character string
+      paste0(lemmas$answer[lemmas$word == unique_concepts[i]], collapse = " "), 
+      format = "obj", tag = F)))
+  
+  ## Clean up the table
+  word_table$Word <- unique_concepts[i]
+  colnames(word_table) = c("Feature", "Frequency", "Word")
+  
+  bag_words <- rbind(bag_words, word_table[ , c(3, 1, 2)])
+  }
+```
+
+
 ## Stopwords
 
-``` {r stop_words, echo = T, size="scriptsize"}
-library(stopwords)
+As shown in Figure \@ref(fig:flow_chart), the next stage of processing would be to exclude stopwords, such as *the, of, but*, for either the multi-word sequence or bag of word style processing. The `stopwords` package [@Benoit2017] includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subseting the data to exclude stopwords as unigrams. 
+
+``` {r stop_words_multi, echo = T, size="scriptsize"}
 ## Install the stopwords package or use tm
 #install.packages("stopwords")
+library(stopwords)
+## Remove stop words from multi-word sequences
+multi_words <- subset(multi_words, 
+                      !(Feature %in% stopwords(language = "en", source = "snowball")))
+```
+
+
+
+For a bag of words approach, the `stringi` library can be used to find and exclude each stop word. 
+
+```{r stop_words_bow, echo = T, size="scriptsize"}
+## Create a new dataframe for Bag of Words 
 no_stop <- lemmas
 ## Exclude all stopwords
 no_stop$answer <- stri_replace_all_regex(no_stop$answer, 
@@ -306,42 +353,6 @@ no_stop$answer <- stri_replace_all_regex(no_stop$answer,
                                                         collapse = "\\b|\\b"),
                                         replacement = "",
                                         F, list(case_insensitive = TRUE))
-## Remove stop words from multi-word sequences
-multi_words <- subset(multi_words, 
-                      !(Feature %in% stopwords(language = "en", source = "snowball")))
-
-```
-
-## Bag of Words 
-
-```{r}
-# Bag of Words ------------------------------------------------------------
-library(tokenizers)
-bag_words <- data.frame(Word=character(),
-                        Feature=character(), 
-                        Frequency=numeric(), 
-                        stringsAsFactors=FALSE) 
-
-
-
-## Loop over each word
-for (i in 1:length(unique_concepts)){
-
-  ## Create a table of frequencies
-  word_table <- as.data.frame(table(
-    unlist(
-      ## Tokenize the words
-      tokenize_words(
-        ## Put all answers together in one character string
-        paste0(no_stop$answer[no_stop$word == unique_concepts[i]], collapse = " ")))))
-  
-  ## Clean up the table
-  word_table$Word <- unique_concepts[i]
-  colnames(word_table) = c("Feature", "Frequency", "Word")
-  
-  bag_words <- rbind(bag_words, word_table[ , c(3, 1, 2)])
-  
-}
 ```
 
 
@@ -365,9 +376,6 @@ c.	feature type ontologies
 \newpage
 
 # References
-```{r create_r-references}
-r_refs(file = "r-references.bib")
-```
 
 \begingroup
 \setlength{\parindent}{-0.5in}
