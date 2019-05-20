@@ -209,18 +209,20 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
   Typical operations performed on features
 \end{enumerate}
 
-\begin{figure}
-\centering
-\includegraphics{flow_chart.png}
-\caption{(\#fig:flow\_chart)Flow chart of proposed semantic processing feature steps.}
-\end{figure}
+\textbackslash{}begin\{figure\}
+\includegraphics[width=5.28in]{flow_chart}
+
+\caption{Flow chart of proposed semantic processing feature steps.}
+
+(\#fig:flow\_chart)
+\textbackslash{}end\{figure\}
 
 In the next several sections, we provide a tutorial using \emph{R} on how data from the semantic property norm task might be processed from raw input to finalized output. Figure @ref(fig:flow\_chart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach.
 
 \hypertarget{materials-and-data-format}{%
 \subsection{Materials and Data Format}\label{materials-and-data-format}}
 
-The data for this tutorial includes 9553 unique concept-feature responses for 104 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer.
+The data for this tutorial includes 17177 unique concept-feature responses for 226 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer.
 
 \begin{table}[H]
 \centering\begin{table}[H]
@@ -284,7 +286,7 @@ For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel car
 \begin{Highlighting}[]
 \CommentTok{## Replace with most likely suggestion}
 \NormalTok{spell_checked <-}\StringTok{ }\NormalTok{master}
-\CommentTok{### Loop over the data.frame}
+\CommentTok{### Loop over the dataframe}
 \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(spell_checked))\{}
   \CommentTok{### See if there are spelling errors}
   \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(spelling_errors[[i]]) }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
@@ -438,10 +440,12 @@ Multi-word sequences are often coded to mimic a Collins and Quillian (1969) styl
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{## Create an empty dataframe }
 \NormalTok{multi_words <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Word=}\KeywordTok{character}\NormalTok{(),}
                         \DataTypeTok{Feature=}\KeywordTok{character}\NormalTok{(), }
                         \DataTypeTok{Frequency=}\KeywordTok{numeric}\NormalTok{(), }
                         \DataTypeTok{stringsAsFactors=}\OtherTok{FALSE}\NormalTok{) }
+\CommentTok{## Create unique word list to loop over }
 \NormalTok{unique_concepts <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(lemmas}\OperatorTok{$}\NormalTok{word)}
 \CommentTok{## Install dplyr}
 \CommentTok{#install.packages("dplyr")}
@@ -456,7 +460,7 @@ Multi-word sequences are often coded to mimic a Collins and Quillian (1969) styl
           \DataTypeTok{treetagger=}\StringTok{"manual"}\NormalTok{, }\DataTypeTok{format=}\StringTok{"obj"}\NormalTok{,}
           \DataTypeTok{TT.tknz=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{lang=}\StringTok{"en"}\NormalTok{,}
           \DataTypeTok{TT.options=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{path=}\StringTok{"~/TreeTagger"}\NormalTok{, }\DataTypeTok{preset=}\StringTok{"en"}\NormalTok{))))}
-  \CommentTok{## Save only the data.frame, remove NULL}
+  \CommentTok{## Save only the dataframe, remove NULL}
 \NormalTok{  temp_tag <-}\StringTok{ }\NormalTok{temp_tag}\OperatorTok{@}\NormalTok{TT.res[}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(temp_tag}\OperatorTok{@}\NormalTok{TT.res) , ]}
   \CommentTok{## Subset out information you don't need}
 \NormalTok{  temp_tag <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(temp_tag, }
@@ -474,13 +478,15 @@ Multi-word sequences are often coded to mimic a Collins and Quillian (1969) styl
                                               \KeywordTok{lead}\NormalTok{(token), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
                             \DataTypeTok{three_words =} \KeywordTok{paste}\NormalTok{(token, }
-                                                \KeywordTok{lead}\NormalTok{(token), }\KeywordTok{lead}\NormalTok{(token, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+                                                \KeywordTok{lead}\NormalTok{(token), }\KeywordTok{lead}\NormalTok{(token, }\DataTypeTok{n =}\NormalTok{ 2L), }
+                                                \DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
                             \DataTypeTok{two_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }
                                                   \KeywordTok{lead}\NormalTok{(wclass), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
 \NormalTok{  temp_tag_tibble <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(temp_tag_tibble, }
                             \DataTypeTok{three_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }
-                                                    \KeywordTok{lead}\NormalTok{(wclass), }\KeywordTok{lead}\NormalTok{(wclass, }\DataTypeTok{n =}\NormalTok{ 2L), }\DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
+                                                    \KeywordTok{lead}\NormalTok{(wclass), }\KeywordTok{lead}\NormalTok{(wclass, }\DataTypeTok{n =}\NormalTok{ 2L), }
+                                                    \DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
   \CommentTok{## Find verb noun or verb adjective nouns to cluster on }
 \NormalTok{  verb_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words_pos)}
 \NormalTok{  verb_adj_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_adjective_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{three_words_pos)}
@@ -502,7 +508,7 @@ Multi-word sequences are often coded to mimic a Collins and Quillian (1969) styl
 
 \normalsize
 
-This procedure does produce some positive output, such as \emph{fingers-have\_fingernails} and \emph{couches-have\_cushions}. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for \emph{zebra} shown below may require fuzzy logic matching to ensure that the different codings for \emph{is-a-horse} are all combined together.
+This procedure produces mostly positive output, such as \emph{fingers-have\_fingernails} and \emph{couches-have\_cushions}. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for \emph{zebra} shown below may require fuzzy logic matching to ensure that the different codings for \emph{is-a-horse} are all combined together.
 
 \begin{table}[H]
 \centering
@@ -528,88 +534,152 @@ zebra & stripe\_similar\_horse & 1\\
 \end{tabular}
 \end{table}
 
+\hypertarget{bag-of-words}{%
+\subsection{Bag of Words}\label{bag-of-words}}
+
+The bag of words approach simply treats each token as a separate feature to be tabulated for analysis. After stemming and lemmatization, the data can be processed as single word tokens into a table of frequencies for each cue word. The resulting dataframe is each cue-feature combination with a total for each feature.
+
+The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{llr}
+\toprule
+Word & Feature & Frequency\\
+\midrule
+zebra & stripe & 71\\
+zebra & black & 64\\
+zebra & white & 62\\
+zebra & be & 56\\
+zebra & animal & 54\\
+\addlinespace
+zebra & have & 54\\
+zebra & and & 47\\
+zebra & a & 46\\
+zebra & in & 41\\
+zebra & horse & 32\\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \hypertarget{stopwords}{%
 \subsection{Stopwords}\label{stopwords}}
+
+As shown in Figure @ref(fig:flow\_chart), the next stage of processing would be to exclude stopwords, such as \emph{the, of, but}, for either the multi-word sequence or bag of word style processing. The \texttt{stopwords} package ({\textbf{???}}) includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subseting the data to exclude stopwords as unigrams.
 
 \scriptsize
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(stopwords)}
 \CommentTok{## Install the stopwords package or use tm}
 \CommentTok{#install.packages("stopwords")}
-\NormalTok{no_stop <-}\StringTok{ }\NormalTok{lemmas}
-\CommentTok{## Exclude all stopwords}
-\NormalTok{no_stop}\OperatorTok{$}\NormalTok{answer <-}\StringTok{ }\KeywordTok{stri_replace_all_regex}\NormalTok{(no_stop}\OperatorTok{$}\NormalTok{answer, }
-                                        \DataTypeTok{pattern =} \KeywordTok{paste}\NormalTok{(}\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
-                                                                  \DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{), }
-                                                        \DataTypeTok{collapse =} \StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{b|}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{),}
-                                        \DataTypeTok{replacement =} \StringTok{""}\NormalTok{,}
-\NormalTok{                                        F, }\KeywordTok{list}\NormalTok{(}\DataTypeTok{case_insensitive =} \OtherTok{TRUE}\NormalTok{))}
-\CommentTok{## Remove stop words from multi-word sequences}
+\KeywordTok{library}\NormalTok{(stopwords)}
+\CommentTok{## Remove stop words from either processing approach}
 \NormalTok{multi_words <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(multi_words, }
-                      \OperatorTok{!}\NormalTok{(Feature }\OperatorTok{%in%}\StringTok{ }\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }\DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{)))}
+                      \OperatorTok{!}\NormalTok{(Feature }\OperatorTok{%in%}\StringTok{ }\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
+                                               \DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{)))}
+
+\NormalTok{bag_words <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(bag_words, }
+                    \OperatorTok{!}\NormalTok{(Feature }\OperatorTok{%in%}\StringTok{ }\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
+                                             \DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{)))}
 \end{Highlighting}
 \end{Shaded}
 
 \normalsize
 
-\hypertarget{bag-of-words}{%
-\subsection{Bag of Words}\label{bag-of-words}}
+\hypertarget{descriptive-statistics}{%
+\subsection{Descriptive Statistics}\label{descriptive-statistics}}
 
-\begin{enumerate}
-\def\labelenumi{\alph{enumi}.}
-\setcounter{enumi}{3}
-\tightlist
-\item
-  identify cut off for idiosyncratic features (should it be necessary?)
-\end{enumerate}
+\begin{verbatim}
+## [1] 0.9836455
+\end{verbatim}
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{4}
-\tightlist
-\item
-  Evaluation of the approach
-\end{enumerate}
+\begin{verbatim}
+## [1] 0.7351418
+\end{verbatim}
 
-\begin{enumerate}
-\def\labelenumi{\alph{enumi}.}
-\tightlist
-\item
-  internal (quality, size, consistency) - ?
-\item
-  feature size number of features work
-\end{enumerate}
+\begin{verbatim}
+## [1] 0.6603825
+\end{verbatim}
 
-\begin{enumerate}
-\def\labelenumi{\roman{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  classifier for ontology, compare results to previous work
-\end{enumerate}
+\begin{verbatim}
+## [1] 0.9163408
+\end{verbatim}
 
-\begin{enumerate}
-\def\labelenumi{\alph{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  externally (categorization, similarity) -- MEN dataset, Lapata categorization task
-\item
-  feature type ontologies
-\end{enumerate}
+\begin{verbatim}
+## [1] 0.7155022
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 0.8167169
+\end{verbatim}
+
+make a table here of the stuff
+talk about deleting low features or not
+d. identify cut off for idiosyncratic features (should it be necessary?)
+
+\hypertarget{internal-comparison-of-approach}{%
+\subsection{Internal Comparison of Approach}\label{internal-comparison-of-approach}}
+
+Compare this data processing to hand processed data from B2019
+
+\begin{verbatim}
+##        raw_b        raw_m        raw_v translated_b translated_m 
+##    0.6899807    0.3764903    0.5926762    0.7243672    0.5753183 
+## translated_v 
+##    0.5817829
+\end{verbatim}
+
+\hypertarget{external-comparison-of-approach}{%
+\subsection{External Comparison of Approach}\label{external-comparison-of-approach}}
+
+Compare to the MEN dataset
+
+\begin{verbatim}
+## [1] 0.6889117
+\end{verbatim}
+
+\hypertarget{ontology-and-categorization}{%
+\subsection{Ontology and Categorization}\label{ontology-and-categorization}}
+
+\begin{verbatim}
+##  [1] 0.9477885 0.8802228 0.8768643 0.8775418 0.8776403 0.8761919 0.8762623
+##  [8] 0.8723146 0.8723403 0.8657468 0.8660341 0.8660926 0.8661895 0.8662974
+## [15] 0.8662678 0.8657396 0.8658517 0.8641960 0.8634386 0.8573610 0.8250660
+## [22] 0.8249962 0.8252634 0.8255298 0.7192209 0.7193813 0.7193717 0.7197155
+## [29] 0.7193555 0.7189437 0.7190156 0.7191427 0.7185243
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##    1    2    3    4    5    6 
+## 8613   17    3   13   11    5
+\end{verbatim}
+
+\includegraphics{flt_manuscript_files/figure-latex/categorization-1.pdf}
+
+\begin{verbatim}
+##         1         2         3         4         5         6 
+##   11.6864  193.2353 1843.0000  150.6923  124.4545  442.0000
+\end{verbatim}
+
+\begin{verbatim}
+##         1         2         3         4         5         6 
+##  36.57800 161.36238 520.74274  97.93313  95.65497 116.06679
+\end{verbatim}
+
+\begin{verbatim}
+##    1    2    3    4    5    6 
+##    1   43 1260   70   44  247
+\end{verbatim}
+
+\begin{verbatim}
+##    1    2    3    4    5    6 
+##  810  542 2262  383  362  550
+\end{verbatim}
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{5}
-\tightlist
-\item
-  Challenges and opportunities
-\end{enumerate}
 
 \newpage
 

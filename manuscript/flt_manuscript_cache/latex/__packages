@@ -8,4 +8,8 @@ koRpus.lang.en
 stringi
 dplyr
 stopwords
-tokenizers
+readxl
+SnowballC
+lsa
+tidyr
+cluster

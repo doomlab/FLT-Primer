@@ -43,7 +43,7 @@ draft             : no
 
 documentclass     : "apa6"
 classoption       : "man"
-output            : papaja::apa6_docx
+output            : papaja::apa6_pdf #or _docx for word
 ---
 
 ```{r setup, include = FALSE}
@@ -326,7 +326,7 @@ bag_words <- bag_words[-c(grep('^[[:punct:]]',bag_words$Feature)), ]
 
 The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features. 
 
-```{r get_zebra, echo = F}
+```{r get_zebra2, echo = F}
 zebra <- bag_words[ bag_words$Word == "zebra" , ]
 zebra <- zebra[order(zebra$Frequency, decreasing = T), ]
 ```
@@ -482,17 +482,20 @@ men_data <- read.table("../data/MEN_dataset_natural_form_full.txt",
                        quote="\"", comment.char="", stringsAsFactors=FALSE)
 
 library(tidyr)
-bag_words_spread <- spread(bag_words, key = Word, value = Frequency, fill = 0)
+bag_words_spread <- spread(bag_words[ , -c(4,5)], key = Word, value = Frequency, fill = 0)
 bag_words_cosine <- cosine(as.matrix(bag_words_spread[ , -1]))
 bag_words_cosine <- as_tibble(bag_words_cosine)
 bag_words_cosine$cue <- colnames(bag_words_cosine)
 bag_words_cosine <- gather(bag_words_cosine, key = target, 
-                           value = cosine, airplane:zebra)
+                           value = cosine, abstract:zebra)
 bag_words_cosine$key <- paste(bag_words_cosine$cue, bag_words_cosine$target, sep = " ")
 men_data$key <- paste(men_data$V1, men_data$V2)
 colnames(men_data) <- c("cue", "target", "rating", "key")
   
 men_merge = merge(men_data, bag_words_cosine, by = "key")
+
+##correlation
+cor(men_merge$rating, men_merge$cosine)
 ```
 
 ## Ontology and Categorization
