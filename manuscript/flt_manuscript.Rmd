@@ -91,10 +91,8 @@ In the next several sections, we provide a tutorial using *R* on how data from t
 ## Materials and Data Format
 
 ```{r data, include = F}
-
 ## Importing the data in the provided data folder
 master <- read.csv("../data/tidy_words.csv", stringsAsFactors = F)
-
 ## Show data structure
 ## Data is in tidy format with concept in the word column
 ## Participant answer in the answer column
@@ -111,7 +109,7 @@ This data was collected using the instructions provided by @McRae2005, however, 
 
 Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018], which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each `answer` can be checked for misspellings across an entire column of answers, which is located in the `master` dataset. The default dictionary is American English, and the `hunspell` vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the `"en_GB"` would convert to British English spellings. 
 
-```{r check_spelling, echo = T, size="scriptsize"}
+```{r check_spelling, echo = T, size="scriptsize", messages = F}
 ## Install the hunspell package if necessary
 #install.packages("hunspell")
 library(hunspell)
@@ -149,11 +147,11 @@ for (i in 1:nrow(spell_checked)){
 
 ## Lemmatization
 
-The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the langauge, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. Several packages for *R* include customizable stemmers, notably the `hunspell`, `corpus` [@Perry2017], and `tm` [@Feinerer2018] packages. 
+The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the langauge, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. Several packages for *R* include customizable stemmers, notably the `hunspell`, `corpus` [@Perry2017], and `tm` [@Feinerer2018] packages.
 
 Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` package in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple langauges. The koRpus package includes functionality to use TreeTagger in *R*. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation. 
 
-```{r lemma, echo = T, size="scriptsize"}
+```{r lemma, echo = T, size="scriptsize", messages = F}
 lemmas <- spell_checked
 ## Install the koRpus package
 #install.packages("koRpus")
@@ -298,8 +296,7 @@ zebra <- zebra[zebra$Word == "zebra", ]
 
 ## Bag of Words 
 
-The bag of words approach simply treats each token as 
-
+The bag of words approach simply treats each token as a separate feature to be tabulated for analysis. After stemming and lemmatization, the data can be processed as single word tokens into a table of frequencies for each cue word. The resulting dataframe is each cue-feature combination with a total for each feature.
 
 ```{r}
 ## Create an empty dataframe 
@@ -322,9 +319,19 @@ for (i in 1:length(unique_concepts)){
   colnames(word_table) = c("Feature", "Frequency", "Word")
   
   bag_words <- rbind(bag_words, word_table[ , c(3, 1, 2)])
-  }
+}
+## Remove punctuation
+bag_words <- bag_words[-c(grep('^[[:punct:]]',bag_words$Feature)), ]
 ```
 
+The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features. 
+
+```{r get_zebra, echo = F}
+zebra <- bag_words[ bag_words$Word == "zebra" , ]
+zebra <- zebra[order(zebra$Frequency, decreasing = T), ]
+```
+
+`r kable(zebra[1:10, ], "latex", booktabs = T, row.names = F) %>%  kable_styling(position = "center")`
 
 ## Stopwords
 
@@ -334,44 +341,189 @@ As shown in Figure \@ref(fig:flow_chart), the next stage of processing would be 
 ## Install the stopwords package or use tm
 #install.packages("stopwords")
 library(stopwords)
-## Remove stop words from multi-word sequences
+## Remove stop words from either processing approach
 multi_words <- subset(multi_words, 
-                      !(Feature %in% stopwords(language = "en", source = "snowball")))
+                      !(Feature %in% stopwords(language = "en", 
+                                               source = "snowball")))
+
+bag_words <- subset(bag_words, 
+                    !(Feature %in% stopwords(language = "en", 
+                                             source = "snowball")))
 ```
 
+## Descriptive Statistics
 
+```{r desc_stats, echo = F}
+sample_sizes <- as.data.frame(tapply(master$word, master$word, length))
+sample_sizes$Word <- rownames(sample_sizes)
+colnames(sample_sizes)[1] <- "Sample_Size"
 
-For a bag of words approach, the `stringi` library can be used to find and exclude each stop word. 
+multi_words <- merge(multi_words, sample_sizes, by = "Word")
+bag_words <- merge(bag_words, sample_sizes, by = "Word")
 
-```{r stop_words_bow, echo = T, size="scriptsize"}
-## Create a new dataframe for Bag of Words 
-no_stop <- lemmas
-## Exclude all stopwords
-no_stop$answer <- stri_replace_all_regex(no_stop$answer, 
-                                        pattern = paste(stopwords(language = "en", 
-                                                                  source = "snowball"), 
-                                                        collapse = "\\b|\\b"),
-                                        replacement = "",
-                                        F, list(case_insensitive = TRUE))
+#number of features
+no_feat_m <- tapply(multi_words$Frequency, multi_words$Word, length)
+no_feat_b <- tapply(bag_words$Frequency, bag_words$Word, length)
+
+#correlations
+cor(no_feat_b, no_feat_m)
+cor(no_feat_m, sample_sizes$Sample_Size)
+cor(no_feat_b, sample_sizes$Sample_Size)
+
+#number of responses
+no_resp_mM <- tapply(multi_words$Frequency, multi_words$Word, mean)
+no_resp_bM <- tapply(bag_words$Frequency, bag_words$Word, mean)
+no_resp_mSD <- tapply(multi_words$Frequency, multi_words$Word, sd)
+no_resp_bSD <- tapply(bag_words$Frequency, bag_words$Word, sd)
+
+multi_words$Percent <- multi_words$Frequency/multi_words$Sample_Size*100
+bag_words$Percent <- bag_words$Frequency/bag_words$Sample_Size*100
+
+#number of responses proportionate to sample size
+per_resp_mM <- tapply(multi_words$Percent, multi_words$Word, mean)
+per_resp_bM <- tapply(bag_words$Percent, bag_words$Word, mean)
+per_resp_mSD <- tapply(multi_words$Percent, multi_words$Word, sd)
+per_resp_bSD <- tapply(bag_words$Percent, bag_words$Word, sd)
+
+#correlations
+cor(no_resp_mM, no_resp_bM)
+cor(no_resp_mM, sample_sizes$Sample_Size)
+cor(no_resp_bM, sample_sizes$Sample_Size)
+
+#number of small features
+no_smallfeat_m <- tapply(multi_words$Percent[multi_words$Percent >=10], multi_words$Word[multi_words$Percent >=10], length)
+no_smallfeat_b <- tapply(bag_words$Percent[bag_words$Percent >=10], bag_words$Word[bag_words$Percent >=10], length)
 ```
 
-
+make a table here of the stuff
+talk about deleting low features or not
 d.	identify cut off for idiosyncratic features (should it be necessary?) 
 
-5.	Evaluation of the approach
-a.	internal (quality, size, consistency) - ? 
-i.	feature size number of features work 
-ii.	classifier for ontology, compare results to previous work 
-b.	externally (categorization, similarity) – MEN dataset, Lapata categorization task 
-c.	feature type ontologies
+## Internal Comparison of Approach
 
+Compare this data processing to hand processed data from B2019
 
+```{r compare_b, echo = F}
+library(readxl)
+b_data <- read.csv("../data/final words 2017.csv", stringsAsFactors = F)
 
+## Reduce down only to overlap words
+b_data <- subset(b_data, cue %in% unique_concepts)
+b_data <- b_data[ , c("where", "cue", "feature", "translated",
+                      "frequency_feature", "frequency_translated") ]
+
+library(lsa)
+
+cosine_values <- data.frame(word=unique_concepts,
+                            raw_b=1:length(unique_concepts), 
+                            raw_m=1:length(unique_concepts),
+                            raw_v=1:length(unique_concepts),
+                            translated_b=1:length(unique_concepts), 
+                            translated_m=1:length(unique_concepts), 
+                            translated_v=1:length(unique_concepts), 
+                            stringsAsFactors=FALSE)
+
+for (i in 1:length(unique_concepts)){
+ 
+  temp_b <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "b", ]
+  temp_m <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "m", ] 
+  temp_v <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "v", ]
+  temp_bag <- bag_words[bag_words$Word == unique_concepts[i], ]
+  colnames(temp_bag)[2] = "feature"
+  
+  ## Based on unprocessed data 
+  temp_merge_b <- merge(temp_b, temp_bag, by = "feature", all = T)
+  temp_merge_m <- merge(temp_m, temp_bag, by = "feature", all = T)
+  temp_merge_v <- merge(temp_v, temp_bag, by = "feature", all = T)
+  
+  temp_merge_b[c("frequency_feature", "Frequency")][is.na(temp_merge_b[c("frequency_feature", "Frequency")])] <- 0
+  temp_merge_m[c("frequency_feature", "Frequency")][is.na(temp_merge_m[c("frequency_feature", "Frequency")])] <- 0
+  temp_merge_v[c("frequency_feature", "Frequency")][is.na(temp_merge_v[c("frequency_feature", "Frequency")])] <- 0
+  
+  cosine_values$raw_b[i] <- cosine(temp_merge_b$frequency_feature, temp_merge_b$Frequency)
+  cosine_values$raw_m[i] <- cosine(temp_merge_m$frequency_feature, temp_merge_m$Frequency)
+  cosine_values$raw_v[i] <- cosine(temp_merge_v$frequency_feature, temp_merge_v$Frequency)
+  
+  ## Based on processed data
+  colnames(temp_bag)[2] = "translated"
+  temp_merge_b <- merge(temp_b, temp_bag, by = "translated", all = T)
+  temp_merge_m <- merge(temp_m, temp_bag, by = "translated", all = T)
+  temp_merge_v <- merge(temp_v, temp_bag, by = "translated", all = T)
+  
+  temp_merge_b[c("frequency_translated", "Frequency")][is.na(temp_merge_b[c("frequency_translated", "Frequency")])] <- 0
+  temp_merge_m[c("frequency_translated", "Frequency")][is.na(temp_merge_m[c("frequency_translated", "Frequency")])] <- 0
+  temp_merge_v[c("frequency_translated", "Frequency")][is.na(temp_merge_v[c("frequency_translated", "Frequency")])] <- 0
+  
+  ### This process creates duplicates
+  temp_merge_b <- temp_merge_b[!duplicated(temp_merge_b$translated), ]
+  temp_merge_m <- temp_merge_m[!duplicated(temp_merge_m$translated), ]
+  temp_merge_v <- temp_merge_v[!duplicated(temp_merge_v$translated), ]
+  
+  cosine_values$translated_b[i] <- cosine(temp_merge_b$frequency_translated, temp_merge_b$Frequency)
+  cosine_values$translated_m[i] <- cosine(temp_merge_m$frequency_translated, temp_merge_m$Frequency)
+  cosine_values$translated_v[i] <- cosine(temp_merge_v$frequency_translated, temp_merge_v$Frequency)
+  
+  }
+
+cosine_values$raw_m[is.nan(cosine_values$raw_m)] <- NA
+cosine_values$raw_v[is.nan(cosine_values$raw_v)] <- NA
+cosine_values$translated_m[is.nan(cosine_values$translated_m)] <- NA
+cosine_values$translated_v[is.nan(cosine_values$translated_v)] <- NA
+
+apply(cosine_values[ , -1], 2, mean, na.rm = T)
+```
+
+## External Comparison of Approach
+
+Compare to the MEN dataset 
+
+```{r compare_men, echo = F}
+men_data <- read.table("../data/MEN_dataset_natural_form_full.txt",
+                       quote="\"", comment.char="", stringsAsFactors=FALSE)
+
+library(tidyr)
+bag_words_spread <- spread(bag_words, key = Word, value = Frequency, fill = 0)
+bag_words_cosine <- cosine(as.matrix(bag_words_spread[ , -1]))
+bag_words_cosine <- as_tibble(bag_words_cosine)
+bag_words_cosine$cue <- colnames(bag_words_cosine)
+bag_words_cosine <- gather(bag_words_cosine, key = target, 
+                           value = cosine, airplane:zebra)
+bag_words_cosine$key <- paste(bag_words_cosine$cue, bag_words_cosine$target, sep = " ")
+men_data$key <- paste(men_data$V1, men_data$V2)
+colnames(men_data) <- c("cue", "target", "rating", "key")
+  
+men_merge = merge(men_data, bag_words_cosine, by = "key")
+```
+
+## Ontology and Categorization
+
+```{r categorization, echo = F}
+library(cluster)
+
+bag_words_dist <- dist(bag_words_spread[ , -1], method = "euclidean")
+bag_words_cluster <- hclust(bag_words_dist, method = "ward.D2")
+#plot(bag_words_cluster, hang = -1)
+
+sapply(2:34, #34 in wu_barsalou 
+       function(x) summary(
+         silhouette(cutree(bag_words_cluster, k = x),
+                    bag_words_dist))$avg.width #find the widths
+)
+
+#probaby 6ish clusters can go more defined
+bag_words_category <- as.data.frame(cutree(bag_words_cluster, k = 6))
+bag_words_category$feature <- bag_words_spread$Feature
+colnames(bag_words_category)[1] <- "category"
+bag_words_category$totals <- rowSums(bag_words_spread[ , -1])
+table(bag_words_category$category)
+hist(bag_words_category$totals[bag_words_category$category == 1], breaks = 40)
+tapply(bag_words_category$totals, bag_words_category$category, mean)
+tapply(bag_words_category$totals, bag_words_category$category, sd)
+tapply(bag_words_category$totals, bag_words_category$category, min)
+tapply(bag_words_category$totals, bag_words_category$category, max)
+```
 
 # Discussion
-
-6.	Challenges and opportunities
-
 
 \newpage
 
