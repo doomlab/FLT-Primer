@@ -209,39 +209,36 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
   Typical operations performed on features
 \end{enumerate}
 
-\textbackslash{}begin\{figure\}
-\includegraphics[width=5.28in]{flow_chart}
+\begin{figure}
+\includegraphics[width=5.28in]{flow_chart} \caption{Flow chart of proposed semantic processing feature steps.}\label{fig:flowchart}
+\end{figure}
 
-\caption{Flow chart of proposed semantic processing feature steps.}
-
-(\#fig:flow\_chart)
-\textbackslash{}end\{figure\}
-
-In the next several sections, we provide a tutorial using \emph{R} on how data from the semantic property norm task might be processed from raw input to finalized output. Figure @ref(fig:flow\_chart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach.
+In the next several sections, we provide a tutorial using \emph{R} on how data from the semantic property norm task might be processed from raw input to finalized output. Figure \ref{fig:flowchart} portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach.
 
 \hypertarget{materials-and-data-format}{%
 \subsection{Materials and Data Format}\label{materials-and-data-format}}
 
-The data for this tutorial includes 17177 unique concept-feature responses for 226 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer.
-
-\begin{table}[H]
-\centering\begin{table}[H]
-\centering
-\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
+\begin{table}[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:tab1}Tidy Data Caption}
+\begin{tabular}{cc}
 \toprule
-word & answer\\
+word & \multicolumn{1}{c}{answer}\\
 \midrule
-airplane & you fly in it  its big  it is fast  they are expensive  they are at an airport  you have to be trained to fly it  there are lots of seats  they get very high up\\
+airplane & you fly in it\ \ its big\ \ it is fast\ \ they are expensive\ \ they are at an airport\ \ you have to be trained to fly it\ \ there are lots of seats\ \ they get very high up\\
 airplane & wings engine pilot cockpit tail\\
-airplane & wings  it flys  modern technology  has passengers  requires a pilot  can be dangerous  runs on gas  used for travel\\
-airplane & wings  flys  pilot  cockpit  uses gas  faster travel\\
-airplane & wings  engines  passengers  pilot(s)  vary in size and color\\
-\addlinespace
-airplane & wings  body  flies  travel\\
+airplane & wings\ \ it flys\ \ modern technology\ \ has passengers\ \ requires a pilot\ \ can be dangerous\ \ runs on gas\ \ used for travel\\
+airplane & wings\ \ flys\ \ pilot\ \ cockpit\ \ uses gas\ \ faster travel\\
+airplane & wings\ \ engines\ \ passengers\ \ pilot(s)\ \ vary in size and color\\
+airplane & wings\ \ body\ \ flies\ \ travel\\
 \bottomrule
 \end{tabular}
+\end{threeparttable}
+\end{center}
 \end{table}
-\end{table}
+
+The data for this tutorial includes 17177 unique concept-feature responses for 226 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer, as shown in Table \ref{tab:tab1}.
 
 This data was collected using the instructions provided by McRae et al. (2005), however, in contrast to the suggestions for consistency detailed above (Devereux et al., 2014), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
 
@@ -278,7 +275,7 @@ The result from the \texttt{hunspell()} function is a list object of spelling er
 
 \normalsize
 
-For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms.
+For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub()}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms.
 
 \scriptsize
 
@@ -354,7 +351,7 @@ The \texttt{treetag()} function calls the installation of TreeTagger to provide 
 
 \normalsize
 
-This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subseting out these from the dataset.
+This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subseting out these from the dataset. Table \ref{tab:tab2} portrays the results from TreeTagger.
 
 \scriptsize
 
@@ -376,24 +373,27 @@ This function returns a tagged corpus object, which can be converted into a data
 
 \normalsize
 
-\begin{table}[H]
-\centering
-\begin{tabular}{lllrl}
+\begin{table}[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:tab2}Tidy Data Caption}
+\begin{tabular}{ccccc}
 \toprule
-token & tag & lemma & lttr & wclass\\
+token & \multicolumn{1}{c}{tag} & \multicolumn{1}{c}{lemma} & \multicolumn{1}{c}{lttr} & \multicolumn{1}{c}{wclass}\\
 \midrule
-is & VBZ & be & 2 & verb\\
-are & VBP & be & 3 & verb\\
-trained & VBN & train & 7 & verb\\
-lots & NNS & lot & 4 & noun\\
-seats & NNS & seat & 5 & noun\\
-\addlinespace
-wings & NNS & wing & 5 & noun\\
+is & VBZ & be & 2.00 & verb\\
+are & VBP & be & 3.00 & verb\\
+trained & VBN & train & 7.00 & verb\\
+lots & NNS & lot & 4.00 & noun\\
+seats & NNS & seat & 5.00 & noun\\
+wings & NNS & wing & 5.00 & noun\\
 \bottomrule
 \end{tabular}
+\end{threeparttable}
+\end{center}
 \end{table}
 
-From this dataset, you can use the \texttt{stringi} package (Gagolewski \& Tartanus, 2019) to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions.
+From this dataset, you can use the \texttt{stringi} package (Gagolewski \& Tartanus, 2019) to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions. The \texttt{stri\_replace\_all\_regex()} function includes the column of data to examine, the patterns to find (using \texttt{\textbackslash{}\textbackslash{}b} regular expressions to ensure word boundaries and no partial word replacements), what to replace those patterns with, and other options to ensure the original dataframe with replacement is returned. Table \ref{tab:tab3} shows the processed data at this stage.
 
 \scriptsize
 
@@ -412,23 +412,24 @@ From this dataset, you can use the \texttt{stringi} package (Gagolewski \& Tarta
 
 \normalsize
 
-\begin{table}[H]
-\centering\begin{table}[H]
-\centering
-\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
+\begin{table}[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:tab3}Tidy Data Caption}
+\begin{tabular}{cc}
 \toprule
-word & answer\\
+word & \multicolumn{1}{c}{answer}\\
 \midrule
-airplane & you fly in it  its big  it be fast  they be expensive  they be at an airport  you have to be train to fly it  there be lot of seat  they get very high up\\
+airplane & you fly in it\ \ its big\ \ it be fast\ \ they be expensive\ \ they be at an airport\ \ you have to be train to fly it\ \ there be lot of seat\ \ they get very high up\\
 airplane & wing engine pilot cockpit tail\\
-airplane & wing  it fly  modern technology  have passenger  require a pilot  can be dangerous  run on gas  use for travel\\
-airplane & wing  fly  pilot  cockpit  use gas  fast travel\\
-airplane & wing  engine  passenger  pilot(s)  vary in size and color\\
-\addlinespace
-airplane & wing  body  fly  travel\\
+airplane & wing\ \ it fly\ \ modern technology\ \ have passenger\ \ require a pilot\ \ can be dangerous\ \ run on gas\ \ use for travel\\
+airplane & wing\ \ fly\ \ pilot\ \ cockpit\ \ use gas\ \ fast travel\\
+airplane & wing\ \ engine\ \ passenger\ \ pilot(s)\ \ vary in size and color\\
+airplane & wing\ \ body\ \ fly\ \ travel\\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{threeparttable}
+\end{center}
 \end{table}
 
 \hypertarget{word-sequences}{%
@@ -508,30 +509,32 @@ Multi-word sequences are often coded to mimic a Collins and Quillian (1969) styl
 
 \normalsize
 
-This procedure produces mostly positive output, such as \emph{fingers-have\_fingernails} and \emph{couches-have\_cushions}. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for \emph{zebra} shown below may require fuzzy logic matching to ensure that the different codings for \emph{is-a-horse} are all combined together.
+This procedure produces mostly positive output, such as \emph{fingers-have\_fingernails} and \emph{couches-have\_cushions}. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for \emph{zebra} shown below may require fuzzy logic matching to ensure that the different codings for \emph{is-a-horse} are all combined together, as shown in Table \ref{tab:tab4}.
 
-\begin{table}[H]
-\centering
-\begin{tabular}{llr}
+\begin{table}[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:tab4}Tidy Data Caption}
+\begin{tabular}{ccc}
 \toprule
-Word & Feature & Frequency\\
+Word & \multicolumn{1}{c}{Feature} & \multicolumn{1}{c}{Frequency}\\
 \midrule
 zebra & be\_horse & 1\\
 zebra & be\_similar\_horse & 1\\
 zebra & build\_horse & 1\\
 zebra & horse & 22\\
 zebra & horse-like & 1\\
-\addlinespace
 zebra & look\_similar\_horse & 1\\
 zebra & related\_horse & 1\\
 zebra & resemble\_small\_horse & 1\\
 zebra & run\_fast\_horse & 1\\
 zebra & run\_horse & 1\\
-\addlinespace
 zebra & sound\_horse & 1\\
 zebra & stripe\_similar\_horse & 1\\
 \bottomrule
 \end{tabular}
+\end{threeparttable}
+\end{center}
 \end{table}
 
 \hypertarget{bag-of-words}{%
@@ -539,33 +542,46 @@ zebra & stripe\_similar\_horse & 1\\
 
 The bag of words approach simply treats each token as a separate feature to be tabulated for analysis. After stemming and lemmatization, the data can be processed as single word tokens into a table of frequencies for each cue word. The resulting dataframe is each cue-feature combination with a total for each feature.
 
+\scriptsize
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## Create an empty dataframe }
+\NormalTok{bag_words <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Word=}\KeywordTok{character}\NormalTok{(),}
+                        \DataTypeTok{Feature=}\KeywordTok{character}\NormalTok{(), }
+                        \DataTypeTok{Frequency=}\KeywordTok{numeric}\NormalTok{(), }
+                        \DataTypeTok{stringsAsFactors=}\OtherTok{FALSE}\NormalTok{) }
+\CommentTok{## Loop over each word}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(unique_concepts))\{}
+  \CommentTok{## Create a table of frequencies}
+\NormalTok{  word_table <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(}
+    \CommentTok{## Tokenize the words}
+    \KeywordTok{tokenize}\NormalTok{(}
+      \CommentTok{## Put all answers together in one character string}
+      \KeywordTok{paste0}\NormalTok{(lemmas}\OperatorTok{$}\NormalTok{answer[lemmas}\OperatorTok{$}\NormalTok{word }\OperatorTok{==}\StringTok{ }\NormalTok{unique_concepts[i]], }\DataTypeTok{collapse =} \StringTok{" "}\NormalTok{), }
+      \DataTypeTok{format =} \StringTok{"obj"}\NormalTok{, }\DataTypeTok{tag =}\NormalTok{ F)))}
+  
+  \CommentTok{## Clean up the table}
+\NormalTok{  word_table}\OperatorTok{$}\NormalTok{Word <-}\StringTok{ }\NormalTok{unique_concepts[i]}
+  \KeywordTok{colnames}\NormalTok{(word_table) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Feature"}\NormalTok{, }\StringTok{"Frequency"}\NormalTok{, }\StringTok{"Word"}\NormalTok{)}
+  
+\NormalTok{  bag_words <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(bag_words, word_table[ , }\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{)])}
+\NormalTok{\}}
+\CommentTok{## Remove punctuation}
+\NormalTok{bag_words <-}\StringTok{ }\NormalTok{bag_words[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\KeywordTok{grep}\NormalTok{(}\StringTok{'^[[:punct:]]'}\NormalTok{,bag_words}\OperatorTok{$}\NormalTok{Feature)), ]}
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize
+
 The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
 
-\begin{table}[H]
-\centering
-\begin{tabular}{llr}
-\toprule
-Word & Feature & Frequency\\
-\midrule
-zebra & stripe & 71\\
-zebra & black & 64\\
-zebra & white & 62\\
-zebra & be & 56\\
-zebra & animal & 54\\
-\addlinespace
-zebra & have & 54\\
-zebra & and & 47\\
-zebra & a & 46\\
-zebra & in & 41\\
-zebra & horse & 32\\
-\bottomrule
-\end{tabular}
-\end{table}
+kable(zebra{[}1:10, {]}, \enquote{latex}, booktabs = T, row.names = F) \%\textgreater{}\% kable\_styling(position = \enquote{center})
 
 \hypertarget{stopwords}{%
 \subsection{Stopwords}\label{stopwords}}
 
-As shown in Figure @ref(fig:flow\_chart), the next stage of processing would be to exclude stopwords, such as \emph{the, of, but}, for either the multi-word sequence or bag of word style processing. The \texttt{stopwords} package ({\textbf{???}}) includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subseting the data to exclude stopwords as unigrams.
+As shown in Figure \ref{fig:flowchart}, the next stage of processing would be to exclude stopwords, such as \emph{the, of, but}, for either the multi-word sequence or bag of word style processing. The \texttt{stopwords} package ({\textbf{???}}) includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subseting the data to exclude stopwords as unigrams.
 
 \scriptsize
 

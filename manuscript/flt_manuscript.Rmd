@@ -49,7 +49,6 @@ output            : papaja::apa6_pdf #or _docx for word
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(cache = TRUE)
 library("papaja")
-library(kableExtra)
 
 def.chunk.hook <- knitr::knit_hooks$get("chunk")
 knitr::knit_hooks$set(chunk = function(x, options) {
@@ -82,11 +81,11 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
 
 3.	Typical operations performed on features
 
-```{r flow_chart, echo=FALSE, fig.cap ="Flow chart of proposed semantic processing feature steps.", fig.height=3, fig.width=4}
+```{r flowchart, echo=FALSE, fig.cap ="Flow chart of proposed semantic processing feature steps.", fig.height=3, fig.width=4}
 knitr::include_graphics("flow_chart.png")
 ```
 
-In the next several sections, we provide a tutorial using *R* on how data from the semantic property norm task might be processed from raw input to finalized output. Figure \@ref(fig:flow_chart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach. 
+In the next several sections, we provide a tutorial using *R* on how data from the semantic property norm task might be processed from raw input to finalized output. Figure \@ref(fig:flowchart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach. 
 
 ## Materials and Data Format
 
@@ -99,9 +98,15 @@ master <- read.csv("../data/tidy_words.csv", stringsAsFactors = F)
 head(master)
 ```
 
-The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @McRae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer. 
+```{r tab1, echo = F, results = 'asis'}
+apa_table(as.data.frame(head(master)),
+          caption = "Tidy Data Caption",
+          #format = "latex", 
+          row.names = F, 
+          align = rep("c", ncol(master)))
+```
 
-`r kable(head(master), "latex", booktabs = T, row.names = F) %>% kable_styling(full_width = F) %>% column_spec(2, width = "30em") %>%  kable_styling(position = "center")`
+The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @McRae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer, as shown in Table \@ref(tab:tab1). 
 
 This data was collected using the instructions provided by @McRae2005, however, in contrast to the suggestions for consistency detailed above [@Devereux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced. 
 
@@ -118,14 +123,14 @@ library(hunspell)
 spelling_errors <- hunspell(master$answer, dict = dictionary("en_US"))
 ```
 
-The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to *`r master$word[175]`*, a participant wrote *`r trimws(gsub("  ", " ", master$answer[175]))`*, and the spelling errors were denoted as *`r paste0(spelling_errors[[175]], collapse = " ")`*. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error. 
+The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to *`r master$word[175]`*, a participant wrote *`r trimws(gsub("  ", " ", master$answer[175]))`*, and the spelling errors were denoted as *`r paste0(spelling_errors[[175]], collapse = " ")`*. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error.
 
 ```{r get_suggestions, echo = T, size="scriptsize"}
 ## Check for suggestions
 spelling_suggest <- lapply(spelling_errors, hunspell_suggest)
 ```
 
-For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[175]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[175]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[175]][2]`*. The suggestions are presented in most probable order, and using a few loops with the substitute (`gsub`) function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms. 
+For *`r spelling_errors[[175]][1]`*, both *`r paste0(unlist(spelling_suggest[[175]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[175]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[175]][2]`*. The suggestions are presented in most probable order, and using a few loops with the substitute (`gsub()`) function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms. 
 
 ```{r fix_errors, echo = T, size="scriptsize"}
 ## Replace with most likely suggestion
@@ -182,7 +187,7 @@ temp_tag <- suppressWarnings(
             TT.options=list(path="~/TreeTagger", preset="en"))))
 ```
 
-This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subseting out these from the dataset. 
+This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subseting out these from the dataset. Table \@ref(tab:tab2) portrays the results from TreeTagger.  
 
 ```{r lemma_remove, echo = T, size="scriptsize"}
 ## Remove all tags not using
@@ -198,9 +203,15 @@ replacement_lemmas <- subset(replacement_lemmas,
                              tolower(token) != tolower(lemma)) 
 ```
 
-`r kable(head(replacement_lemmas[ , 2:6]), "latex", booktabs = T, row.names = F) %>% kable_styling(position = "center")`
+```{r tab2, echo = F, results = 'asis'}
+apa_table(as.data.frame(head(replacement_lemmas[ , 2:6])),
+          caption = "Tidy Data Caption",
+          #format = "latex", 
+          row.names = F, 
+          align = rep("c", ncol(replacement_lemmas[ , 2:6])))
+```
 
-From this dataset, you can use the `stringi` package [@Gagolewski2019] to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions. 
+From this dataset, you can use the `stringi` package [@Gagolewski2019] to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions. The `stri_replace_all_regex()` function includes the column of data to examine, the patterns to find (using `\\b` regular expressions to ensure word boundaries and no partial word replacements), what to replace those patterns with, and other options to ensure the original dataframe with replacement is returned. Table \@ref(tab:tab3) shows the processed data at this stage. 
 
 ```{r string_replace, echo = T, size="scriptsize"}
 ## Install the stringi package
@@ -213,7 +224,13 @@ lemmas$answer <- stri_replace_all_regex(str = lemmas$answer,
                        vectorize_all = F, list(case_insensitive = TRUE))
 ```
 
-`r kable(head(lemmas), "latex", booktabs = T, row.names = F) %>% kable_styling(full_width = F) %>% column_spec(2, width = "30em") %>%  kable_styling(position = "center")`
+```{r tab3, echo = F, results = 'asis'}
+apa_table(as.data.frame(head(lemmas)),
+          caption = "Tidy Data Caption",
+          #format = "latex", 
+          row.names = F, 
+          align = rep("c", ncol(lemmas)))
+```
 
 ## Word Sequences
 
@@ -285,20 +302,24 @@ for (i in 1:length(unique_concepts)){
 }
 ```
 
-This procedure produces mostly positive output, such as *fingers-have_fingernails* and *couches-have_cushions*. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for *zebra* shown below may require fuzzy logic matching to ensure that the different codings for *is-a-horse* are all combined together.
+This procedure produces mostly positive output, such as *fingers-have_fingernails* and *couches-have_cushions*. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for *zebra* shown below may require fuzzy logic matching to ensure that the different codings for *is-a-horse* are all combined together, as shown in Table \@ref(tab:tab4).
 
-```{r get_zebra, echo = F}
+```{r tab4, echo = F, results = 'asis'}
 zebra <- multi_words[ grep("horse", multi_words$Feature) , ]
 zebra <- zebra[zebra$Word == "zebra", ]
-```
 
-`r kable(zebra, "latex", booktabs = T, row.names = F) %>%  kable_styling(position = "center")`
+apa_table(as.data.frame(zebra),
+          caption = "Tidy Data Caption",
+          #format = "latex", 
+          row.names = F, 
+          align = rep("c", ncol(zebra)))
+```
 
 ## Bag of Words 
 
 The bag of words approach simply treats each token as a separate feature to be tabulated for analysis. After stemming and lemmatization, the data can be processed as single word tokens into a table of frequencies for each cue word. The resulting dataframe is each cue-feature combination with a total for each feature.
 
-```{r}
+```{r bag_words, echo = T, size="scriptsize", message = F}
 ## Create an empty dataframe 
 bag_words <- data.frame(Word=character(),
                         Feature=character(), 
@@ -331,11 +352,11 @@ zebra <- bag_words[ bag_words$Word == "zebra" , ]
 zebra <- zebra[order(zebra$Frequency, decreasing = T), ]
 ```
 
-`r kable(zebra[1:10, ], "latex", booktabs = T, row.names = F) %>%  kable_styling(position = "center")`
+kable(zebra[1:10, ], "latex", booktabs = T, row.names = F) %>%  kable_styling(position = "center")
 
 ## Stopwords
 
-As shown in Figure \@ref(fig:flow_chart), the next stage of processing would be to exclude stopwords, such as *the, of, but*, for either the multi-word sequence or bag of word style processing. The `stopwords` package [@Benoit2017] includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subseting the data to exclude stopwords as unigrams. 
+As shown in Figure \@ref(fig:flowchart), the next stage of processing would be to exclude stopwords, such as *the, of, but*, for either the multi-word sequence or bag of word style processing. The `stopwords` package [@Benoit2017] includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subseting the data to exclude stopwords as unigrams. 
 
 ``` {r stop_words_multi, echo = T, size="scriptsize"}
 ## Install the stopwords package or use tm
