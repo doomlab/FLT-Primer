@@ -1,0 +1,7 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\includegraphics[width=5.28in]{flow_chart} \caption{Flow chart of proposed semantic processing feature steps.}\label{fig:flowchart}
+\end{figure*}
+\efloatseparator
+ 

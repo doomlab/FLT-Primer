@@ -1,4 +1,4 @@
-\documentclass[man,floatsintext]{apa6}
+\documentclass[man]{apa6}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -132,6 +132,12 @@
 \newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
 
 
+\DeclareDelayedFloatFlavor{ThreePartTable}{table}
+\DeclareDelayedFloatFlavor{lltable}{table}
+\DeclareDelayedFloatFlavor*{longtable}{table}
+\makeatletter
+\renewcommand{\efloat@iwrite}[1]{\immediate\expandafter\protected@write\csname efloat@post#1\endcsname{}}
+\makeatother
 \usepackage{lineno}
 
 \linenumbers
@@ -218,27 +224,26 @@ In the next several sections, we provide a tutorial using \emph{R} on how data f
 \hypertarget{materials-and-data-format}{%
 \subsection{Materials and Data Format}\label{materials-and-data-format}}
 
-\begin{table}[tbp]
-\begin{center}
-\begin{threeparttable}
-\caption{\label{tab:tab1}Tidy Data Caption}
-\begin{tabular}{cc}
+\begin{table}[t]
+
+\caption{\label{tab:tab1}Example of Data Formatted for Tidy Data}
+\centering
+\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
 \toprule
-word & \multicolumn{1}{c}{answer}\\
+word & answer\\
 \midrule
-airplane & you fly in it\ \ its big\ \ it is fast\ \ they are expensive\ \ they are at an airport\ \ you have to be trained to fly it\ \ there are lots of seats\ \ they get very high up\\
+airplane & you fly in it  its big  it is fast  they are expensive  they are at an airport  you have to be trained to fly it  there are lots of seats  they get very high up\\
 airplane & wings engine pilot cockpit tail\\
-airplane & wings\ \ it flys\ \ modern technology\ \ has passengers\ \ requires a pilot\ \ can be dangerous\ \ runs on gas\ \ used for travel\\
-airplane & wings\ \ flys\ \ pilot\ \ cockpit\ \ uses gas\ \ faster travel\\
-airplane & wings\ \ engines\ \ passengers\ \ pilot(s)\ \ vary in size and color\\
-airplane & wings\ \ body\ \ flies\ \ travel\\
+airplane & wings  it flys  modern technology  has passengers  requires a pilot  can be dangerous  runs on gas  used for travel\\
+airplane & wings  flys  pilot  cockpit  uses gas  faster travel\\
+airplane & wings  engines  passengers  pilot(s)  vary in size and color\\
+\addlinespace
+airplane & wings  body  flies  travel\\
 \bottomrule
 \end{tabular}
-\end{threeparttable}
-\end{center}
 \end{table}
 
-The data for this tutorial includes 17177 unique concept-feature responses for 226 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer, as shown in Table \ref{tab:tab1}.
+The data for this tutorial includes 16544 unique concept-feature responses for 226 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer, as shown in Table \ref{tab:tab1}.
 
 This data was collected using the instructions provided by McRae et al. (2005), however, in contrast to the suggestions for consistency detailed above (Devereux et al., 2014), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
 
@@ -262,7 +267,7 @@ Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (
 
 \normalsize
 
-The result from the \texttt{hunspell()} function is a list object of spelling errors for each row of data. For example, when responding to \emph{apple}, a participant wrote \emph{fruit grocery store orchard red green yelloe good with peanut butter good with caramell}, and the spelling errors were denoted as \emph{yelloe caramell}. After checking for errors, the \texttt{hunspell\_suggest()} function was used to determine the most likely replacement for each error.
+The result from the \texttt{hunspell()} function is a list object of spelling errors for each row of data. For example, when responding to \emph{apple}, a participant wrote \emph{fruit containing seeds}, and the spelling errors were denoted as **. After checking for errors, the \texttt{hunspell\_suggest()} function was used to determine the most likely replacement for each error.
 
 \scriptsize
 
@@ -275,7 +280,7 @@ The result from the \texttt{hunspell()} function is a list object of spelling er
 
 \normalsize
 
-For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub()}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms.
+For \emph{NA}, both ** were suggested, and ** were suggested for \emph{NA}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub()}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with precoded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms.
 
 \scriptsize
 
@@ -373,24 +378,23 @@ This function returns a tagged corpus object, which can be converted into a data
 
 \normalsize
 
-\begin{table}[tbp]
-\begin{center}
-\begin{threeparttable}
-\caption{\label{tab:tab2}Tidy Data Caption}
-\begin{tabular}{ccccc}
+\begin{table}[t]
+
+\caption{\label{tab:tab2}Lemma and Part of Speech Information from TreeTagger}
+\centering
+\begin{tabular}{lllrl}
 \toprule
-token & \multicolumn{1}{c}{tag} & \multicolumn{1}{c}{lemma} & \multicolumn{1}{c}{lttr} & \multicolumn{1}{c}{wclass}\\
+token & tag & lemma & lttr & wclass\\
 \midrule
-is & VBZ & be & 2.00 & verb\\
-are & VBP & be & 3.00 & verb\\
-trained & VBN & train & 7.00 & verb\\
-lots & NNS & lot & 4.00 & noun\\
-seats & NNS & seat & 5.00 & noun\\
-wings & NNS & wing & 5.00 & noun\\
+is & VBZ & be & 2 & verb\\
+are & VBP & be & 3 & verb\\
+trained & VBN & train & 7 & verb\\
+lots & NNS & lot & 4 & noun\\
+seats & NNS & seat & 5 & noun\\
+\addlinespace
+wings & NNS & wing & 5 & noun\\
 \bottomrule
 \end{tabular}
-\end{threeparttable}
-\end{center}
 \end{table}
 
 From this dataset, you can use the \texttt{stringi} package (Gagolewski \& Tartanus, 2019) to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions. The \texttt{stri\_replace\_all\_regex()} function includes the column of data to examine, the patterns to find (using \texttt{\textbackslash{}\textbackslash{}b} regular expressions to ensure word boundaries and no partial word replacements), what to replace those patterns with, and other options to ensure the original dataframe with replacement is returned. Table \ref{tab:tab3} shows the processed data at this stage.
@@ -412,24 +416,23 @@ From this dataset, you can use the \texttt{stringi} package (Gagolewski \& Tarta
 
 \normalsize
 
-\begin{table}[tbp]
-\begin{center}
-\begin{threeparttable}
-\caption{\label{tab:tab3}Tidy Data Caption}
-\begin{tabular}{cc}
+\begin{table}[t]
+
+\caption{\label{tab:tab3}Original Data with Lemmatization}
+\centering
+\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
 \toprule
-word & \multicolumn{1}{c}{answer}\\
+word & answer\\
 \midrule
-airplane & you fly in it\ \ its big\ \ it be fast\ \ they be expensive\ \ they be at an airport\ \ you have to be train to fly it\ \ there be lot of seat\ \ they get very high up\\
+airplane & you fly in it  its big  it be fast  they be expensive  they be at an airport  you have to be train to fly it  there be lot of seat  they get very high up\\
 airplane & wing engine pilot cockpit tail\\
-airplane & wing\ \ it fly\ \ modern technology\ \ have passenger\ \ require a pilot\ \ can be dangerous\ \ run on gas\ \ use for travel\\
-airplane & wing\ \ fly\ \ pilot\ \ cockpit\ \ use gas\ \ fast travel\\
-airplane & wing\ \ engine\ \ passenger\ \ pilot(s)\ \ vary in size and color\\
-airplane & wing\ \ body\ \ fly\ \ travel\\
+airplane & wing  it fly  modern technology  have passenger  require a pilot  can be dangerous  run on gas  use for travel\\
+airplane & wing  fly  pilot  cockpit  use gas  fast travel\\
+airplane & wing  engine  passenger  pilot(s)  vary in size and color\\
+\addlinespace
+airplane & wing  body  fly  travel\\
 \bottomrule
 \end{tabular}
-\end{threeparttable}
-\end{center}
 \end{table}
 
 \hypertarget{word-sequences}{%
@@ -511,30 +514,27 @@ Multi-word sequences are often coded to mimic a Collins and Quillian (1969) styl
 
 This procedure produces mostly positive output, such as \emph{fingers-have\_fingernails} and \emph{couches-have\_cushions}. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for \emph{zebra} shown below may require fuzzy logic matching to ensure that the different codings for \emph{is-a-horse} are all combined together, as shown in Table \ref{tab:tab4}.
 
-\begin{table}[tbp]
-\begin{center}
-\begin{threeparttable}
-\caption{\label{tab:tab4}Tidy Data Caption}
-\begin{tabular}{ccc}
+\begin{table}[t]
+
+\caption{\label{tab:tab4}Multi-Word Sequence Examples for Zebra}
+\centering
+\begin{tabular}{llr}
 \toprule
-Word & \multicolumn{1}{c}{Feature} & \multicolumn{1}{c}{Frequency}\\
+Word & Feature & Frequency\\
 \midrule
 zebra & be\_horse & 1\\
 zebra & be\_similar\_horse & 1\\
 zebra & build\_horse & 1\\
 zebra & horse & 22\\
 zebra & horse-like & 1\\
+\addlinespace
 zebra & look\_similar\_horse & 1\\
 zebra & related\_horse & 1\\
 zebra & resemble\_small\_horse & 1\\
 zebra & run\_fast\_horse & 1\\
 zebra & run\_horse & 1\\
-zebra & sound\_horse & 1\\
-zebra & stripe\_similar\_horse & 1\\
 \bottomrule
 \end{tabular}
-\end{threeparttable}
-\end{center}
 \end{table}
 
 \hypertarget{bag-of-words}{%
@@ -574,9 +574,30 @@ The bag of words approach simply treats each token as a separate feature to be t
 
 \normalsize
 
-The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
+Tab @\ref(tab:tab5) shows the top ten most frequent responses to \emph{zebra} given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
 
-kable(zebra{[}1:10, {]}, \enquote{latex}, booktabs = T, row.names = F) \%\textgreater{}\% kable\_styling(position = \enquote{center})
+\begin{table}[t]
+
+\caption{\label{tab:tab5}Bag of Words Examples for Zebra}
+\centering
+\begin{tabular}{llr}
+\toprule
+Word & Feature & Frequency\\
+\midrule
+zebra & stripe & 71\\
+zebra & black & 63\\
+zebra & white & 61\\
+zebra & be & 56\\
+zebra & animal & 54\\
+\addlinespace
+zebra & have & 54\\
+zebra & a & 46\\
+zebra & and & 46\\
+zebra & in & 41\\
+zebra & horse & 32\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \hypertarget{stopwords}{%
 \subsection{Stopwords}\label{stopwords}}
@@ -606,29 +627,53 @@ As shown in Figure \ref{fig:flowchart}, the next stage of processing would be to
 \hypertarget{descriptive-statistics}{%
 \subsection{Descriptive Statistics}\label{descriptive-statistics}}
 
+The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from Buchanan et al. (2019), this information was merged with the sample data. Table @\ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for \emph{zebra} might be 100, while \emph{apple} might be 45, and these values were averaged.
+
+More cue-feature combinations are listed for the multi-word approach, likely due to differences in combinations for some overlapping features as shown in Table \ref{tab:tab4}. The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10\% of the participants. This porportion of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, McRae et al. (2005) used 16\% or 5/30 participants as a minimum standard, and Buchanan et al. (2019) recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired.
+
 \begin{verbatim}
-## [1] 0.9836455
+## [1] 0.9836955
 \end{verbatim}
 
 \begin{verbatim}
-## [1] 0.7351418
+## [1] 0.7431313
 \end{verbatim}
 
 \begin{verbatim}
-## [1] 0.6603825
+## [1] 0.6645615
 \end{verbatim}
 
 \begin{verbatim}
-## [1] 0.9163408
+## [1] 0.9124089
 \end{verbatim}
 
 \begin{verbatim}
-## [1] 0.7155022
+## [1] 0.7281558
 \end{verbatim}
 
 \begin{verbatim}
-## [1] 0.8167169
+## [1] 0.8262608
 \end{verbatim}
+
+\begin{table}[t]
+
+\caption{\label{tab:tab6}Descriptive Statistics of Text Processing Style}
+\centering
+\begin{tabular}{lllllll}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{Multi-Word Sequences} & \multicolumn{3}{c}{Bag of Words} \\
+\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
+Statistics & $M$ & $SD$ & $r$ & $M$ & $SD$ & $r$\\
+\midrule
+Number of Cue-Features & 191.85 & 98.19 & 0.74 & 171.80 & 76.96 & 0.66\\
+Frequency of Idiosyncratic Response & 182.57 & 96.43 & 0.76 & 158.85 & 73.97 & 0.69\\
+Frequency of Cue-Feature Response & 2.14 & 3.46 & 0.73 & 2.73 & 4.80 & 0.83\\
+Proportion of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
+\bottomrule
+\multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and the}\\
+\multicolumn{7}{l}{sample size for the cue.}\\
+\end{tabular}
+\end{table}
 
 make a table here of the stuff
 talk about deleting low features or not
@@ -641,9 +686,9 @@ Compare this data processing to hand processed data from B2019
 
 \begin{verbatim}
 ##        raw_b        raw_m        raw_v translated_b translated_m 
-##    0.6899807    0.3764903    0.5926762    0.7243672    0.5753183 
+##    0.6871319    0.3785460    0.5924934    0.7217544    0.5782025 
 ## translated_v 
-##    0.5817829
+##    0.5822144
 \end{verbatim}
 
 \hypertarget{external-comparison-of-approach}{%
@@ -652,46 +697,46 @@ Compare this data processing to hand processed data from B2019
 Compare to the MEN dataset
 
 \begin{verbatim}
-## [1] 0.6889117
+## [1] 0.6935202
 \end{verbatim}
 
 \hypertarget{ontology-and-categorization}{%
 \subsection{Ontology and Categorization}\label{ontology-and-categorization}}
 
 \begin{verbatim}
-##  [1] 0.9477885 0.8802228 0.8768643 0.8775418 0.8776403 0.8761919 0.8762623
-##  [8] 0.8723146 0.8723403 0.8657468 0.8660341 0.8660926 0.8661895 0.8662974
-## [15] 0.8662678 0.8657396 0.8658517 0.8641960 0.8634386 0.8573610 0.8250660
-## [22] 0.8249962 0.8252634 0.8255298 0.7192209 0.7193813 0.7193717 0.7197155
-## [29] 0.7193555 0.7189437 0.7190156 0.7191427 0.7185243
+##  [1] 0.9645379 0.8607603 0.8439264 0.8441948 0.8442215 0.8182595 0.8187568
+##  [8] 0.8192547 0.8194990 0.8195310 0.7971676 0.7972675 0.7972554 0.7976975
+## [15] 0.7983826 0.7995112 0.8012690 0.8015626 0.8017586 0.8020315 0.8021860
+## [22] 0.7883631 0.7885703 0.7887004 0.7887905 0.7725361 0.7727847 0.7729023
+## [29] 0.7732403 0.7735866 0.7737093 0.7726901 0.7727843
 \end{verbatim}
 
 \begin{verbatim}
 ## 
 ##    1    2    3    4    5    6 
-## 8613   17    3   13   11    5
+## 8545  101   29    2    3    1
 \end{verbatim}
 
 \includegraphics{flt_manuscript_files/figure-latex/categorization-1.pdf}
 
 \begin{verbatim}
-##         1         2         3         4         5         6 
-##   11.6864  193.2353 1843.0000  150.6923  124.4545  442.0000
+##           1           2           3           4           5           6 
+##    9.771328  200.712871  145.931034 2127.500000  302.666667  445.000000
 \end{verbatim}
 
 \begin{verbatim}
 ##         1         2         3         4         5         6 
-##  36.57800 161.36238 520.74274  97.93313  95.65497 116.06679
+##  26.54329 203.79776 140.18889 163.34167  80.68664        NA
 \end{verbatim}
 
 \begin{verbatim}
 ##    1    2    3    4    5    6 
-##    1   43 1260   70   44  247
+##    1   20   24 2012  219  445
 \end{verbatim}
 
 \begin{verbatim}
 ##    1    2    3    4    5    6 
-##  810  542 2262  383  362  550
+##  774 1239  537 2243  380  445
 \end{verbatim}
 
 \hypertarget{discussion}{%

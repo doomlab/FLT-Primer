@@ -33,7 +33,7 @@ keywords          : "semantic, property norm task, tutorial"
 
 bibliography      : ["flt_bib.bib"]
 
-floatsintext      : yes
+floatsintext      : no
 figurelist        : no
 tablelist         : no
 footnotelist      : no
@@ -49,6 +49,7 @@ output            : papaja::apa6_pdf #or _docx for word
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(cache = TRUE)
 library("papaja")
+library(kableExtra)
 
 def.chunk.hook <- knitr::knit_hooks$get("chunk")
 knitr::knit_hooks$set(chunk = function(x, options) {
@@ -99,11 +100,9 @@ head(master)
 ```
 
 ```{r tab1, echo = F, results = 'asis'}
-apa_table(as.data.frame(head(master)),
-          caption = "Tidy Data Caption",
-          #format = "latex", 
-          row.names = F, 
-          align = rep("c", ncol(master)))
+kable(head(master), "latex", booktabs = T, row.names = F, 
+      caption = "Example of Data Formatted for Tidy Data") %>% 
+  column_spec(2, width = "30em")
 ```
 
 The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @McRae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer, as shown in Table \@ref(tab:tab1). 
@@ -204,11 +203,8 @@ replacement_lemmas <- subset(replacement_lemmas,
 ```
 
 ```{r tab2, echo = F, results = 'asis'}
-apa_table(as.data.frame(head(replacement_lemmas[ , 2:6])),
-          caption = "Tidy Data Caption",
-          #format = "latex", 
-          row.names = F, 
-          align = rep("c", ncol(replacement_lemmas[ , 2:6])))
+kable(head(replacement_lemmas[ , 2:6]), "latex", booktabs = T, row.names = F, 
+      caption = "Lemma and Part of Speech Information from TreeTagger")
 ```
 
 From this dataset, you can use the `stringi` package [@Gagolewski2019] to replace all of the original tokens with their lemmas. This package allows for replacement lookup across a large set of subsitutions. The `stri_replace_all_regex()` function includes the column of data to examine, the patterns to find (using `\\b` regular expressions to ensure word boundaries and no partial word replacements), what to replace those patterns with, and other options to ensure the original dataframe with replacement is returned. Table \@ref(tab:tab3) shows the processed data at this stage. 
@@ -225,11 +221,9 @@ lemmas$answer <- stri_replace_all_regex(str = lemmas$answer,
 ```
 
 ```{r tab3, echo = F, results = 'asis'}
-apa_table(as.data.frame(head(lemmas)),
-          caption = "Tidy Data Caption",
-          #format = "latex", 
-          row.names = F, 
-          align = rep("c", ncol(lemmas)))
+kable(head(lemmas), "latex", booktabs = T, row.names = F, 
+      caption = "Original Data with Lemmatization") %>%  
+  column_spec(2, width = "30em")
 ```
 
 ## Word Sequences
@@ -308,11 +302,8 @@ This procedure produces mostly positive output, such as *fingers-have_fingernail
 zebra <- multi_words[ grep("horse", multi_words$Feature) , ]
 zebra <- zebra[zebra$Word == "zebra", ]
 
-apa_table(as.data.frame(zebra),
-          caption = "Tidy Data Caption",
-          #format = "latex", 
-          row.names = F, 
-          align = rep("c", ncol(zebra)))
+kable(zebra[1:10, ], "latex", booktabs = T, row.names = F, 
+      caption = "Multi-Word Sequence Examples for Zebra") 
 ```
 
 ## Bag of Words 
@@ -345,14 +336,15 @@ for (i in 1:length(unique_concepts)){
 bag_words <- bag_words[-c(grep('^[[:punct:]]',bag_words$Feature)), ]
 ```
 
-The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features. 
+Tab @\ref(tab:tab5) shows the top ten most frequent responses to *zebra* given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features.  
 
-```{r get_zebra2, echo = F}
+```{r tab5, echo = F, results = 'asis'}
 zebra <- bag_words[ bag_words$Word == "zebra" , ]
 zebra <- zebra[order(zebra$Frequency, decreasing = T), ]
-```
 
-kable(zebra[1:10, ], "latex", booktabs = T, row.names = F) %>%  kable_styling(position = "center")
+kable(zebra[1:10, ], "latex", booktabs = T, row.names = F, 
+      caption = "Bag of Words Examples for Zebra") 
+```
 
 ## Stopwords
 
@@ -373,6 +365,10 @@ bag_words <- subset(bag_words,
 ```
 
 ## Descriptive Statistics
+
+The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from @Buchanan2019, this information was merged with the sample data. Table @\ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for *zebra* might be 100, while *apple* might be 45, and these values were averaged. 
+
+More cue-feature combinations are listed for the multi-word approach, likely due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This porportion of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. 
 
 ```{r desc_stats, echo = F}
 sample_sizes <- as.data.frame(tapply(master$word, master$word, length))
@@ -412,9 +408,58 @@ cor(no_resp_mM, sample_sizes$Sample_Size)
 cor(no_resp_bM, sample_sizes$Sample_Size)
 
 #number of small features
-no_smallfeat_m <- tapply(multi_words$Percent[multi_words$Percent >=10], multi_words$Word[multi_words$Percent >=10], length)
-no_smallfeat_b <- tapply(bag_words$Percent[bag_words$Percent >=10], bag_words$Word[bag_words$Percent >=10], length)
+no_smallfeat_m <- tapply(multi_words$Percent[multi_words$Percent <=10], multi_words$Word[multi_words$Percent <=10], length)
+no_smallfeat_b <- tapply(bag_words$Percent[bag_words$Percent <=10], bag_words$Word[bag_words$Percent <=10], length)
 ```
+
+```{r tab6, echo = F, results = 'asis'}
+tableprint <- matrix(NA, nrow = 4, ncol = 7)
+
+colnames(tableprint) <- c("Stat", "M_m", "SD_m", "r_m", 
+                          "M_b", "SD_b", "r_b")
+
+tableprint <- as.data.frame(tableprint)
+#number of cue-features
+tableprint[1, ] <- c("Number of Cue-Features", 
+                     mean(no_feat_m), sd(no_feat_m), cor(no_feat_m, sample_sizes$Sample_Size), 
+                     mean(no_feat_b), sd(no_feat_b), cor(no_feat_b, sample_sizes$Sample_Size))
+
+#avg small features
+tableprint[2, ] <- c("Frequency of Idiosyncratic Response", 
+                     mean(no_smallfeat_m), sd(no_smallfeat_m), 
+                     cor(no_smallfeat_m, sample_sizes$Sample_Size),
+                     mean(no_smallfeat_b), sd(no_smallfeat_b),
+                     cor(no_smallfeat_b, sample_sizes$Sample_Size))
+
+#avg no times cue-feature listed
+tableprint[3, ] <- c("Frequency of Cue-Feature Response", 
+                     mean(no_resp_mM), mean(no_resp_mSD), 
+                     cor(no_resp_mM, sample_sizes$Sample_Size),
+                     mean(no_resp_bM), mean(no_resp_bSD), 
+                     cor(no_resp_bM, sample_sizes$Sample_Size))
+
+#avg percent cue-feature listed
+tableprint[4, ] <- c("Proportion of Cue-Feature Response", 
+                     mean(per_resp_mM), mean(per_resp_mSD), 
+                     cor(per_resp_mM, sample_sizes$Sample_Size),
+                     mean(per_resp_bM), mean(no_resp_bSD),
+                     cor(per_resp_bM, sample_sizes$Sample_Size))
+
+
+
+for (i in 2:7){
+  tableprint[ , i] <- printnum(as.numeric(tableprint[ , i]))
+}
+
+kable(tableprint, "latex", booktabs = T, row.names = F,
+      escape = F, 
+      col.names = c("Statistics", "$M$", "$SD$", "$r$", 
+                          "$M$", "$SD$", "$r$"), 
+      caption = "Descriptive Statistics of Text Processing Style") %>%  
+  add_header_above(c(" " = 1, "Multi-Word Sequences" = 3, "Bag of Words" = 3)) %>% 
+  add_footnote("$Note$. Correlation represents the relation between the statistic listed for that row and the sample size for the cue.", notation="none", escape = F)
+```
+
 
 make a table here of the stuff
 talk about deleting low features or not

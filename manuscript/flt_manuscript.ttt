@@ -1,6 +1,8 @@
 \begin{table*}[hbt]
 \ifnextchar[{\eatarg}{}
-[H]
+[t]
+
+\caption{\label{tab:tab1}Example of Data Formatted for Tidy Data}
 \centering
 \begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
 \toprule
@@ -14,6 +16,125 @@ airplane & wings  engines  passengers  pilot(s)  vary in size and color\\
 \addlinespace
 airplane & wings  body  flies  travel\\
 \bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[t]
+
+\caption{\label{tab:tab2}Lemma and Part of Speech Information from TreeTagger}
+\centering
+\begin{tabular}{lllrl}
+\toprule
+token & tag & lemma & lttr & wclass\\
+\midrule
+is & VBZ & be & 2 & verb\\
+are & VBP & be & 3 & verb\\
+trained & VBN & train & 7 & verb\\
+lots & NNS & lot & 4 & noun\\
+seats & NNS & seat & 5 & noun\\
+\addlinespace
+wings & NNS & wing & 5 & noun\\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[t]
+
+\caption{\label{tab:tab3}Original Data with Lemmatization}
+\centering
+\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
+\toprule
+word & answer\\
+\midrule
+airplane & you fly in it  its big  it be fast  they be expensive  they be at an airport  you have to be train to fly it  there be lot of seat  they get very high up\\
+airplane & wing engine pilot cockpit tail\\
+airplane & wing  it fly  modern technology  have passenger  require a pilot  can be dangerous  run on gas  use for travel\\
+airplane & wing  fly  pilot  cockpit  use gas  fast travel\\
+airplane & wing  engine  passenger  pilot(s)  vary in size and color\\
+\addlinespace
+airplane & wing  body  fly  travel\\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[t]
+
+\caption{\label{tab:tab4}Multi-Word Sequence Examples for Zebra}
+\centering
+\begin{tabular}{llr}
+\toprule
+Word & Feature & Frequency\\
+\midrule
+zebra & be\_horse & 1\\
+zebra & be\_similar\_horse & 1\\
+zebra & build\_horse & 1\\
+zebra & horse & 22\\
+zebra & horse-like & 1\\
+\addlinespace
+zebra & look\_similar\_horse & 1\\
+zebra & related\_horse & 1\\
+zebra & resemble\_small\_horse & 1\\
+zebra & run\_fast\_horse & 1\\
+zebra & run\_horse & 1\\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[t]
+
+\caption{\label{tab:tab5}Bag of Words Examples for Zebra}
+\centering
+\begin{tabular}{llr}
+\toprule
+Word & Feature & Frequency\\
+\midrule
+zebra & stripe & 71\\
+zebra & black & 63\\
+zebra & white & 61\\
+zebra & be & 56\\
+zebra & animal & 54\\
+\addlinespace
+zebra & have & 54\\
+zebra & a & 46\\
+zebra & and & 46\\
+zebra & in & 41\\
+zebra & horse & 32\\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[t]
+
+\caption{\label{tab:tab6}Descriptive Statistics of Text Processing Style}
+\centering
+\begin{tabular}{lllllll}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{Multi-Word Sequences} & \multicolumn{3}{c}{Bag of Words} \\
+\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
+Statistics & $M$ & $SD$ & $r$ & $M$ & $SD$ & $r$\\
+\midrule
+Number of Cue-Features & 191.85 & 98.19 & 0.74 & 171.80 & 76.96 & 0.66\\
+Frequency of Idiosyncratic Response & 182.57 & 96.43 & 0.76 & 158.85 & 73.97 & 0.69\\
+Frequency of Cue-Feature Response & 2.14 & 3.46 & 0.73 & 2.73 & 4.80 & 0.83\\
+Proportion of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
+\bottomrule
+\multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and the}\\
+\multicolumn{7}{l}{sample size for the cue.}\\
 \end{tabular}
 \end{table*}
 \efloatseparator

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  19 MAY 2019 23:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  20 MAY 2019 20:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -199,18 +199,11 @@ nd (jdm)
 \c@postfigure=\count101
 \efloat@postfff=\write4
 \@ef@fffopen=\count102
-) (/usr/local/texlive/2017/texmf-dist/tex/latex/float/float.sty
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count103
-\float@exts=\toks16
-\float@box=\box28
-\@float@everytoks=\toks17
-\@floatcapt=\box29
 )) (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\@emptytoks=\toks18
+\@emptytoks=\toks16
 \symAMSa=\mathgroup7
 \symAMSb=\mathgroup8
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
@@ -223,7 +216,7 @@ For additional information on amsmath, use the `?' option.
 Package: amstext 2000/06/29 v2.01 AMS text
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks19
+\@emptytoks=\toks17
 \ex@=\dimen133
 )) (/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
@@ -232,41 +225,41 @@ LaTeX Info: Redefining \boldsymbol on input line 28.
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count104
+\inf@bad=\count103
 LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count105
-\leftroot@=\count106
+\uproot@=\count104
+\leftroot@=\count105
 LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count107
-\DOTSCASE@=\count108
+\classnum@=\count106
+\DOTSCASE@=\count107
 LaTeX Info: Redefining \ldots on input line 472.
 LaTeX Info: Redefining \dots on input line 475.
 LaTeX Info: Redefining \cdots on input line 596.
-\Mathstrutbox@=\box30
-\strutbox@=\box31
+\Mathstrutbox@=\box28
+\strutbox@=\box29
 \big@size=\dimen135
 LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count109
-\c@MaxMatrixCols=\count110
+\macc@depth=\count108
+\c@MaxMatrixCols=\count109
 \dotsspace@=\muskip10
-\c@parentequation=\count111
-\dspbrk@lvl=\count112
-\tag@help=\toks20
-\row@=\count113
-\column@=\count114
-\maxfields@=\count115
-\andhelp@=\toks21
+\c@parentequation=\count110
+\dspbrk@lvl=\count111
+\tag@help=\toks18
+\row@=\count112
+\column@=\count113
+\maxfields@=\count114
+\andhelp@=\toks19
 \eqnshift@=\dimen136
 \alignsep@=\dimen137
 \tagshift@=\dimen138
 \tagwidth@=\dimen139
 \totwidth@=\dimen140
 \lineht@=\dimen141
-\@envbody=\toks22
+\@envbody=\toks20
 \multlinegap=\skip66
 \multlinetaggap=\skip67
-\mathdisplay@stack=\toks23
+\mathdisplay@stack=\toks21
 LaTeX Info: Redefining \[ on input line 2817.
 LaTeX Info: Redefining \] on input line 2818.
 ) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifluatex.sty
@@ -288,8 +281,8 @@ File: t1enc.def 2017/04/05 v2.0i Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 )) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2015/03/17 v1.2c Input encoding file
-\inpenc@prehook=\toks24
-\inpenc@posthook=\toks25
+\inpenc@prehook=\toks22
+\inpenc@posthook=\toks23
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2017/01/28 v1.1t UTF-8 support for inputenc
 Now handling font encoding OML ...
@@ -757,12 +750,12 @@ Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
 Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
 )) (/usr/local/texlive/2017/texmf-dist/tex/latex/microtype/microtype.sty
 Package: microtype 2016/05/14 v2.6a Micro-typographical refinements (RS)
-\MT@toks=\toks26
-\MT@count=\count116
+\MT@toks=\toks24
+\MT@count=\count115
 LaTeX Info: Redefining \textls on input line 774.
 \MT@outer@kern=\dimen142
 LaTeX Info: Redefining \textmicrotypecontext on input line 1310.
-\MT@listname@count=\count117
+\MT@listname@count=\count116
 (/usr/local/texlive/2017/texmf-dist/tex/latex/microtype/microtype-pdftex.def
 File: microtype-pdftex.def 2016/05/14 v2.6a Definitions specific to pdftex (RS)
 
@@ -820,14 +813,14 @@ Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen143
-\Hy@linkcounter=\count118
-\Hy@pagecounter=\count119
+\Hy@linkcounter=\count117
+\Hy@pagecounter=\count118
 (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2017/03/14 v6.85a Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
-\Hy@SavedSpaceFactor=\count120
+\Hy@SavedSpaceFactor=\count119
 (/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
@@ -838,14 +831,14 @@ Package hyperref Info: Plain pages OFF on input line 4513.
 Package hyperref Info: Backreferencing OFF on input line 4518.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4751.
-\c@Hy@tempcnt=\count121
+\c@Hy@tempcnt=\count120
 (/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 5104.
 \XeTeXLinkMargin=\dimen144
-\Fld@menulength=\count122
+\Fld@menulength=\count121
 \Field@Width=\dimen145
 \Fld@charsize=\dimen146
 Package hyperref Info: Hyper figures OFF on input line 6358.
@@ -857,17 +850,17 @@ Package hyperref Info: Link coloring with OCG OFF on input line 6383.
 Package hyperref Info: PDF/A mode OFF on input line 6388.
 LaTeX Info: Redefining \ref on input line 6428.
 LaTeX Info: Redefining \pageref on input line 6432.
-\Hy@abspage=\count123
-\c@Item=\count124
-\c@Hfootnote=\count125
+\Hy@abspage=\count122
+\c@Item=\count123
+\c@Hfootnote=\count124
 )
 
 Package hyperref Message: Driver (autodetected): hpdftex.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2017/03/14 v6.85a Hyperref driver for pdfTeX
-\Fld@listcount=\count126
-\c@bookmark@seq@number=\count127
+\Fld@listcount=\count125
+\c@bookmark@seq@number=\count126
 (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
@@ -893,11 +886,11 @@ Package: fancyvrb 2008/02/07
 
 Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
 <2008/02/07> (tvz)
-\FV@CodeLineNo=\count128
+\FV@CodeLineNo=\count127
 \FV@InFile=\read1
-\FV@TabBox=\box32
-\c@FancyVerbLine=\count129
-\FV@StepNumber=\count130
+\FV@TabBox=\box30
+\c@FancyVerbLine=\count128
+\FV@StepNumber=\count129
 \FV@OutFile=\write5
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/framed/framed.sty
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
@@ -916,13 +909,13 @@ Package grffile Info: \Gin@ii of package `graphicx' fixed on input line 486.
 Package: parskip 2001/04/09 non-zero parskip adjustments
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/csquotes/csquotes.sty
 Package: csquotes 2017/03/11 v5.2b context-sensitive quotations (JAW)
-\csq@reset=\count131
-\csq@gtype=\count132
-\csq@glevel=\count133
-\csq@qlevel=\count134
-\csq@maxlvl=\count135
-\csq@tshold=\count136
-\csq@ltx@everypar=\toks27
+\csq@reset=\count130
+\csq@gtype=\count131
+\csq@glevel=\count132
+\csq@qlevel=\count133
+\csq@maxlvl=\count134
+\csq@tshold=\count135
+\csq@ltx@everypar=\toks25
 (/usr/local/texlive/2017/texmf-dist/tex/latex/csquotes/csquotes.def
 File: csquotes.def 2017/03/11 v5.2b csquotes generic definitions (JAW)
 )
@@ -942,23 +935,23 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
 \LTright=\skip72
 \LTpre=\skip73
 \LTpost=\skip74
-\LTchunksize=\count137
+\LTchunksize=\count136
 \LTcapwidth=\dimen151
-\LT@head=\box33
-\LT@firsthead=\box34
-\LT@foot=\box35
-\LT@lastfoot=\box36
-\LT@cols=\count138
-\LT@rows=\count139
-\c@LT@tables=\count140
-\c@LT@chunks=\count141
-\LT@p@ftn=\toks28
+\LT@head=\box31
+\LT@firsthead=\box32
+\LT@foot=\box33
+\LT@lastfoot=\box34
+\LT@cols=\count137
+\LT@rows=\count138
+\c@LT@tables=\count139
+\c@LT@chunks=\count140
+\LT@p@ftn=\toks26
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
 \multirow@colwidth=\skip75
-\multirow@cntb=\count142
+\multirow@cntb=\count141
 \multirow@dima=\skip76
 \bigstrutjot=\dimen152
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/tools/tabularx.sty
@@ -967,7 +960,7 @@ Package: tabularx 2016/02/03 v2.11 `tabularx' package (DPC)
 Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
 \col@sep=\dimen153
 \extrarowheight=\dimen154
-\NC@list=\toks29
+\NC@list=\toks27
 \extratabsurround=\skip77
 \backup@length=\skip78
 )
@@ -976,8 +969,8 @@ Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
 \TX@old@col=\dimen157
 \TX@target=\dimen158
 \TX@delta=\dimen159
-\TX@cols=\count143
-\TX@ftn=\toks30
+\TX@cols=\count142
+\TX@ftn=\toks28
 )
 (/usr/local/texlive/2017/texmf-dist/tex/latex/threeparttablex/threeparttablex.s
 ty
@@ -992,20 +985,20 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 \longtablewidth=\skip80
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lineno/lineno.sty
 Package: lineno 2005/11/02 line numbers on paragraphs v4.41
-\linenopenalty=\count144
-\output=\toks31
-\linenoprevgraf=\count145
+\linenopenalty=\count143
+\output=\toks29
+\linenoprevgraf=\count144
 \linenumbersep=\dimen160
 \linenumberwidth=\dimen161
-\c@linenumber=\count146
-\c@pagewiselinenumber=\count147
-\c@LN@truepage=\count148
-\c@internallinenumber=\count149
-\c@internallinenumbers=\count150
+\c@linenumber=\count145
+\c@pagewiselinenumber=\count146
+\c@LN@truepage=\count147
+\c@internallinenumber=\count148
+\c@internallinenumbers=\count149
 \quotelinenumbersep=\dimen162
 \bframerule=\dimen163
 \bframesep=\dimen164
-\bframebox=\box37
+\bframebox=\box35
 
 LaTeX Warning: Command \@parboxrestore  has changed.
                Check if current package is valid.
@@ -1017,30 +1010,30 @@ Package csquotes Info: ... none found.
 (./flt_manuscript.aux)
 \openout1 = `flt_manuscript.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 151.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 151.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 157.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 157.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 151.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 157.
+LaTeX Font Info:    ... okay on input line 157.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 157.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -1080,17 +1073,17 @@ File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count151
+\scratchcounter=\count150
 \scratchdimen=\dimen165
-\scratchbox=\box38
-\nofMPsegments=\count152
-\nofMParguments=\count153
-\everyMPshowfont=\toks32
-\MPscratchCnt=\count154
+\scratchbox=\box36
+\nofMPsegments=\count151
+\nofMParguments=\count152
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count153
 \MPscratchDim=\dimen166
-\MPnumerator=\count155
-\makeMPintoPDFobject=\count156
-\everyMPtoPDFconversion=\toks33
+\MPnumerator=\count154
+\makeMPintoPDFobject=\count155
+\everyMPtoPDFconversion=\toks31
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grfext.sty
@@ -1109,14 +1102,13 @@ e
 File: APAamerican.txt 2012/02/23 v1.25 apa6 configuration for American English
 )
 Package caption Info: Begin \AtBeginDocument code.
-Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: longtable package is loaded.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2013/06/09 v1.4-94 longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 151.
+LaTeX Info: Redefining \microtypecontext on input line 157.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
@@ -1130,60 +1122,60 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-\AtBeginShipoutBox=\box39
-Package hyperref Info: Link coloring OFF on input line 151.
+\AtBeginShipoutBox=\box37
+Package hyperref Info: Link coloring OFF on input line 157.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count157
+\c@section@level=\count156
 )
-LaTeX Info: Redefining \ref on input line 151.
-LaTeX Info: Redefining \pageref on input line 151.
-LaTeX Info: Redefining \nameref on input line 151.
+LaTeX Info: Redefining \ref on input line 157.
+LaTeX Info: Redefining \pageref on input line 157.
+LaTeX Info: Redefining \nameref on input line 157.
 (./flt_manuscript.out) (./flt_manuscript.out)
 \@outlinefile=\write6
 \openout6 = `flt_manuscript.out'.
 
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 153.
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 159.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 153.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 159.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 153.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 159.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 153
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 159
 .
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 153
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 159
 .
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 153.
+(Font)              <12> on input line 159.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 153.
+(Font)              <8> on input line 159.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 153.
-LaTeX Font Info:    Try loading font information for U+msa on input line 153.
+(Font)              <6> on input line 159.
+LaTeX Font Info:    Try loading font information for U+msa on input line 159.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 153.
+LaTeX Font Info:    Try loading font information for U+msb on input line 159.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/microtype/mt-msb.cfg
@@ -1193,131 +1185,160 @@ File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 ) [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ] [2]
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 164.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 170.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [3] <flow_chart.png, id=83, 794.97pt x 276.03125pt>
-File: flow_chart.png Graphic file (type png)
-<use flow_chart.png>
-Package pdftex.def Info: flow_chart.png used on input line 213.
-(pdftex.def)             Requested size: 381.5934pt x 132.4977pt.
+) [3]
+\openout4 = `flt_manuscript.fff'.
 
-Overfull \hbox (372.30371pt too wide) in paragraph at lines 224--238
- [] 
- []
+(flt_manuscript.fff)
+\openout3 = `flt_manuscript.ttt'.
 
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 241.
+(flt_manuscript.ttt)
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 246.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [4 <./flow_chart.png>] [5]
+)
+Underfull \vbox (badness 2556) has occurred while \output is active []
+
+[4]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 256.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 261.
+[5] [6]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Underfull \vbox (badness 1466) detected at line 300
- []
-
-[6] [7] [8]
-Overfull \hbox (344.69223pt too wide) in paragraph at lines 418--432
- [] 
+[7] [8]
+LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 469
+.
+(/usr/local/texlive/2017/texmf-dist/tex/latex/lm/ts1lmtt.fd
+File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Underfull \vbox (badness 10000) detected at line 511
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[9] [10]
-LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 466
-.
-(/usr/local/texlive/2017/texmf-dist/tex/latex/lm/ts1lmtt.fd
-File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-Underfull \vbox (badness 10000) detected at line 508
+[9]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[10]
+
+LaTeX Warning: Reference `(' on page 11 undefined on input line 577.
+
+[11]
+
+LaTeX Warning: Reference `(' on page 12 undefined on input line 630.
+
+[12] [13]
+Overfull \hbox (5.65018pt too wide) in paragraph at lines 712--712
+[]\T1/lmtt/m/n/12 ##  [1] 0.9645379 0.8607603 0.8439264 0.8441948 0.8442215 0.8
+182595 0.8187568[] 
  []
 
 
-Underfull \vbox (badness 10000) detected at line 508
- []
-
-[11] [12]
-Underfull \vbox (badness 10000) detected at line 573
- []
-
-[13] [14] [15]
-Overfull \hbox (5.65718pt too wide) in paragraph at lines 667--667
-[]\T1/lmtt/m/n/12 ##  [1] 0.9477885 0.8802228 0.8768643 0.8775418 0.8776403 0.8
-761919 0.8762623[] 
+Overfull \hbox (5.62216pt too wide) in paragraph at lines 712--712
+[]\T1/lmtt/m/n/12 ##  [8] 0.8192547 0.8194990 0.8195310 0.7971676 0.7972675 0.7
+972554 0.7976975[] 
  []
 
 
-Overfull \hbox (5.61516pt too wide) in paragraph at lines 667--667
-[]\T1/lmtt/m/n/12 ##  [8] 0.8723146 0.8723403 0.8657468 0.8660341 0.8660926 0.8
-661895 0.8662974[] 
+Overfull \hbox (5.65018pt too wide) in paragraph at lines 712--712
+[]\T1/lmtt/m/n/12 ## [15] 0.7983826 0.7995112 0.8012690 0.8015626 0.8017586 0.8
+020315 0.8021860[] 
  []
 
 
-Overfull \hbox (5.61516pt too wide) in paragraph at lines 667--667
-[]\T1/lmtt/m/n/12 ## [15] 0.8662678 0.8657396 0.8658517 0.8641960 0.8634386 0.8
-573610 0.8250660[] 
+Overfull \hbox (5.6922pt too wide) in paragraph at lines 712--712
+[]\T1/lmtt/m/n/12 ## [22] 0.7883631 0.7885703 0.7887004 0.7887905 0.7725361 0.7
+727847 0.7729023[] 
  []
 
 
-Overfull \hbox (5.65018pt too wide) in paragraph at lines 667--667
-[]\T1/lmtt/m/n/12 ## [22] 0.8249962 0.8252634 0.8255298 0.7192209 0.7193813 0.7
-193717 0.7197155[] 
- []
-
-
-<flt_manuscript_files/figure-latex/categorization-1.pdf, id=170, 469.755pt x 28
+<flt_manuscript_files/figure-latex/categorization-1.pdf, id=152, 469.755pt x 28
 7.0725pt>
 File: flt_manuscript_files/figure-latex/categorization-1.pdf Graphic file (type
  pdf)
 <use flt_manuscript_files/figure-latex/categorization-1.pdf>
 Package pdftex.def Info: flt_manuscript_files/figure-latex/categorization-1.pdf
- used on input line 675.
+ used on input line 720.
 (pdftex.def)             Requested size: 469.75386pt x 287.0718pt.
 
-Overfull \hbox (28.90639pt too wide) in paragraph at lines 675--676
+Overfull \hbox (28.90639pt too wide) in paragraph at lines 720--721
 [][]  
  []
 
-[16 <./flt_manuscript_files/figure-latex/categorization-1.pdf>] [17] [18]
-Overfull \hbox (14.23662pt too wide) in paragraph at lines 749--751
+[14] [15 <./flt_manuscript_files/figure-latex/categorization-1.pdf>] [16]
+Overfull \hbox (14.23662pt too wide) in paragraph at lines 794--796
  \T1/lmr/m/n/12 (-20) project.org/web/packages/hunspell/vignettes/intro.html{\#
 }setting{\_}a{\_}language[]  
  []
 
-[19] AED endfloat: Processing end Figures and Tables [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 791.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 791.
+[17] AED endfloat: Processing end Figures and Tables [18] (./flt_manuscript.ttt
+[19
+
+
+] [20
+
+] [21
+
+] [22
+
+] [23
+
+]
+Overfull \hbox (8.38728pt too wide) in paragraph at lines 125--139
+ [][] 
+ []
+
+[24
+
+]) (./flt_manuscript.fff <flow_chart.png, id=269, 794.97pt x 276.03125pt>
+File: flow_chart.png Graphic file (type png)
+<use flow_chart.png>
+Package pdftex.def Info: flow_chart.png used on input line 4.
+(pdftex.def)             Requested size: 381.5934pt x 132.4977pt.
+[25
+
+
+ <./flow_chart.png>])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 836.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 836.
 (./flt_manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 791.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 791.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 836.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 836.
 Package rerunfilecheck Info: File `flt_manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 73E1FA5D3F19A5F29DEE4D788BF5FEDA;2199.
+(rerunfilecheck)             Checksum: DA1E97D2FF85FD1E0970B9DAD5BFF47B;2195.
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 16355 strings out of 492995
- 241647 string characters out of 6132704
- 361540 words of memory out of 5000000
- 19468 multiletter control sequences out of 15000+600000
- 52822 words of font info for 86 fonts, out of 8000000 for 9000
+ 16322 strings out of 492995
+ 241113 string characters out of 6132704
+ 362759 words of memory out of 5000000
+ 19428 multiletter control sequences out of 15000+600000
+ 52913 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,11n,47p,1796b,529s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local
-/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2017/
-texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2017/texmf-dist
-/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type
-1/public/lm/lmr8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/
-lmri12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmss8.pfb>
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/loca
-l/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr/local/texlive/
-2017/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2017/texmf-
-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on flt_manuscript.pdf (20 pages, 325749 bytes).
+ 43i,12n,47p,1796b,492s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/lo
+cal/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2
+017/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2017/texmf-dist
+/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/typ
+e1/public/lm/lmmi12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/
+lm/lmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmr8.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/loc
+al/texlive/2017/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/
+2017/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2017/texmf
+-dist/fonts/type1/public/lm/lmtt12.pfb></usr/local/texlive/2017/texmf-dist/font
+s/type1/public/lm/lmtt8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/pub
+lic/lm/lmtti10.pfb>
+Output written on flt_manuscript.pdf (25 pages, 335803 bytes).
 PDF statistics:
- 312 PDF objects out of 1000 (max. 8388607)
- 273 compressed objects within 3 object streams
- 87 named destinations out of 1000 (max. 500000)
+ 337 PDF objects out of 1000 (max. 8388607)
+ 292 compressed objects within 3 object streams
+ 90 named destinations out of 1000 (max. 500000)
  6267 words of extra memory for PDF output out of 10000 (max. 10000000)
 
