@@ -50,6 +50,17 @@ output            : papaja::apa6_pdf #or _docx for word
 knitr::opts_chunk$set(cache = TRUE)
 library("papaja")
 library(kableExtra)
+library(cowplot)
+library(ggplot2)
+cleanup = theme(panel.grid.major = element_blank(), 
+              panel.grid.minor = element_blank(), 
+              panel.background = element_blank(), 
+              axis.line.x = element_line(colour = "black"), 
+              axis.line.y = element_line(colour = "black"),
+              legend.key = element_rect(fill = "white"),
+              text = element_text(size = 12),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12))
 
 def.chunk.hook <- knitr::knit_hooks$get("chunk")
 knitr::knit_hooks$set(chunk = function(x, options) {
@@ -366,11 +377,13 @@ bag_words <- subset(bag_words,
 
 ## Descriptive Statistics
 
-The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from @Buchanan2019, this information was merged with the sample data. Table @\ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for *zebra* might be 100, while *apple* might be 45, and these values were averaged. 
+The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from @Buchanan2019, this information was merged with the sample data. Table \@ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for *zebra* might be 100, while *apple* might be 45, and these values were averaged. 
 
-More cue-feature combinations are listed for the multi-word approach, likely due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This porportion of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. 
+More cue-feature combinations are listed for the multi-word approach, likely due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. 
 
-```{r desc_stats, echo = F}
+The next two lines of Table \@ref(tab:tab6) indicate cue-feature combination frequecies, such as the number of times *zebra-stripes* or *apple-red* were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. THe correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \@ref(fig:correlation-fig) displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear.
+
+```{r desc_stats, echo = F, include = F}
 sample_sizes <- as.data.frame(tapply(master$word, master$word, length))
 sample_sizes$Word <- rownames(sample_sizes)
 colnames(sample_sizes)[1] <- "Sample_Size"
@@ -439,13 +452,11 @@ tableprint[3, ] <- c("Frequency of Cue-Feature Response",
                      cor(no_resp_bM, sample_sizes$Sample_Size))
 
 #avg percent cue-feature listed
-tableprint[4, ] <- c("Proportion of Cue-Feature Response", 
+tableprint[4, ] <- c("Percent of Cue-Feature Response", 
                      mean(per_resp_mM), mean(per_resp_mSD), 
                      cor(per_resp_mM, sample_sizes$Sample_Size),
                      mean(per_resp_bM), mean(no_resp_bSD),
                      cor(per_resp_bM, sample_sizes$Sample_Size))
-
-
 
 for (i in 2:7){
   tableprint[ , i] <- printnum(as.numeric(tableprint[ , i]))
@@ -460,16 +471,47 @@ kable(tableprint, "latex", booktabs = T, row.names = F,
   add_footnote("$Note$. Correlation represents the relation between the statistic listed for that row and the sample size for the cue.", notation="none", escape = F)
 ```
 
+```{r correlation-fig, echo = F, fig.height=6, fig.width=8, fig.cap="Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches."}
 
-make a table here of the stuff
-talk about deleting low features or not
-d.	identify cut off for idiosyncratic features (should it be necessary?) 
+p1 <- ggplot(data = NULL, aes(no_resp_bM, sample_sizes$Sample_Size)) +
+  geom_point(alpha = .25, size = no_resp_bSD) +
+  xlab("Average Frequency Cue-Feature Response") +
+  ylab("Cue Sample Size") + 
+  labs(title="Bag of Words") +
+  cleanup
+
+p2 <- ggplot(data = NULL, aes(per_resp_bM, sample_sizes$Sample_Size)) +
+  geom_point(alpha = .25, size = per_resp_bSD) +
+  xlab("Average Proportion Cue-Feature Response") +
+  ylab("Cue Sample Size") + 
+  labs(title="Bag of Words") +
+  cleanup
+
+p3 <- ggplot(data = NULL, aes(no_resp_mM, sample_sizes$Sample_Size)) +
+  geom_point(alpha = .25, size = no_resp_mSD) +
+  xlab("Average Frequency Cue-Feature Response") +
+  ylab("Cue Sample Size") + 
+  labs(title="Multi-word Sequences") +
+  cleanup
+
+p4 <- ggplot(data = NULL, aes(per_resp_mM, sample_sizes$Sample_Size)) +
+  geom_point(alpha = .25, size = per_resp_mSD) +
+  xlab("Average Proportion Cue-Feature Response") +
+  ylab("Cue Sample Size") + 
+  labs(title="Multi-word Sequences") +
+  cleanup
+
+prow <- plot_grid(p1, p2, p3, p4, hjust = -1, nrow = 2)
+prow
+```
+
 
 ## Internal Comparison of Approach
 
-Compare this data processing to hand processed data from B2019
+In this section, we show that the bag of words approach processed completely through code matches a bag of words approach that was hand coded from @Buchanan2019. In @Buchanan2019, the @McRae2005 adn @Vinson2008 datasets were recoded in a bag of words approach, and the comparison between all three is provided below. THe mutli-word sequence approach would be comparable if one or more datasets used the same structured data collection approach or with considerable hand coded rules for feature combinations. The data from open ended responses, such as the @Buchanan2019, could potentially be compared in a multi-word sequence approach, if the raw data from other such projects were avaliable. 
 
-```{r compare_b, echo = F}
+
+```{r compare_b, echo = F, include = F}
 library(readxl)
 b_data <- read.csv("../data/final words 2017.csv", stringsAsFactors = F)
 
