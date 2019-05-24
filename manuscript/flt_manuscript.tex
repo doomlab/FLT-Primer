@@ -574,7 +574,7 @@ The bag of words approach simply treats each token as a separate feature to be t
 
 \normalsize
 
-Tab @\ref(tab:tab5) shows the top ten most frequent responses to \emph{zebra} given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
+Tab \ref{tab:tab5} shows the top ten most frequent responses to \emph{zebra} given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
 
 \begin{table}[t]
 
@@ -627,33 +627,11 @@ As shown in Figure \ref{fig:flowchart}, the next stage of processing would be to
 \hypertarget{descriptive-statistics}{%
 \subsection{Descriptive Statistics}\label{descriptive-statistics}}
 
-The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from Buchanan et al. (2019), this information was merged with the sample data. Table @\ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for \emph{zebra} might be 100, while \emph{apple} might be 45, and these values were averaged.
+The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from Buchanan et al. (2019), this information was merged with the sample data. Table \ref{tab:tab6} includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for \emph{zebra} might be 100, while \emph{apple} might be 45, and these values were averaged.
 
-More cue-feature combinations are listed for the multi-word approach, likely due to differences in combinations for some overlapping features as shown in Table \ref{tab:tab4}. The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10\% of the participants. This porportion of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, McRae et al. (2005) used 16\% or 5/30 participants as a minimum standard, and Buchanan et al. (2019) recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired.
+More cue-feature combinations are listed for the multi-word approach, likely due to differences in combinations for some overlapping features as shown in Table \ref{tab:tab4}. The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10\% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, McRae et al. (2005) used 16\% or 5/30 participants as a minimum standard, and Buchanan et al. (2019) recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired.
 
-\begin{verbatim}
-## [1] 0.9836955
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 0.7431313
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 0.6645615
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 0.9124089
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 0.7281558
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 0.8262608
-\end{verbatim}
+The next two lines of Table \ref{tab:tab6} indicate cue-feature combination frequecies, such as the number of times \emph{zebra-stripes} or \emph{apple-red} were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. The correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \ref{fig:correlation-fig} displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear. The size of the points indicates the variability (standard deviation of each cue word's average frequency or percent). Variability appears to increase linearly with sample size for average frequency, however, it is somewhat mixed for average percent.
 
 \begin{table}[t]
 
@@ -668,76 +646,33 @@ Statistics & $M$ & $SD$ & $r$ & $M$ & $SD$ & $r$\\
 Number of Cue-Features & 191.85 & 98.19 & 0.74 & 171.80 & 76.96 & 0.66\\
 Frequency of Idiosyncratic Response & 182.57 & 96.43 & 0.76 & 158.85 & 73.97 & 0.69\\
 Frequency of Cue-Feature Response & 2.14 & 3.46 & 0.73 & 2.73 & 4.80 & 0.83\\
-Proportion of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
+Percent of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
 \bottomrule
 \multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and the}\\
 \multicolumn{7}{l}{sample size for the cue.}\\
 \end{tabular}
 \end{table}
 
-make a table here of the stuff
-talk about deleting low features or not
-d. identify cut off for idiosyncratic features (should it be necessary?)
+\begin{figure}
+\centering
+\includegraphics{flt_manuscript_files/figure-latex/correlation-fig-1.pdf}
+\caption{\label{fig:correlation-fig}Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches. Each point represents a cue word, and the size of the point indicates the variability of the average frequency or percent.}
+\end{figure}
 
 \hypertarget{internal-comparison-of-approach}{%
 \subsection{Internal Comparison of Approach}\label{internal-comparison-of-approach}}
 
-Compare this data processing to hand processed data from B2019
+In this section, we show that the bag of words approach processed completely through code matches a bag of words approach that was hand coded from Buchanan et al. (2019). In Buchanan et al. (2019), the McRae et al. (2005) and Vinson and Vigliocco (2008) datasets were recoded in a bag of words approach, and the comparison between all three is provided below. The mutli-word sequence approach would be comparable if one or more datasets used the same structured data collection approach or with considerable hand coded rules for feature combinations. The data from open ended responses, such as the Buchanan et al. (2019), could potentially be compared in the demonstrated multi-word sequence approach, if the raw data from other such projects were avaliable.
 
-\begin{verbatim}
-##        raw_b        raw_m        raw_v translated_b translated_m 
-##    0.6871319    0.3785460    0.5924934    0.7217544    0.5782025 
-## translated_v 
-##    0.5822144
-\end{verbatim}
+Cosine is often used as a measure of semantic similiarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the Buchanan et al. (2019): the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the Buchanan et al. (2019). If data were processed in an identical fashion, the cosine values would be nearly 1 for Buchanan et al. (2019) data or match the cosine values found for McRae et al. (2005) and Vinson and Vigliocco (2008) in the Buchanan et al. (2019) results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. The cosine matches for original features averaged: \(M_B\) = .69 (\emph{SD} = .17, \emph{N} = 226); \(M_M\) = .38 (\emph{SD} = .18, \emph{N} = 61); \(M_V\) = .59 (\emph{SD} = .18, \emph{N} = 68). These values indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results. The cosine matches for translated features averaged: \(M_B\) = .72 (\emph{SD} = .16, \emph{N} = 226); \(M_M\) = .58 (\emph{SD} = .14, \emph{N} = 61); \(M_V\) = .58 (\emph{SD} = .19, \emph{N} = 68). Again, these values indicate that the data processed entirely in \emph{R} produces a comparable set of results, albeit with added noise of small frequency features.
 
 \hypertarget{external-comparison-of-approach}{%
 \subsection{External Comparison of Approach}\label{external-comparison-of-approach}}
 
-Compare to the MEN dataset
-
-\begin{verbatim}
-## [1] 0.6935202
-\end{verbatim}
+The MEN dataset (Bruni et al., 2014) contains cue-cue pairs of English words rating for similarity by Amazon Mechanical Turk participants. In their rating task, participants were shown two cue-cue pairs and asked to select the more related pair of the two presented. Each pair was rated by 50 participants, and thus, a score of 50 indicates high relatedness, while a score of 0 indicates no relatedness. A range of relatedness values were selected from this dataset with overlapping cues from Buchanan et al. (2019), and these values were compared to the cosine caluclated between cues using the bag of words method. The correlation between cosine on the processed data and the MEN ratings was \(r = .69\), 95\% CI \([.61\), \(.76]\), \emph{N} = 179, indicating considerable agreement between raters and cosine values.
 
 \hypertarget{ontology-and-categorization}{%
 \subsection{Ontology and Categorization}\label{ontology-and-categorization}}
-
-\begin{verbatim}
-##  [1] 0.9645379 0.8607603 0.8439264 0.8441948 0.8442215 0.8182595 0.8187568
-##  [8] 0.8192547 0.8194990 0.8195310 0.7971676 0.7972675 0.7972554 0.7976975
-## [15] 0.7983826 0.7995112 0.8012690 0.8015626 0.8017586 0.8020315 0.8021860
-## [22] 0.7883631 0.7885703 0.7887004 0.7887905 0.7725361 0.7727847 0.7729023
-## [29] 0.7732403 0.7735866 0.7737093 0.7726901 0.7727843
-\end{verbatim}
-
-\begin{verbatim}
-## 
-##    1    2    3    4    5    6 
-## 8545  101   29    2    3    1
-\end{verbatim}
-
-\includegraphics{flt_manuscript_files/figure-latex/categorization-1.pdf}
-
-\begin{verbatim}
-##           1           2           3           4           5           6 
-##    9.771328  200.712871  145.931034 2127.500000  302.666667  445.000000
-\end{verbatim}
-
-\begin{verbatim}
-##         1         2         3         4         5         6 
-##  26.54329 203.79776 140.18889 163.34167  80.68664        NA
-\end{verbatim}
-
-\begin{verbatim}
-##    1    2    3    4    5    6 
-##    1   20   24 2012  219  445
-\end{verbatim}
-
-\begin{verbatim}
-##    1    2    3    4    5    6 
-##  774 1239  537 2243  380  445
-\end{verbatim}
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}

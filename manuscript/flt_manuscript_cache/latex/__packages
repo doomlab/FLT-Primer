@@ -13,3 +13,5 @@ SnowballC
 lsa
 tidyr
 cluster
+ggplot2
+cowplot

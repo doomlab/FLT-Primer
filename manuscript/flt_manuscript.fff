@@ -5,3 +5,12 @@
 \end{figure*}
 \efloatseparator
  
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{flt_manuscript_files/figure-latex/correlation-fig-1.pdf}
+\caption{\label{fig:correlation-fig}Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches. Each point represents a cue word, and the size of the point indicates the variability of the average frequency or percent.}
+\end{figure*}
+\efloatseparator
+ 

@@ -347,7 +347,7 @@ for (i in 1:length(unique_concepts)){
 bag_words <- bag_words[-c(grep('^[[:punct:]]',bag_words$Feature)), ]
 ```
 
-Tab @\ref(tab:tab5) shows the top ten most frequent responses to *zebra* given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features.  
+Tab \@ref(tab:tab5) shows the top ten most frequent responses to *zebra* given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features.  
 
 ```{r tab5, echo = F, results = 'asis'}
 zebra <- bag_words[ bag_words$Word == "zebra" , ]
@@ -381,7 +381,7 @@ The finalized data now represents a a processed set of cue-feature combinations 
 
 More cue-feature combinations are listed for the multi-word approach, likely due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. 
 
-The next two lines of Table \@ref(tab:tab6) indicate cue-feature combination frequecies, such as the number of times *zebra-stripes* or *apple-red* were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. THe correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \@ref(fig:correlation-fig) displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear.
+The next two lines of Table \@ref(tab:tab6) indicate cue-feature combination frequecies, such as the number of times *zebra-stripes* or *apple-red* were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. The correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \@ref(fig:correlation-fig) displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear. The size of the points indicates the variability (standard deviation of each cue word's average frequency or percent). Variability appears to increase linearly with sample size for average frequency, however, it is somewhat mixed for average percent.  
 
 ```{r desc_stats, echo = F, include = F}
 sample_sizes <- as.data.frame(tapply(master$word, master$word, length))
@@ -471,7 +471,7 @@ kable(tableprint, "latex", booktabs = T, row.names = F,
   add_footnote("$Note$. Correlation represents the relation between the statistic listed for that row and the sample size for the cue.", notation="none", escape = F)
 ```
 
-```{r correlation-fig, echo = F, fig.height=6, fig.width=8, fig.cap="Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches."}
+```{r correlation-fig, echo = F, fig.height=6, fig.width=8, fig.cap="Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches. Each point represents a cue word, and the size of the point indicates the variability of the average frequency or percent."}
 
 p1 <- ggplot(data = NULL, aes(no_resp_bM, sample_sizes$Sample_Size)) +
   geom_point(alpha = .25, size = no_resp_bSD) +
@@ -482,7 +482,7 @@ p1 <- ggplot(data = NULL, aes(no_resp_bM, sample_sizes$Sample_Size)) +
 
 p2 <- ggplot(data = NULL, aes(per_resp_bM, sample_sizes$Sample_Size)) +
   geom_point(alpha = .25, size = per_resp_bSD) +
-  xlab("Average Proportion Cue-Feature Response") +
+  xlab("Average Percent Cue-Feature Response") +
   ylab("Cue Sample Size") + 
   labs(title="Bag of Words") +
   cleanup
@@ -496,7 +496,7 @@ p3 <- ggplot(data = NULL, aes(no_resp_mM, sample_sizes$Sample_Size)) +
 
 p4 <- ggplot(data = NULL, aes(per_resp_mM, sample_sizes$Sample_Size)) +
   geom_point(alpha = .25, size = per_resp_mSD) +
-  xlab("Average Proportion Cue-Feature Response") +
+  xlab("Average Percent Cue-Feature Response") +
   ylab("Cue Sample Size") + 
   labs(title="Multi-word Sequences") +
   cleanup
@@ -505,11 +505,9 @@ prow <- plot_grid(p1, p2, p3, p4, hjust = -1, nrow = 2)
 prow
 ```
 
-
 ## Internal Comparison of Approach
 
-In this section, we show that the bag of words approach processed completely through code matches a bag of words approach that was hand coded from @Buchanan2019. In @Buchanan2019, the @McRae2005 adn @Vinson2008 datasets were recoded in a bag of words approach, and the comparison between all three is provided below. THe mutli-word sequence approach would be comparable if one or more datasets used the same structured data collection approach or with considerable hand coded rules for feature combinations. The data from open ended responses, such as the @Buchanan2019, could potentially be compared in a multi-word sequence approach, if the raw data from other such projects were avaliable. 
-
+In this section, we show that the bag of words approach processed completely through code matches a bag of words approach that was hand coded from @Buchanan2019. In @Buchanan2019, the @McRae2005 and @Vinson2008 datasets were recoded in a bag of words approach, and the comparison between all three is provided below. The mutli-word sequence approach would be comparable if one or more datasets used the same structured data collection approach or with considerable hand coded rules for feature combinations. The data from open ended responses, such as the @Buchanan2019, could potentially be compared in the demonstrated multi-word sequence approach, if the raw data from other such projects were avaliable. 
 
 ```{r compare_b, echo = F, include = F}
 library(readxl)
@@ -578,12 +576,14 @@ cosine_values$raw_v[is.nan(cosine_values$raw_v)] <- NA
 cosine_values$translated_m[is.nan(cosine_values$translated_m)] <- NA
 cosine_values$translated_v[is.nan(cosine_values$translated_v)] <- NA
 
-apply(cosine_values[ , -1], 2, mean, na.rm = T)
+cosine_M <- apply(cosine_values[ , -1], 2, mean, na.rm = T)
+cosine_SD <- apply(cosine_values[ , -1], 2, sd, na.rm = T)
+cosine_N <- apply(cosine_values[ , -1], 2, function(x) length(na.omit(x)))
 ```
 
-## External Comparison of Approach
+Cosine is often used as a measure of semantic similiarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the @Buchanan2019: the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the @Buchanan2019. If data were processed in an identical fashion, the cosine values would be nearly 1 for @Buchanan2019 data or match the cosine values found for @McRae2005 and @Vinson2008 in the @Buchanan2019 results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. The cosine matches for original features averaged: $M_B$ = `r printnum(cosine_M['raw_b'], gt1 = F)` (*SD* = `r printnum(cosine_SD['raw_b'], gt1 = F)`, *N* = `r printnum(cosine_N['raw_b'])`); $M_M$ = `r printnum(cosine_M['raw_m'], gt1 = F)` (*SD* = `r printnum(cosine_SD['raw_m'], gt1 = F)`, *N* = `r printnum(cosine_N['raw_m'])`); $M_V$ = `r printnum(cosine_M['raw_v'], gt1 = F)` (*SD* = `r printnum(cosine_SD['raw_v'], gt1 = F)`, *N* = `r printnum(cosine_N['raw_v'])`). These values indicate a somewhat comparable set of data, with lower values for @McRae2005 than previous results. The cosine matches for translated features averaged: $M_B$ = `r printnum(cosine_M['translated_b'], gt1 = F)` (*SD* = `r printnum(cosine_SD['translated_b'], gt1 = F)`, *N* = `r printnum(cosine_N['translated_b'])`); $M_M$ = `r printnum(cosine_M['translated_m'], gt1 = F)` (*SD* = `r printnum(cosine_SD['translated_m'], gt1 = F)`, *N* = `r printnum(cosine_N['translated_m'])`); $M_V$ = `r printnum(cosine_M['translated_v'], gt1 = F)` (*SD* = `r printnum(cosine_SD['translated_v'], gt1 = F)`, *N* = `r printnum(cosine_N['translated_v'])`). Again, these values indicate that the data processed entirely in *R* produces a comparable set of results, albeit with added noise of small frequency features. 
 
-Compare to the MEN dataset 
+## External Comparison of Approach
 
 ```{r compare_men, echo = F}
 men_data <- read.table("../data/MEN_dataset_natural_form_full.txt",
@@ -603,35 +603,41 @@ colnames(men_data) <- c("cue", "target", "rating", "key")
 men_merge = merge(men_data, bag_words_cosine, by = "key")
 
 ##correlation
-cor(men_merge$rating, men_merge$cosine)
+cor_MEN <- cor.test(men_merge$rating, men_merge$cosine)
 ```
+
+The MEN dataset [@Bruni2014] contains cue-cue pairs of English words rating for similarity by Amazon Mechanical Turk participants. In their rating task, participants were shown two cue-cue pairs and asked to select the more related pair of the two presented. Each pair was rated by 50 participants, and thus, a score of 50 indicates high relatedness, while a score of 0 indicates no relatedness. A range of relatedness values were selected from this dataset with overlapping cues from @Buchanan2019, and these values were compared to the cosine caluclated between cues using the bag of words method. The correlation between cosine on the processed data and the MEN ratings was `r apa_print(cor_MEN)$estimate`, *N* = `r cor_MEN$parameter+2`, indicating considerable agreement between raters and cosine values. 
+
 
 ## Ontology and Categorization
 
-```{r categorization, echo = F}
+```{r categorization, echo = F, include = F}
 library(cluster)
 
 bag_words_dist <- dist(bag_words_spread[ , -1], method = "euclidean")
 bag_words_cluster <- hclust(bag_words_dist, method = "ward.D2")
-#plot(bag_words_cluster, hang = -1)
 
-sapply(2:34, #34 in wu_barsalou 
-       function(x) summary(
-         silhouette(cutree(bag_words_cluster, k = x),
-                    bag_words_dist))$avg.width #find the widths
-)
+# plot(bag_words_cluster, hang = -1)
+
+# sapply(2:34, #34 in wu_barsalou 
+#        function(x) summary(
+#          silhouette(cutree(bag_words_cluster, k = x),
+#                     bag_words_dist))$avg.width #find the widths
+# )
 
 #probaby 6ish clusters can go more defined
-bag_words_category <- as.data.frame(cutree(bag_words_cluster, k = 6))
+bag_words_category <- as.data.frame(cutree(bag_words_cluster, k = 34))
 bag_words_category$feature <- bag_words_spread$Feature
 colnames(bag_words_category)[1] <- "category"
 bag_words_category$totals <- rowSums(bag_words_spread[ , -1])
 table(bag_words_category$category)
-hist(bag_words_category$totals[bag_words_category$category == 1], breaks = 40)
 tapply(bag_words_category$totals, bag_words_category$category, mean)
 tapply(bag_words_category$totals, bag_words_category$category, sd)
 tapply(bag_words_category$totals, bag_words_category$category, min)
 tapply(bag_words_category$totals, bag_words_category$category, max)
+
+#try taking these out and reclustering until each has been categorized ? 
+
 ```
 
 # Discussion
