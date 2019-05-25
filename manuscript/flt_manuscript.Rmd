@@ -611,34 +611,41 @@ The MEN dataset [@Bruni2014] contains cue-cue pairs of English words rating for 
 
 ## Ontology and Categorization
 
+Generally, coding ontology is cumbersome on the researcher, as it is normally performed by hand using a coding schema. @Wu2009 developed a hierarchical taxonomy for coding categories as part of the feature listing task, that has been used in several projects, notably the @McRae2005. Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and  introspective properties (emotion, evaluation). Coding ontology may be best peformed systematically with look-up rules of previously decided upon factors, however, clustering analyses provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncractic features as mentioned above, and thus, features smaller in number may be more difficult to group. 
+
 ```{r categorization, echo = F, include = F}
 library(cluster)
+library(expss)
 
-bag_words_dist <- dist(bag_words_spread[ , -1], method = "euclidean")
-bag_words_cluster <- hclust(bag_words_dist, method = "ward.D2")
+category_combos <- list()
+bag_words_reduce <- bag_words
 
-# plot(bag_words_cluster, hang = -1)
+for (i in 1:10){
+  
+  bag_words_dist <- dist(bag_words_spread[ , -1], method = "euclidean")
+  bag_words_cluster <- hclust(bag_words_dist, method = "ward.D2")
+  bag_words_category <- as.data.frame(cutree(bag_words_cluster, k = 10))
+  bag_words_category$feature <- bag_words_spread$Feature
+  colnames(bag_words_category)[1] <- "category"
+  #bag_words_category$totals <- rowSums(bag_words_spread[ , -1])
+  cat_temp <- as.data.frame(table(bag_words_category$category))
+  keep <- cat_temp$Var1[cat_temp$Freq > 10 & cat_temp$Freq<500]
+  category_combos[[i]] <- subset(bag_words_category, category %in% keep)
+  
+  #remove words and start over
+  bag_words_reduce <- bag_words_reduce[!(bag_words_reduce$Feature %in% unique(category_combos[[i]]$feature)) , ]
+  bag_words_spread <- spread(bag_words_reduce[ , -c(4,5)], key = Word, value = Frequency, fill = 0)
 
-# sapply(2:34, #34 in wu_barsalou 
-#        function(x) summary(
-#          silhouette(cutree(bag_words_cluster, k = x),
-#                     bag_words_dist))$avg.width #find the widths
-# )
+}
 
-#probaby 6ish clusters can go more defined
-bag_words_category <- as.data.frame(cutree(bag_words_cluster, k = 34))
-bag_words_category$feature <- bag_words_spread$Feature
-colnames(bag_words_category)[1] <- "category"
-bag_words_category$totals <- rowSums(bag_words_spread[ , -1])
-table(bag_words_category$category)
-tapply(bag_words_category$totals, bag_words_category$category, mean)
-tapply(bag_words_category$totals, bag_words_category$category, sd)
-tapply(bag_words_category$totals, bag_words_category$category, min)
-tapply(bag_words_category$totals, bag_words_category$category, max)
-
-#try taking these out and reclustering until each has been categorized ? 
 
 ```
+
+The `cluster` library [@Maechler2019] was used to analyze a hierarchical cluster analysis on the Euclidean distances between cue-feature frequencies. The @Wu2009 taxonomy has 37 potential category markers, and therefore, this number of clusters was examined during an iterative process to cluster the data. During the first pass of clustering the features, one large cluster appeared with approximately 93% of the data. The second category included 4% of the data, and all other categories were small in nature. However, these small categories appear to cluster in meaningful ways, such as *egg, meal, milk, day, important, morning, bacon, toast, biscuit*, and this category represented ... 
+
+
+
+
 
 # Discussion
 
