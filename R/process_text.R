@@ -328,3 +328,106 @@ tapply(bag_words_category$totals, bag_words_category$category, mean)
 tapply(bag_words_category$totals, bag_words_category$category, sd)
 tapply(bag_words_category$totals, bag_words_category$category, min)
 tapply(bag_words_category$totals, bag_words_category$category, max)
+
+
+# Clustering that I tried -------------------------------------------------
+
+category_combos <- list()
+bag_words_reduce <- subset(bag_words, Percent >= 10)
+
+for (i in 1:5){
+  
+  bag_words_spread <- spread(bag_words_reduce[ , -c(4,5)], key = Word, value = Frequency, fill = 0)
+  bag_words_dist <- dist(bag_words_spread[ , -1], method = "euclidean")
+  bag_words_cluster <- hclust(bag_words_dist, method = "ward.D2")
+  bag_words_category <- as.data.frame(cutree(bag_words_cluster, k = 20))
+  bag_words_category$feature <- bag_words_spread$Feature
+  colnames(bag_words_category)[1] <- "category"
+  #bag_words_category$totals <- rowSums(bag_words_spread[ , -1])
+  cat_temp <- as.data.frame(table(bag_words_category$category))
+  keep <- cat_temp$Var1[cat_temp$Freq >= 10 & cat_temp$Freq<500]
+  category_combos[[i]] <- subset(bag_words_category, category %in% keep)
+  
+  #remove words and start over
+  bag_words_reduce <- bag_words_reduce[!(bag_words_reduce$Feature %in% unique(category_combos[[i]]$feature)) , ]
+  bag_words_spread <- spread(bag_words_reduce[ , -c(4,5)], key = Word, value = Frequency, fill = 0)
+  
+}
+
+
+## kmeans
+
+library(cluster)
+library(factoextra)
+
+bag_words_reduce <- subset(bag_words, Percent >= 20)
+bag_words_spread <- spread(bag_words_reduce[ , -c(4,5)], 
+                           key = Word, value = Frequency, fill = 0)
+bag_words_cluster <- kmeans(bag_words_spread[ , -1], 
+                            centers = 10,
+                            nstart = 25)
+#bag_words_dist <- get_dist(bag_words_spread[ , -1])
+#fviz_dist(bag_words_dist)  
+
+fviz_cluster(bag_words_cluster, data = bag_words_spread[ , -1]) 
+
+fviz_nbclust(bag_words_spread[ , -1], kmeans, method = "wss")
+fviz_nbclust(bag_words_spread[ , -1], kmeans, method = "silhouette")
+
+##scaling and just looking at various dimensions of the data
+library(factoextra)
+bag_words_reduce <- subset(bag_words, Percent >= 60)
+bag_words_spread <- spread(bag_words_reduce[ , -c(3,4)], 
+                           key = Word, value = Percent, fill = 0)
+rownames(bag_words_spread) <- bag_words_spread[ , 1]
+bag_words_dist <- get_dist(bag_words_spread[ , -1])
+
+fviz_dist(bag_words_dist)  
+
+bag_words_mds <- cmdscale(bag_words_dist, #distances
+                          k = 2, #number of dimensions
+                          eig = T #calculate the eigenvalues
+)
+barplot(bag_words_mds$eig)
+
+{plot(bag_words_mds$points, #plot the MDS dimension points
+      type = "n", #blank canvas plot
+      main = "MDS Bag Words")
+  
+  text(bag_words_mds$points, #plot the dimensions
+       labels = bag_words_spread[ , 1], #label them with the names
+       cex = .6) #text sizing
+}
+
+#run the MDS
+bag_words_mds_3d = cmdscale(bag_words_dist, k = 3, eig = TRUE)
+
+#plot 3d
+library(rgl)
+{
+  plot3d(bag_words_mds_3d$points, type = "n")
+  text3d(bag_words_mds_3d$points, texts = bag_words_spread[ , 1], cex = .6)
+}
+
+
+# k means with removal ----------------------------------------------------
+
+category_combos <- list()
+bag_words_reduce <- subset(bag_words, Percent >= 10)
+
+for (i in 1:5){
+  
+  bag_words_spread <- spread(bag_words_reduce[ , -c(3,4)], key = Word, value = Percent, fill = 0)
+  bag_words_cluster <- kmeans(bag_words_spread[ , -1], 
+                              centers = 20,
+                              nstart = 25)
+  bag_words_category <- as.data.frame(bag_words_cluster$cluster)
+  bag_words_category$feature <- bag_words_spread$Feature
+  colnames(bag_words_category)[1] <- "category"
+  cat_temp <- as.data.frame(table(bag_words_category$category))
+  keep <- cat_temp$Var1[cat_temp$Freq >= 10 & cat_temp$Freq<500]
+  category_combos[[i]] <- subset(bag_words_category, category %in% keep)
+  
+  #remove words and start over
+  bag_words_reduce <- bag_words_reduce[!(bag_words_reduce$Feature %in% unique(category_combos[[i]]$feature)) , ]
+}
