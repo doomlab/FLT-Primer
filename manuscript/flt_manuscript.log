@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  25 MAY 2019 16:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  28 MAY 2019 14:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1284,7 +1284,7 @@ Package rerunfilecheck Info: File `flt_manuscript.out' has not changed.
 Here is how much of TeX's memory you used:
  16330 strings out of 492995
  241197 string characters out of 6132704
- 362940 words of memory out of 5000000
+ 362943 words of memory out of 5000000
  19428 multiletter control sequences out of 15000+600000
  53000 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1302,7 +1302,7 @@ t/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2017/texmf-dist/fonts/typ
 e1/public/lm/lmtk10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/
 lm/lmtt12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt8.p
 fb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on flt_manuscript.pdf (28 pages, 395678 bytes).
+Output written on flt_manuscript.pdf (28 pages, 395683 bytes).
 PDF statistics:
  371 PDF objects out of 1000 (max. 8388607)
  321 compressed objects within 4 object streams

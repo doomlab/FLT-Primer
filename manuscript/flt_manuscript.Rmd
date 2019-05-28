@@ -17,7 +17,7 @@ affiliation:
   - id            : "1"
     institution   : "Harrisburg University of Science and Technology"
   - id            : "2"
-    institution   : "University of Melbourne"
+    institution   : "The University of Adelaide"
   - id            : "3"
     institution   : "University of Padua"
 
@@ -41,7 +41,7 @@ draft             : no
 
 documentclass     : "apa6"
 classoption       : "man"
-output            : papaja::apa6_pdf #or _docx for word
+output            : papaja::apa6_docx #or _docx for word
 ---
 
 ```{r setup, include = FALSE}
