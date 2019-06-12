@@ -214,10 +214,10 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
 \end{enumerate}
 
 \begin{figure}
-\includegraphics[width=5.28in]{flow_chart} \caption{Flow chart of proposed semantic processing feature steps.}\label{fig:flowchart}
+\includegraphics[width=5.28in]{flow_chart} \caption{Flow chart illustrating how feature listings are recoded to obtain a standard feature format.}\label{fig:flowchart}
 \end{figure}
 
-In the next several sections, we provide a tutorial using \emph{R} on how data from the semantic property norm task might be processed from raw input to finalized output. Figure \ref{fig:flowchart} portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach.
+Due to the productivity in language, a semantic feature can be expressed in a myriad of ways. Without any further processing, many features will be expressed in an idiosyncratic way, despite the fact that they capture the same meaning. For example, the fact that bicycles have two wheels is expressed as ,, , , . The next sections provide a tutorial on how data from the semantic feature listing (SFL) task might be processed from raw input to a more compact feature output. The tutorial is written for R and is fully documented, such that users can adapt it to their language of choice. Figure \ref{fig:flowchart} portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach.
 
 \hypertarget{materials-and-data-format}{%
 \subsection{Materials and Data Format}\label{materials-and-data-format}}
@@ -241,14 +241,14 @@ airplane & wings  body  flies  travel\\
 \end{tabular}
 \end{table}
 
-The data for this tutorial includes 16544 unique concept-feature responses for 226 concepts from Buchanan et al. (2019) that were included in McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable (Wickham, 2014). Therefore, the data includes a \texttt{word} column with the normed concept and an \texttt{answer} column with the participant answer, as shown in Table \ref{tab:tab1}.
+The data for this tutorial includes 16544 unique concept-feature responses for 226 concepts from Buchanan et al. (2019). The concepts were taken from McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The concepts include 185 nouns, 25 verbs, and 16 adjectives. Concreteness ratings collected by ({\textbf{???}}) were matched with the current data set. The concreteness ratings can range from 1 (\emph{abstract (language based)}) to 5 (\emph{concrete (experience based)}). The nouns were rated as most concrete: \emph{M} = 4.59 (\emph{SD} = 0.52), followed by adjectives: \emph{M} = 3.78 (\emph{SD} = 0.81), and verbs: \emph{M} = 3.57 (\emph{SD} = 0.79). The data consist of a text file where concept-feature observation is a row and each column is a variable. An example of this raw data is shown in Table \ref{tab:tab1}. The original data can be found at \url{https://osf.io/cjyzw/}.
 
 This data was collected using the instructions provided by McRae et al. (2005), however, in contrast to the suggestions for consistency detailed above (Devereux et al., 2014), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
 
 \hypertarget{spelling}{%
 \subsection{Spelling}\label{spelling}}
 
-Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (Ooms, 2018), which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
+Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (Ooms, 2018). Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
 
 \scriptsize
 
@@ -280,7 +280,7 @@ The result from the \texttt{hunspell()} function is a list object of spelling er
 
 \normalsize
 
-For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub()}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with pre-coded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms.
+For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel caramels caramel l camellia camel} were suggested for \emph{caramell}. The suggestions are presented in most probable order, and using a few loops with the substitute (\texttt{gsub()}) function, we can replace all errors with the most likely replacement in a new dataset \texttt{spell\_checked}. A specialized dictionary with pre-coded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, \emph{apple} versus \emph{Apple}) or slang terms and provides context sensitive corrections (e.g., keeping \emph{Apple} as a response to computer, but not as a response to green).
 
 \scriptsize
 
@@ -309,7 +309,7 @@ For \emph{yelloe}, both \emph{yellow yell} were suggested, and \emph{caramel car
 \hypertarget{lemmatization}{%
 \subsection{Lemmatization}\label{lemmatization}}
 
-The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, \emph{am, are, is}) to convert into a common lemma (i.e., \emph{be}) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as \emph{ing} or \emph{s}. The stem or root word may not reflect an actual word in the language, as simply removing an affix does not necessarily produce the lemma. For example, in response to \emph{airplane}, \emph{flying} can be easily converted to \emph{fly} by removing the \emph{ing} inflection. However, this same heuristic converts the feature \emph{wings} into \emph{w} after removing both the \emph{s} for a plural marker and the \emph{ing} participle marker. Several packages for \emph{R} include customizable stemmers, notably the \texttt{hunspell}, \texttt{corpus} (Perry, 2017), and \texttt{tm} (Feinerer, Hornik, \& Artifex Software, 2018) packages.
+The next step approaches the grouping different word forms that share the same lemma. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, \emph{am, are, is}) to convert into a common lemma (i.e., \emph{be}) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as \emph{ing} or \emph{s}. The stem or root word may not reflect an actual word in the language, as simply removing an affix does not necessarily produce the lemma. For example, in response to \emph{airplane}, \emph{flying} can be easily converted to \emph{fly} by removing the \emph{ing} inflection. However, this same heuristic converts the feature \emph{wings} into \emph{w} after removing both the \emph{s} for a plural marker and the \emph{ing} participle marker.
 
 Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing \texttt{TreeTagger} (Schmid, 1994) and the \texttt{koRpus} package in \emph{R} (Michalke, 2018). TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple languages. The koRpus package includes functionality to use TreeTagger in \emph{R}. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation.
 
@@ -397,7 +397,7 @@ wings & NNS & wing & 5 & noun\\
 \end{tabular}
 \end{table}
 
-From this dataset, you can use the \texttt{stringi} package (Gagolewski \& Tartanus, 2019) to replace all of the original tokens with their lemmas. This package allows for replacement look-up across a large set of substitutions. The \texttt{stri\_replace\_all\_regex()} function includes the column of data to examine, the patterns to find (using \texttt{\textbackslash{}\textbackslash{}b} regular expressions to ensure word boundaries and no partial word replacements), what to replace those patterns with, and other options to ensure the original dataframe with replacement is returned. Table \ref{tab:tab3} shows the processed data at this stage.
+Similar to spelling correction \texttt{stri\_replace\_all\_regex()} is used to replace the wordforms with their corresponding lemmas from the \texttt{stringi} package (Gagolewski \& Tartanus, 2019). Table \ref{tab:tab3} shows the processed data at this stage.
 
 \scriptsize
 
@@ -435,10 +435,10 @@ airplane & wing  body  fly  travel\\
 \end{tabular}
 \end{table}
 
-\hypertarget{word-sequences}{%
-\subsection{Word Sequences}\label{word-sequences}}
+\hypertarget{multi-word-sequences}{%
+\subsection{Multi-word Sequences}\label{multi-word-sequences}}
 
-Multi-word sequences are often coded to mimic a Collins and Quillian (1969) style model, with \enquote{is-a} and \enquote{has-a} type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the \enquote{is-a} and \enquote{has-a} strings. An examination of the coding in McRae et al. (2005) and Devereux et al. (2014) indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With \texttt{dplyr} (Wickham, Francios, Henry, Muller, \& Rstudio, 2019), new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the \texttt{table()} function is used to tabulate the final count of n-grams and their frequency.
+Multi-word sequences are often coded to mimic a Collins and Quillian (1969) style model, with \enquote{is-a} and \enquote{has-a} type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the \enquote{is-a} and \enquote{has-a} strings, and a more complex set of regular expressions has been implented in Strudel by Baroni, Murphy, Barbu, and Poesio (2010). An examination of the coding in McRae et al. (2005) and Devereux et al. (2014) indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With \texttt{dplyr} (Wickham, Francios, Henry, Muller, \& Rstudio, 2019), new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the \texttt{table()} function is used to tabulate the final count of n-grams and their frequency.
 
 \scriptsize
 
@@ -491,13 +491,16 @@ Multi-word sequences are often coded to mimic a Collins and Quillian (1969) styl
                             \DataTypeTok{three_words_pos =} \KeywordTok{paste}\NormalTok{(wclass, }
                                                     \KeywordTok{lead}\NormalTok{(wclass), }\KeywordTok{lead}\NormalTok{(wclass, }\DataTypeTok{n =}\NormalTok{ 2L), }
                                                     \DataTypeTok{sep =} \StringTok{"_"}\NormalTok{))}
-  \CommentTok{## Find verb noun or verb adjective nouns to cluster on }
+  \CommentTok{## Find adjective, noun, verb combinations to cluster on}
 \NormalTok{  verb_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words_pos)}
+\NormalTok{  adj_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{badjective_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words_pos)}
 \NormalTok{  verb_adj_nouns <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{bverb_adjective_noun"}\NormalTok{, temp_tag_tibble}\OperatorTok{$}\NormalTok{three_words_pos)}
   \CommentTok{## Use combined and left over features}
 \NormalTok{  features_for_table <-}\StringTok{ }\KeywordTok{c}\NormalTok{(temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words[verb_nouns], }
+\NormalTok{                          temp_tag_tibble}\OperatorTok{$}\NormalTok{two_words[adj_nouns], }
 \NormalTok{                          temp_tag_tibble}\OperatorTok{$}\NormalTok{three_words[verb_adj_nouns],}
 \NormalTok{                          temp_tag_tibble}\OperatorTok{$}\NormalTok{token[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(verb_nouns, verb_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{, }
+\NormalTok{                                                   adj_nouns, adj_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{,}
 \NormalTok{                                                   verb_adj_nouns, verb_adj_nouns}\OperatorTok{+}\DecValTok{1}\NormalTok{, }
 \NormalTok{                                                   verb_adj_nouns}\OperatorTok{+}\DecValTok{2}\NormalTok{)])}
   \CommentTok{## Create a table of frequencies}
@@ -574,7 +577,7 @@ The bag of words approach simply treats each token as a separate feature to be t
 
 \normalsize
 
-Tab \ref{tab:tab5} shows the top ten most frequent responses to \emph{zebra} given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
+Table \ref{tab:tab5} shows the top ten most frequent responses to \emph{zebra} given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as \emph{be, in, a} indicate the need to remove irrelevant words listed with features.
 
 \begin{table}[t]
 
@@ -612,10 +615,10 @@ As shown in Figure \ref{fig:flowchart}, the next stage of processing would be to
 \CommentTok{#install.packages("stopwords")}
 \KeywordTok{library}\NormalTok{(stopwords)}
 \CommentTok{## Remove stop words from either processing approach}
-\NormalTok{multi_words <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(multi_words, }
+\NormalTok{multi_words_nostop <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(multi_words, }
                       \OperatorTok{!}\NormalTok{(Feature }\OperatorTok{%in%}\StringTok{ }\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
                                                \DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{)))}
-\NormalTok{bag_words <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(bag_words, }
+\NormalTok{bag_words_nostop <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(bag_words, }
                     \OperatorTok{!}\NormalTok{(Feature }\OperatorTok{%in%}\StringTok{ }\KeywordTok{stopwords}\NormalTok{(}\DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
                                              \DataTypeTok{source =} \StringTok{"snowball"}\NormalTok{)))}
 \end{Highlighting}
@@ -628,7 +631,7 @@ As shown in Figure \ref{fig:flowchart}, the next stage of processing would be to
 
 The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from Buchanan et al. (2019), this information was merged with the sample data. Table \ref{tab:tab6} includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for \emph{zebra} might be 100, while \emph{apple} might be 45, and these values were averaged.
 
-More cue-feature combinations are listed for the multi-word approach, due to differences in combinations for some overlapping features as shown in Table \ref{tab:tab4}. The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10\% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, McRae et al. (2005) used 16\% or 5/30 participants as a minimum standard, and Buchanan et al. (2019) recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired.
+More cue-feature combinations are listed for the multi-word approach, due to differences in combinations for some overlapping features as shown in Table \ref{tab:tab4}. The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10\% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, McRae et al. (2005) used 16\% or 5/30 participants as a minimum standard, and Buchanan et al. (2019) recently used a similar criteria. A large number of cue-features are generated by a small number of participants, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. Additionally, feature weighting using statistics such as pointwise mutual information could be implemented to discount rare features without excluding them.
 
 The next two lines of Table \ref{tab:tab6} indicate cue-feature combination frequencies, such as the number of times \emph{zebra-stripes} or \emph{apple-red} were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. The correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \ref{fig:correlation-fig} displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear. The size of the points indicates the variability (standard deviation of each cue word's average frequency or percent). Variability appears to increase linearly with sample size for average frequency, however, it is somewhat mixed for average percent.
 
@@ -655,7 +658,7 @@ Percent of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
 \begin{figure}
 \centering
 \includegraphics{flt_manuscript_files/figure-latex/correlation-fig-1.pdf}
-\caption{\label{fig:correlation-fig}Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches. Each point represents a cue word, and the size of the point indicates the variability of the average frequency or percent.}
+\caption{\label{fig:correlation-fig}Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches. Each point represents a cue word, and the size of the point indicates the variability of the average frequency (left) or percent (right).}
 \end{figure}
 
 \hypertarget{internal-comparison-of-approach}{%
@@ -663,7 +666,32 @@ Percent of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
 
 In this section, we show that the bag of words approach processed completely through code matches a bag of words approach that was hand coded from Buchanan et al. (2019). In Buchanan et al. (2019), the McRae et al. (2005) and Vinson and Vigliocco (2008) datasets were recoded in a bag of words approach, and the comparison between all three is provided below. The multi-word sequence approach would be comparable if one or more datasets used the same structured data collection approach or with considerable hand coded rules for feature combinations. The data from open ended responses, such as the Buchanan et al. (2019), could potentially be compared in the demonstrated multi-word sequence approach, if the raw data from other such projects were available.
 
-Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the Buchanan et al. (2019): the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the Buchanan et al. (2019). If data were processed in an identical fashion, the cosine values would be nearly 1 for Buchanan et al. (2019) data or match the cosine values found for McRae et al. (2005) and Vinson and Vigliocco (2008) in the Buchanan et al. (2019) results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. The cosine matches for original features averaged: \(M_B\) = .69 (\emph{SD} = .17, \emph{N} = 226); \(M_M\) = .38 (\emph{SD} = .18, \emph{N} = 61); \(M_V\) = .59 (\emph{SD} = .18, \emph{N} = 68). These values indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results. The cosine matches for translated features averaged: \(M_B\) = .72 (\emph{SD} = .16, \emph{N} = 226); \(M_M\) = .58 (\emph{SD} = .14, \emph{N} = 61); \(M_V\) = .58 (\emph{SD} = .19, \emph{N} = 68). Again, these values indicate that the data processed entirely in \emph{R} produces a comparable set of results, albeit with added noise of small frequency features.
+\begin{table}[t]
+
+\caption{\label{tab:tab7}Cosine Overlap with Previous Data Collection}
+\centering
+\begin{tabular}{lllll}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{With Stopwords} & \multicolumn{2}{c}{No Stopwords} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
+Statistic & Original & Translated & Original & Translated\\
+\midrule
+B Mean & .54 & .57 & .69 & .72\\
+B SD & .16 & .17 & .17 & .16\\
+M Mean & .32 & .48 & .38 & .58\\
+M SD & .15 & .14 & .18 & .14\\
+V Mean & .50 & .49 & .59 & .58\\
+\addlinespace
+V SD & .18 & .19 & .18 & .19\\
+\bottomrule
+\multicolumn{5}{l}{\textsuperscript{} $Note$. Translated values are hand coded lemmatization from}\\
+\multicolumn{5}{l}{Buchanan et al. (2019). B: Buchanan et al. (2019), M: McRae et}\\
+\multicolumn{5}{l}{al. (2005), V: Vinson \& Vigliocco (2008). $N$ values are 226,}\\
+\multicolumn{5}{l}{61, and 68 respectively.}\\
+\end{tabular}
+\end{table}
+
+Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the Buchanan et al. (2019): the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the Buchanan et al. (2019). If data were processed in an identical fashion, the cosine values would be nearly 1 for Buchanan et al. (2019) data or match the cosine values found for McRae et al. (2005) and Vinson and Vigliocco (2008) in the Buchanan et al. (2019) results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. Table \ref{tab:tab7} BLAH BLAH BLAH. Again, these values indicate that the data processed entirely in \emph{R} produces a comparable set of results, albeit with added noise of small frequency features.
 
 \hypertarget{external-comparison-of-approach}{%
 \subsection{External Comparison of Approach}\label{external-comparison-of-approach}}
@@ -685,6 +713,8 @@ Generally, coding ontology is cumbersome on the researcher, as it is normally pe
   we've provided a workflow suggestion that a researcher can use to format their work, along with functions that can be detailed to match any hand processing results.
 \item
   weave this to match introduction
+\item
+  how concrete or abstract the words are
 \end{itemize}
 
 \newpage
@@ -699,6 +729,9 @@ Generally, coding ontology is cumbersome on the researcher, as it is normally pe
 \hypertarget{refs}{}
 \leavevmode\hypertarget{ref-Ashcraft1978a}{}%
 Ashcraft, M. H. (1978). Property norms for typical and atypical items from 17 categories: A description and discussion. \emph{Memory \& Cognition}, \emph{6}(3), 227--232. doi:\href{https://doi.org/10.3758/BF03197450}{10.3758/BF03197450}
+
+\leavevmode\hypertarget{ref-Baroni2010}{}%
+Baroni, M., Murphy, B., Barbu, E., \& Poesio, M. (2010). Strudel: A Corpus-Based Semantic Model Based on Properties and Types. \emph{Cognitive Science}, \emph{34}(2), 222--254. doi:\href{https://doi.org/10.1111/j.1551-6709.2009.01068.x}{10.1111/j.1551-6709.2009.01068.x}
 
 \leavevmode\hypertarget{ref-Benoit2017}{}%
 Benoit, K., Muhr, D., \& Watanabe, K. (2017). stopwords: Multilingual Stopword Lists. Retrieved from \url{https://cran.r-project.org/web/packages/stopwords/index.html}
@@ -717,9 +750,6 @@ Collins, A. M., \& Quillian, M. R. (1969). Retrieval time from semantic memory. 
 
 \leavevmode\hypertarget{ref-Devereux2014}{}%
 Devereux, B. J., Tyler, L. K., Geertzen, J., \& Randall, B. (2014). The Centre for Speech, Language and the Brain (CSLB) concept property norms. \emph{Behavior Research Methods}, \emph{46}(4), 1119--1127. doi:\href{https://doi.org/10.3758/s13428-013-0420-4}{10.3758/s13428-013-0420-4}
-
-\leavevmode\hypertarget{ref-Feinerer2018}{}%
-Feinerer, I., Hornik, K., \& Artifex Software, I. (2018). tm: Text Mining Package. Retrieved from \url{https://cran.r-project.org/web/packages/tm/index.html}
 
 \leavevmode\hypertarget{ref-Gagolewski2019}{}%
 Gagolewski, M., \& Tartanus, B. (2019). stringi: Character String Processing Facilities. Retrieved from \url{https://cran.r-project.org/web/packages/stringi/index.html}
@@ -741,9 +771,6 @@ Montefinese, M., Ambrosini, E., Fairfield, B., \& Mammarella, N. (2013). Semanti
 
 \leavevmode\hypertarget{ref-Ooms2018}{}%
 Ooms, J. (2018). The hunspell package: High-Performance Stemmer, Tokenizer, and Spell Checker for R. Retrieved from \href{https://cran.r-project.org/web/packages/hunspell/vignettes/intro.html\%7B/\#\%7Dsetting\%7B/_\%7Da\%7B/_\%7Dlanguage}{https://cran.r-project.org/web/packages/hunspell/vignettes/intro.html\{\textbackslash{}\#\}setting\{\textbackslash{}\_\}a\{\textbackslash{}\_\}language}
-
-\leavevmode\hypertarget{ref-Perry2017}{}%
-Perry, P. O. (2017). corpus: Text Corpus Analysis. Retrieved from \url{http://corpustext.com/}
 
 \leavevmode\hypertarget{ref-Reverberi2004}{}%
 Reverberi, C., Capitani, E., \& Laiacona, E. (2004). Variabili semantico lessicali relative a tutti gli elementi di una categoria semantica: Indagine su soggetti normali italiani per la categoria ``frutta". \emph{Giornale Italiano Di Psicologia}, \emph{31}, 497--522.
@@ -771,9 +798,6 @@ Vinson, D. P., \& Vigliocco, G. (2008). Semantic feature production norms for a 
 
 \leavevmode\hypertarget{ref-Vivas2017}{}%
 Vivas, J., Vivas, L., Comesaña, A., Coni, A. G., \& Vorano, A. (2017). Spanish semantic feature production norms for 400 concrete concepts. \emph{Behavior Research Methods}, \emph{49}(3), 1095--1106. doi:\href{https://doi.org/10.3758/s13428-016-0777-2}{10.3758/s13428-016-0777-2}
-
-\leavevmode\hypertarget{ref-Wickham2014}{}%
-Wickham, H. (2014). Tidy Data. \emph{Journal of Statistical Software}, \emph{59}(10), 1--23. doi:\href{https://doi.org/10.18637/jss.v059.i10}{10.18637/jss.v059.i10}
 
 \leavevmode\hypertarget{ref-Wickham2019}{}%
 Wickham, H., Francios, R., Henry, L., Muller, K., \& Rstudio. (2019). dplyr: A Grammar of Data Manipulation. Retrieved from \url{https://cloud.r-project.org/web/packages/dplyr/index.html}

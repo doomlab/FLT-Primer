@@ -14,3 +14,5 @@ The subset of words chosen for this study include the overlap from:
 The MEN dataset was taken from: Bruni, E., Tran, N. K., & Baroni, M. (2014). Multimodal Distributional Semantics. Journal of Artificial Intelligence Research, 49, 1?47. doi:10.1613/jair.4135
 
 The Strudel data was taken from: Baroni, M., Murphy, B., Barbu, E., & Poesio, M. (2010). Strudel: A Corpus-Based Semantic Model Based on Properties and Types. Cognitive Science, 34(2), 222?254. https://doi.org/10.1111/j.1551-6709.2009.01068.x
+
+The Concreteness Ratings are from: Brysbaert, M., Warriner, A.B., & Kuperman, V. (2014). Concreteness ratings for 40 thousand generally known English word lemmas. Behavior Research Methods, 46, 904-911.

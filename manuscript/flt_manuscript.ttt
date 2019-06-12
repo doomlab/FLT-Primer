@@ -139,3 +139,31 @@ Percent of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
 \end{table*}
 \efloatseparator
  
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[t]
+
+\caption{\label{tab:tab7}Cosine Overlap with Previous Data Collection}
+\centering
+\begin{tabular}{lllll}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{With Stopwords} & \multicolumn{2}{c}{No Stopwords} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
+Statistic & Original & Translated & Original & Translated\\
+\midrule
+B Mean & .54 & .57 & .69 & .72\\
+B SD & .16 & .17 & .17 & .16\\
+M Mean & .32 & .48 & .38 & .58\\
+M SD & .15 & .14 & .18 & .14\\
+V Mean & .50 & .49 & .59 & .58\\
+\addlinespace
+V SD & .18 & .19 & .18 & .19\\
+\bottomrule
+\multicolumn{5}{l}{\textsuperscript{} $Note$. Translated values are hand coded lemmatization from}\\
+\multicolumn{5}{l}{Buchanan et al. (2019). B: Buchanan et al. (2019), M: McRae et}\\
+\multicolumn{5}{l}{al. (2005), V: Vinson \& Vigliocco (2008). $N$ values are 226,}\\
+\multicolumn{5}{l}{61, and 68 respectively.}\\
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 

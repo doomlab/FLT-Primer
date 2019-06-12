@@ -41,7 +41,7 @@ draft             : no
 
 documentclass     : "apa6"
 classoption       : "man"
-output            : papaja::apa6_docx #or _docx for word
+output            : papaja::apa6_pdf #or _docx for word
 ---
 
 ```{r setup, include = FALSE}
@@ -91,11 +91,11 @@ They showed the concept, then had a drop down menu for is/has/does, and then the
 
 3.	Typical operations performed on features
 
-```{r flowchart, echo=FALSE, fig.cap ="Flow chart of proposed semantic processing feature steps.", fig.height=3, fig.width=4}
+```{r flowchart, echo=FALSE, fig.cap ="Flow chart illustrating how feature listings are recoded to obtain a standard feature format.", fig.height=3, fig.width=4}
 knitr::include_graphics("flow_chart.png")
 ```
 
-In the next several sections, we provide a tutorial using *R* on how data from the semantic property norm task might be processed from raw input to finalized output. Figure \@ref(fig:flowchart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach. 
+Due to the productivity in language, a semantic feature can be expressed in a myriad of ways. Without any further processing, many features will be expressed in an idiosyncratic way, despite the fact that they capture the same meaning. For example, the fact that bicycles have two wheels is expressed as <two wheels>,<two wheeled>, <weels>, <wheels>, <has wheels>.  The next sections provide a tutorial on how data from the semantic feature listing (SFL) task might be processed from raw input to a more compact feature output. The tutorial is written for R and is fully documented, such that users can adapt it to their language of choice. Figure \@ref(fig:flowchart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach. 
 
 ## Materials and Data Format
 
@@ -106,6 +106,25 @@ master <- read.csv("../data/tidy_words.csv", stringsAsFactors = F)
 ## Data is in tidy format with concept in the word column
 ## Participant answer in the answer column
 head(master)
+
+## Importing the information from Buchanan 2019 to get types of words
+b_data <- read.csv("../data/final words 2017.csv", stringsAsFactors = F)
+
+## Figure out the POS for our list
+b_map <- b_data[ , c("cue", "pos_cue")]
+b_map <- unique(b_map)
+b_map <- b_map[b_map$cue %in% master$word , ]
+b_table <- table(b_map$pos_cue)
+
+## Importing concreteness ratings
+concrete <- read.delim("../data/concrete.txt")
+
+## Merging rating
+colnames(b_map)[1] = "Word"
+b_map_merge <- merge(b_map, concrete, by = c("Word"))
+
+b_map_M <- tapply(b_map_merge$Conc.M, b_map_merge$pos_cue, mean, na.rm = T)
+b_map_SD <- tapply(b_map_merge$Conc.M, b_map_merge$pos_cue, sd, na.rm = T)
 ```
 
 ```{r tab1, echo = F, results = 'asis'}
@@ -114,13 +133,13 @@ kable(head(master), "latex", booktabs = T, row.names = F,
   column_spec(2, width = "30em")
 ```
 
-The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019 that were included in @McRae2005, @Vinson2008, and @Bruni2014. The data should be structured in tidy format wherein each concept-feature observation is a row and each column is a variable [@Wickham2014]. Therefore, the data includes a `word` column with the normed concept and an `answer` column with the participant answer, as shown in Table \@ref(tab:tab1). 
+The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019. The concepts were taken from @McRae2005, @Vinson2008, and @Bruni2014. The concepts include `r b_table["noun"]` nouns, `r b_table["verb"]` verbs, and `r b_table["adjective"]` adjectives. Concreteness ratings collected by @Brysbaert2014 were matched with the current data set. The concreteness ratings can range from 1 (*abstract (language based)*) to 5 (*concrete (experience based)*). The nouns were rated as most concrete: *M* = `r printnum(b_map_M["noun"])` (*SD* = `r printnum(b_map_SD["noun"])`), followed by adjectives: *M* = `r printnum(b_map_M["adjective"])` (*SD* = `r printnum(b_map_SD["adjective"])`), and verbs: *M* = `r printnum(b_map_M["verb"])` (*SD* = `r printnum(b_map_SD["verb"])`). The data consist of a text file where concept-feature observation is a row and each column is a variable. An example of this raw data is shown in Table \@ref(tab:tab1). The original data can be found at https://osf.io/cjyzw/. 
 
 This data was collected using the instructions provided by @McRae2005, however, in contrast to the suggestions for consistency detailed above [@Devereux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced. 
 
 ## Spelling 
 
-Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018], which is the spell checking library used in popular programs such as FireFox, Chrome, RStudio, and OpenOffice. Each `answer` can be checked for misspellings across an entire column of answers, which is located in the `master` dataset. The default dictionary is American English, and the `hunspell` vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the `"en_GB"` would convert to British English spellings. 
+Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018]. Each `answer` can be checked for misspellings across an entire column of answers, which is located in the `master` dataset. The default dictionary is American English, and the `hunspell` vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the `"en_GB"` would convert to British English spellings. 
 
 ```{r check_spelling, echo = T, size="scriptsize", messages = F}
 ## Lower case to normalize
@@ -140,7 +159,7 @@ The result from the `hunspell()` function is a list object of spelling errors fo
 spelling_suggest <- lapply(spelling_errors, hunspell_suggest)
 ```
 
-For *`r spelling_errors[[173]][1]`*, both *`r paste0(unlist(spelling_suggest[[173]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[173]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[173]][2]`*. The suggestions are presented in most probable order, and using a few loops with the substitute (`gsub()`) function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with pre-coded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms. 
+For *`r spelling_errors[[173]][1]`*, both *`r paste0(unlist(spelling_suggest[[173]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[173]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[173]][2]`*. The suggestions are presented in most probable order, and using a few loops with the substitute (`gsub()`) function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with pre-coded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms and provides context sensitive corrections (e.g., keeping *Apple* as a response to computer, but not as a response to green).
 
 ```{r fix_errors, echo = T, size="scriptsize"}
 ## Replace with most likely suggestion
@@ -162,7 +181,7 @@ for (i in 1:nrow(spell_checked)){
 
 ## Lemmatization
 
-The next step approaches the clustering of word forms into their lemma or head word from a dictionary. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the language, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. Several packages for *R* include customizable stemmers, notably the `hunspell`, `corpus` [@Perry2017], and `tm` [@Feinerer2018] packages.
+The next step approaches the grouping different word forms that share the same lemma. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the language, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. 
 
 Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` package in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple languages. The koRpus package includes functionality to use TreeTagger in *R*. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation. 
 
@@ -218,7 +237,7 @@ kable(head(replacement_lemmas[ , 2:6]), "latex", booktabs = T, row.names = F,
       caption = "Lemma and Part of Speech Information from TreeTagger")
 ```
 
-From this dataset, you can use the `stringi` package [@Gagolewski2019] to replace all of the original tokens with their lemmas. This package allows for replacement look-up across a large set of substitutions. The `stri_replace_all_regex()` function includes the column of data to examine, the patterns to find (using `\\b` regular expressions to ensure word boundaries and no partial word replacements), what to replace those patterns with, and other options to ensure the original dataframe with replacement is returned. Table \@ref(tab:tab3) shows the processed data at this stage. 
+Similar to spelling correction `stri_replace_all_regex()`  is used to replace the wordforms with their corresponding lemmas from the `stringi` package [@Gagolewski2019]. Table \@ref(tab:tab3) shows the processed data at this stage. 
 
 ```{r string_replace, echo = T, size="scriptsize"}
 ## Install the stringi package
@@ -237,9 +256,9 @@ kable(head(lemmas), "latex", booktabs = T, row.names = F,
   column_spec(2, width = "30em")
 ```
 
-## Word Sequences
+## Multi-word Sequences
 
-Multi-word sequences are often coded to mimic a @Collins1969 style model, with "is-a" and "has-a" type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the "is-a" and "has-a" strings. An examination of the coding in @McRae2005 and @Devereux2014 indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With `dplyr` [@Wickham2019], new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the `table()` function is used to tabulate the final count of n-grams and their frequency. 
+Multi-word sequences are often coded to mimic a @Collins1969 style model, with "is-a" and "has-a" type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the "is-a" and "has-a" strings, and a more complex set of regular expressions has been implented in Strudel by @Baroni2010. An examination of the coding in @McRae2005 and @Devereux2014 indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With `dplyr` [@Wickham2019], new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the `table()` function is used to tabulate the final count of n-grams and their frequency. 
 
 ```{r multi_words, echo = T, size="scriptsize", message = F}
 ## Create an empty dataframe 
@@ -289,13 +308,16 @@ for (i in 1:length(unique_concepts)){
                             three_words_pos = paste(wclass, 
                                                     lead(wclass), lead(wclass, n = 2L), 
                                                     sep = "_"))
-  ## Find verb noun or verb adjective nouns to cluster on 
+  ## Find adjective, noun, verb combinations to cluster on
   verb_nouns <- grep("\\bverb_noun", temp_tag_tibble$two_words_pos)
+  adj_nouns <- grep("\\badjective_noun", temp_tag_tibble$two_words_pos)
   verb_adj_nouns <- grep("\\bverb_adjective_noun", temp_tag_tibble$three_words_pos)
   ## Use combined and left over features
   features_for_table <- c(temp_tag_tibble$two_words[verb_nouns], 
+                          temp_tag_tibble$two_words[adj_nouns], 
                           temp_tag_tibble$three_words[verb_adj_nouns],
                           temp_tag_tibble$token[-c(verb_nouns, verb_nouns+1, 
+                                                   adj_nouns, adj_nouns+1,
                                                    verb_adj_nouns, verb_adj_nouns+1, 
                                                    verb_adj_nouns+2)])
   ## Create a table of frequencies
@@ -347,7 +369,7 @@ for (i in 1:length(unique_concepts)){
 bag_words <- bag_words[-c(grep('^[[:punct:]]',bag_words$Feature)), ]
 ```
 
-Tab \@ref(tab:tab5) shows the top ten most frequent responses to *zebra* given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features. 
+Table \@ref(tab:tab5) shows the top ten most frequent responses to *zebra* given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features. 
 
 ```{r tab5, echo = F, results = 'asis'}
 zebra <- bag_words[ bag_words$Word == "zebra" , ]
@@ -366,10 +388,10 @@ As shown in Figure \@ref(fig:flowchart), the next stage of processing would be t
 #install.packages("stopwords")
 library(stopwords)
 ## Remove stop words from either processing approach
-multi_words <- subset(multi_words, 
+multi_words_nostop <- subset(multi_words, 
                       !(Feature %in% stopwords(language = "en", 
                                                source = "snowball")))
-bag_words <- subset(bag_words, 
+bag_words_nostop <- subset(bag_words, 
                     !(Feature %in% stopwords(language = "en", 
                                              source = "snowball")))
 ```
@@ -378,7 +400,7 @@ bag_words <- subset(bag_words,
 
 The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from @Buchanan2019, this information was merged with the sample data. Table \@ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for *zebra* might be 100, while *apple* might be 45, and these values were averaged. 
 
-More cue-feature combinations are listed for the multi-word approach, due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. The average number of cue-features that would be considered low in proportion is quite large, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. 
+More cue-feature combinations are listed for the multi-word approach, due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. A large number of cue-features are generated by a small number of participants, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. Additionally, feature weighting using statistics such as pointwise mutual information could be implemented to discount rare features without excluding them. 
 
 The next two lines of Table \@ref(tab:tab6) indicate cue-feature combination frequencies, such as the number of times *zebra-stripes* or *apple-red* were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. The correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \@ref(fig:correlation-fig) displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear. The size of the points indicates the variability (standard deviation of each cue word's average frequency or percent). Variability appears to increase linearly with sample size for average frequency, however, it is somewhat mixed for average percent. 
 
@@ -387,12 +409,16 @@ sample_sizes <- as.data.frame(tapply(master$word, master$word, length))
 sample_sizes$Word <- rownames(sample_sizes)
 colnames(sample_sizes)[1] <- "Sample_Size"
 
+multi_words_nostop <- merge(multi_words_nostop, sample_sizes, by = "Word")
+bag_words_nostop <- merge(bag_words_nostop, sample_sizes, by = "Word")
+
+## For later showing that removing stop helps
 multi_words <- merge(multi_words, sample_sizes, by = "Word")
 bag_words <- merge(bag_words, sample_sizes, by = "Word")
 
 #number of features
-no_feat_m <- tapply(multi_words$Frequency, multi_words$Word, length)
-no_feat_b <- tapply(bag_words$Frequency, bag_words$Word, length)
+no_feat_m <- tapply(multi_words_nostop$Frequency, multi_words_nostop$Word, length)
+no_feat_b <- tapply(bag_words_nostop$Frequency, bag_words_nostop$Word, length)
 
 #correlations
 cor(no_feat_b, no_feat_m)
@@ -400,19 +426,22 @@ cor(no_feat_m, sample_sizes$Sample_Size)
 cor(no_feat_b, sample_sizes$Sample_Size)
 
 #number of responses
-no_resp_mM <- tapply(multi_words$Frequency, multi_words$Word, mean)
-no_resp_bM <- tapply(bag_words$Frequency, bag_words$Word, mean)
-no_resp_mSD <- tapply(multi_words$Frequency, multi_words$Word, sd)
-no_resp_bSD <- tapply(bag_words$Frequency, bag_words$Word, sd)
+no_resp_mM <- tapply(multi_words_nostop$Frequency, multi_words_nostop$Word, mean)
+no_resp_bM <- tapply(bag_words_nostop$Frequency, bag_words_nostop$Word, mean)
+no_resp_mSD <- tapply(multi_words_nostop$Frequency, multi_words_nostop$Word, sd)
+no_resp_bSD <- tapply(bag_words_nostop$Frequency, bag_words_nostop$Word, sd)
+
+multi_words_nostop$Percent <- multi_words_nostop$Frequency/multi_words_nostop$Sample_Size*100
+bag_words_nostop$Percent <- bag_words_nostop$Frequency/bag_words_nostop$Sample_Size*100
 
 multi_words$Percent <- multi_words$Frequency/multi_words$Sample_Size*100
 bag_words$Percent <- bag_words$Frequency/bag_words$Sample_Size*100
 
 #number of responses proportionate to sample size
-per_resp_mM <- tapply(multi_words$Percent, multi_words$Word, mean)
-per_resp_bM <- tapply(bag_words$Percent, bag_words$Word, mean)
-per_resp_mSD <- tapply(multi_words$Percent, multi_words$Word, sd)
-per_resp_bSD <- tapply(bag_words$Percent, bag_words$Word, sd)
+per_resp_mM <- tapply(multi_words_nostop$Percent, multi_words_nostop$Word, mean)
+per_resp_bM <- tapply(bag_words_nostop$Percent, bag_words_nostop$Word, mean)
+per_resp_mSD <- tapply(multi_words_nostop$Percent, multi_words_nostop$Word, sd)
+per_resp_bSD <- tapply(bag_words_nostop$Percent, bag_words_nostop$Word, sd)
 
 #correlations
 cor(no_resp_mM, no_resp_bM)
@@ -420,8 +449,8 @@ cor(no_resp_mM, sample_sizes$Sample_Size)
 cor(no_resp_bM, sample_sizes$Sample_Size)
 
 #number of small features
-no_smallfeat_m <- tapply(multi_words$Percent[multi_words$Percent <=10], multi_words$Word[multi_words$Percent <=10], length)
-no_smallfeat_b <- tapply(bag_words$Percent[bag_words$Percent <=10], bag_words$Word[bag_words$Percent <=10], length)
+no_smallfeat_m <- tapply(multi_words_nostop$Percent[multi_words_nostop$Percent <=10], multi_words_nostop$Word[multi_words_nostop$Percent <=10], length)
+no_smallfeat_b <- tapply(bag_words_nostop$Percent[bag_words_nostop$Percent <=10], bag_words_nostop$Word[bag_words_nostop$Percent <=10], length)
 ```
 
 ```{r tab6, echo = F, results = 'asis'}
@@ -470,7 +499,7 @@ kable(tableprint, "latex", booktabs = T, row.names = F,
   add_footnote("$Note$. Correlation represents the relation between the statistic listed for that row and the sample size for the cue.", notation="none", escape = F)
 ```
 
-```{r correlation-fig, echo = F, fig.height=6, fig.width=8, fig.cap="Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches. Each point represents a cue word, and the size of the point indicates the variability of the average frequency or percent."}
+```{r correlation-fig, echo = F, fig.height=6, fig.width=8, fig.cap="Correlation of sample size with the average cue-feature frequency (left) and percent (right) of response for each cue for both processing approaches. Each point represents a cue word, and the size of the point indicates the variability of the average frequency (left) or percent (right)."}
 
 p1 <- ggplot(data = NULL, aes(no_resp_bM, sample_sizes$Sample_Size)) +
   geom_point(alpha = .25, size = no_resp_bSD) +
@@ -478,7 +507,7 @@ p1 <- ggplot(data = NULL, aes(no_resp_bM, sample_sizes$Sample_Size)) +
   ylab("Cue Sample Size") + 
   labs(title="Bag of Words") +
   cleanup +
-  coord_cartesian(xlim = c(1,10)) +
+  coord_cartesian(xlim = c(1,10), ylim = c(0, 450)) +
   scale_x_continuous(breaks = c(2,4,6,8,10))
 
 p2 <- ggplot(data = NULL, aes(per_resp_bM, sample_sizes$Sample_Size)) +
@@ -487,7 +516,7 @@ p2 <- ggplot(data = NULL, aes(per_resp_bM, sample_sizes$Sample_Size)) +
   ylab("Cue Sample Size") + 
   labs(title="Bag of Words") +
   cleanup +
-  coord_cartesian(xlim = c(1,10)) +
+  coord_cartesian(xlim = c(1,10), ylim = c(0, 450)) +
   scale_x_continuous(breaks = c(2,4,6,8,10))
 
 p3 <- ggplot(data = NULL, aes(no_resp_mM, sample_sizes$Sample_Size)) +
@@ -496,7 +525,7 @@ p3 <- ggplot(data = NULL, aes(no_resp_mM, sample_sizes$Sample_Size)) +
   ylab("Cue Sample Size") + 
   labs(title="Multi-word Sequences") +
   cleanup +
-  coord_cartesian(xlim = c(0,10)) +
+  coord_cartesian(xlim = c(1,10), ylim = c(0, 450)) +
   scale_x_continuous(breaks = c(2,4,6,8,10))
 
 p4 <- ggplot(data = NULL, aes(per_resp_mM, sample_sizes$Sample_Size)) +
@@ -505,7 +534,7 @@ p4 <- ggplot(data = NULL, aes(per_resp_mM, sample_sizes$Sample_Size)) +
   ylab("Cue Sample Size") + 
   labs(title="Multi-word Sequences") +
   cleanup +
-  coord_cartesian(xlim = c(1,10)) +
+  coord_cartesian(xlim = c(1,10), ylim = c(0, 450)) +
   scale_x_continuous(breaks = c(2,4,6,8,10))
 
 prow <- plot_grid(p1, p2, p3, p4, hjust = -1, nrow = 2)
@@ -518,7 +547,7 @@ In this section, we show that the bag of words approach processed completely thr
 
 ```{r compare_b, echo = F, include = F}
 library(readxl)
-b_data <- read.csv("../data/final words 2017.csv", stringsAsFactors = F)
+## b data imported earlier 
 
 ## Reduce down only to overlap words
 b_data <- subset(b_data, cue %in% unique_concepts)
@@ -536,26 +565,49 @@ cosine_values <- data.frame(word=unique_concepts,
                             translated_v=1:length(unique_concepts), 
                             stringsAsFactors=FALSE)
 
+cosine_values_wstop <- data.frame(word=unique_concepts,
+                            raw_b=1:length(unique_concepts), 
+                            raw_m=1:length(unique_concepts),
+                            raw_v=1:length(unique_concepts),
+                            translated_b=1:length(unique_concepts), 
+                            translated_m=1:length(unique_concepts), 
+                            translated_v=1:length(unique_concepts), 
+                            stringsAsFactors=FALSE)
+
 for (i in 1:length(unique_concepts)){
  
   temp_b <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "b", ]
   temp_m <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "m", ] 
   temp_v <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "v", ]
-  temp_bag <- bag_words[bag_words$Word == unique_concepts[i], ]
+  temp_bag <- bag_words_nostop[bag_words_nostop$Word == unique_concepts[i], ]
   colnames(temp_bag)[2] = "feature"
+  temp_bag_wstop <- bag_words[bag_words$Word == unique_concepts[i], ]
+  colnames(temp_bag_wstop)[2] = "feature"
   
   ## Based on unprocessed data 
   temp_merge_b <- merge(temp_b, temp_bag, by = "feature", all = T)
   temp_merge_m <- merge(temp_m, temp_bag, by = "feature", all = T)
   temp_merge_v <- merge(temp_v, temp_bag, by = "feature", all = T)
   
+  temp_merge_b_wstop <- merge(temp_b, temp_bag_wstop, by = "feature", all = T)
+  temp_merge_m_wstop <- merge(temp_m, temp_bag_wstop, by = "feature", all = T)
+  temp_merge_v_wstop <- merge(temp_v, temp_bag_wstop, by = "feature", all = T)
+  
   temp_merge_b[c("frequency_feature", "Frequency")][is.na(temp_merge_b[c("frequency_feature", "Frequency")])] <- 0
   temp_merge_m[c("frequency_feature", "Frequency")][is.na(temp_merge_m[c("frequency_feature", "Frequency")])] <- 0
   temp_merge_v[c("frequency_feature", "Frequency")][is.na(temp_merge_v[c("frequency_feature", "Frequency")])] <- 0
   
+    temp_merge_b_wstop[c("frequency_feature", "Frequency")][is.na(temp_merge_b_wstop[c("frequency_feature", "Frequency")])] <- 0
+  temp_merge_m_wstop[c("frequency_feature", "Frequency")][is.na(temp_merge_m_wstop[c("frequency_feature", "Frequency")])] <- 0
+  temp_merge_v_wstop[c("frequency_feature", "Frequency")][is.na(temp_merge_v_wstop[c("frequency_feature", "Frequency")])] <- 0
+  
   cosine_values$raw_b[i] <- cosine(temp_merge_b$frequency_feature, temp_merge_b$Frequency)
   cosine_values$raw_m[i] <- cosine(temp_merge_m$frequency_feature, temp_merge_m$Frequency)
   cosine_values$raw_v[i] <- cosine(temp_merge_v$frequency_feature, temp_merge_v$Frequency)
+  
+    cosine_values_wstop$raw_b[i] <- cosine(temp_merge_b_wstop$frequency_feature, temp_merge_b_wstop$Frequency)
+  cosine_values_wstop$raw_m[i] <- cosine(temp_merge_m_wstop$frequency_feature, temp_merge_m_wstop$Frequency)
+  cosine_values_wstop$raw_v[i] <- cosine(temp_merge_v_wstop$frequency_feature, temp_merge_v_wstop$Frequency)
   
   ## Based on processed data
   colnames(temp_bag)[2] = "translated"
@@ -563,18 +615,35 @@ for (i in 1:length(unique_concepts)){
   temp_merge_m <- merge(temp_m, temp_bag, by = "translated", all = T)
   temp_merge_v <- merge(temp_v, temp_bag, by = "translated", all = T)
   
+  colnames(temp_bag_wstop)[2] = "translated"
+  temp_merge_b_wstop <- merge(temp_b, temp_bag_wstop, by = "translated", all = T)
+  temp_merge_m_wstop <- merge(temp_m, temp_bag_wstop, by = "translated", all = T)
+  temp_merge_v_wstop <- merge(temp_v, temp_bag_wstop, by = "translated", all = T)
+  
   temp_merge_b[c("frequency_translated", "Frequency")][is.na(temp_merge_b[c("frequency_translated", "Frequency")])] <- 0
   temp_merge_m[c("frequency_translated", "Frequency")][is.na(temp_merge_m[c("frequency_translated", "Frequency")])] <- 0
   temp_merge_v[c("frequency_translated", "Frequency")][is.na(temp_merge_v[c("frequency_translated", "Frequency")])] <- 0
+  
+  temp_merge_b_wstop[c("frequency_translated", "Frequency")][is.na(temp_merge_b_wstop[c("frequency_translated", "Frequency")])] <- 0
+  temp_merge_m_wstop[c("frequency_translated", "Frequency")][is.na(temp_merge_m_wstop[c("frequency_translated", "Frequency")])] <- 0
+  temp_merge_v_wstop[c("frequency_translated", "Frequency")][is.na(temp_merge_v_wstop[c("frequency_translated", "Frequency")])] <- 0
   
   ### This process creates duplicates
   temp_merge_b <- temp_merge_b[!duplicated(temp_merge_b$translated), ]
   temp_merge_m <- temp_merge_m[!duplicated(temp_merge_m$translated), ]
   temp_merge_v <- temp_merge_v[!duplicated(temp_merge_v$translated), ]
   
+  temp_merge_b_wstop <- temp_merge_b_wstop[!duplicated(temp_merge_b_wstop$translated), ]
+  temp_merge_m_wstop <- temp_merge_m_wstop[!duplicated(temp_merge_m_wstop$translated), ]
+  temp_merge_v_wstop <- temp_merge_v_wstop[!duplicated(temp_merge_v_wstop$translated), ]
+  
   cosine_values$translated_b[i] <- cosine(temp_merge_b$frequency_translated, temp_merge_b$Frequency)
   cosine_values$translated_m[i] <- cosine(temp_merge_m$frequency_translated, temp_merge_m$Frequency)
   cosine_values$translated_v[i] <- cosine(temp_merge_v$frequency_translated, temp_merge_v$Frequency)
+  
+  cosine_values_wstop$translated_b[i] <- cosine(temp_merge_b_wstop$frequency_translated, temp_merge_b_wstop$Frequency)
+  cosine_values_wstop$translated_m[i] <- cosine(temp_merge_m_wstop$frequency_translated, temp_merge_m_wstop$Frequency)
+  cosine_values_wstop$translated_v[i] <- cosine(temp_merge_v_wstop$frequency_translated, temp_merge_v_wstop$Frequency)
   
   }
 
@@ -583,12 +652,74 @@ cosine_values$raw_v[is.nan(cosine_values$raw_v)] <- NA
 cosine_values$translated_m[is.nan(cosine_values$translated_m)] <- NA
 cosine_values$translated_v[is.nan(cosine_values$translated_v)] <- NA
 
+cosine_values_wstop$raw_m[is.nan(cosine_values_wstop$raw_m)] <- NA
+cosine_values_wstop$raw_v[is.nan(cosine_values_wstop$raw_v)] <- NA
+cosine_values_wstop$translated_m[is.nan(cosine_values_wstop$translated_m)] <- NA
+cosine_values_wstop$translated_v[is.nan(cosine_values_wstop$translated_v)] <- NA
+
 cosine_M <- apply(cosine_values[ , -1], 2, mean, na.rm = T)
 cosine_SD <- apply(cosine_values[ , -1], 2, sd, na.rm = T)
 cosine_N <- apply(cosine_values[ , -1], 2, function(x) length(na.omit(x)))
+
+cosine_M_wstop <- apply(cosine_values_wstop[ , -1], 2, mean, na.rm = T)
+cosine_SD_wstop <- apply(cosine_values_wstop[ , -1], 2, sd, na.rm = T)
+cosine_N_wstop <- apply(cosine_values_wstop[ , -1], 2, function(x) length(na.omit(x)))
 ```
 
-Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the @Buchanan2019: the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the @Buchanan2019. If data were processed in an identical fashion, the cosine values would be nearly 1 for @Buchanan2019 data or match the cosine values found for @McRae2005 and @Vinson2008 in the @Buchanan2019 results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. The cosine matches for original features averaged: $M_B$ = `r printnum(cosine_M['raw_b'], gt1 = F)` (*SD* = `r printnum(cosine_SD['raw_b'], gt1 = F)`, *N* = `r printnum(cosine_N['raw_b'])`); $M_M$ = `r printnum(cosine_M['raw_m'], gt1 = F)` (*SD* = `r printnum(cosine_SD['raw_m'], gt1 = F)`, *N* = `r printnum(cosine_N['raw_m'])`); $M_V$ = `r printnum(cosine_M['raw_v'], gt1 = F)` (*SD* = `r printnum(cosine_SD['raw_v'], gt1 = F)`, *N* = `r printnum(cosine_N['raw_v'])`). These values indicate a somewhat comparable set of data, with lower values for @McRae2005 than previous results. The cosine matches for translated features averaged: $M_B$ = `r printnum(cosine_M['translated_b'], gt1 = F)` (*SD* = `r printnum(cosine_SD['translated_b'], gt1 = F)`, *N* = `r printnum(cosine_N['translated_b'])`); $M_M$ = `r printnum(cosine_M['translated_m'], gt1 = F)` (*SD* = `r printnum(cosine_SD['translated_m'], gt1 = F)`, *N* = `r printnum(cosine_N['translated_m'])`); $M_V$ = `r printnum(cosine_M['translated_v'], gt1 = F)` (*SD* = `r printnum(cosine_SD['translated_v'], gt1 = F)`, *N* = `r printnum(cosine_N['translated_v'])`). Again, these values indicate that the data processed entirely in *R* produces a comparable set of results, albeit with added noise of small frequency features. 
+```{r tab7, echo = F, results = 'asis'}
+tableprint <- matrix(NA, nrow = 6, ncol = 5)
+colnames(tableprint) <- c("Stat", "Original_S", "Translated_S", "Original", "Translated")
+tableprint <- as.data.frame(tableprint)
+
+##b words
+tableprint[1 , ] <- c("B Mean", 
+                      printnum(cosine_M_wstop['raw_b'], gt1 = F),
+                      printnum(cosine_M_wstop['translated_b'], gt1 = F),
+                      printnum(cosine_M['raw_b'], gt1 = F),
+                      printnum(cosine_M['translated_b'], gt1 = F))
+
+tableprint[2 , ] <- c("B SD", 
+                      printnum(cosine_SD_wstop['raw_b'], gt1 = F),
+                      printnum(cosine_SD_wstop['translated_b'], gt1 = F),
+                      printnum(cosine_SD['raw_b'], gt1 = F),
+                      printnum(cosine_SD['translated_b'], gt1 = F))
+
+##m words
+tableprint[3 , ] <- c("M Mean", 
+                      printnum(cosine_M_wstop['raw_m'], gt1 = F),
+                      printnum(cosine_M_wstop['translated_m'], gt1 = F),
+                      printnum(cosine_M['raw_m'], gt1 = F),
+                      printnum(cosine_M['translated_m'], gt1 = F))
+
+tableprint[4 , ] <- c("M SD", 
+                      printnum(cosine_SD_wstop['raw_m'], gt1 = F),
+                      printnum(cosine_SD_wstop['translated_m'], gt1 = F),
+                      printnum(cosine_SD['raw_m'], gt1 = F),
+                      printnum(cosine_SD['translated_m'], gt1 = F))
+
+##v words
+tableprint[5 , ] <- c("V Mean", 
+                      printnum(cosine_M_wstop['raw_v'], gt1 = F),
+                      printnum(cosine_M_wstop['translated_v'], gt1 = F),
+                      printnum(cosine_M['raw_v'], gt1 = F),
+                      printnum(cosine_M['translated_v'], gt1 = F))
+
+tableprint[6 , ] <- c("V SD", 
+                      printnum(cosine_SD_wstop['raw_v'], gt1 = F),
+                      printnum(cosine_SD_wstop['translated_v'], gt1 = F),
+                      printnum(cosine_SD['raw_v'], gt1 = F),
+                      printnum(cosine_SD['translated_v'], gt1 = F))
+
+kable(tableprint, "latex", booktabs = T, row.names = F,
+      escape = F, 
+      col.names = c("Statistic", "Original", "Translated", "Original", 
+                          "Translated"), 
+      caption = "Cosine Overlap with Previous Data Collection") %>%  
+  add_header_above(c(" " = 1, "With Stopwords" = 2, "No Stopwords" = 2)) %>% 
+  add_footnote("$Note$. Translated values are hand coded lemmatization from Buchanan et al. (2019). B: Buchanan et al. (2019), M: McRae et al. (2005), V: Vinson \\& Vigliocco (2008). $N$ values are 226, 61, and 68 respectively. ", notation="none", escape = F) 
+```
+
+Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the @Buchanan2019: the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the @Buchanan2019. If data were processed in an identical fashion, the cosine values would be nearly 1 for @Buchanan2019 data or match the cosine values found for @McRae2005 and @Vinson2008 in the @Buchanan2019 results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. Table \@ref(tab:tab7) indicates the cosine values for each cue paired with itself in different scenarios. On the left, the cosine values with stopwords are provided for both the original feature listed (i.e., no lemmatization) and the translated feature (i.e., hand lemmatization). The right side of the table includes the cosine values once stopwords have been removed. The removal of stopwords increases the match between sets indicating how removing these terms can improve comparison and quality. The cosine values for no stopwords indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results in the original feature sets. These values indicate that the data processed entirely in *R* produces a comparable set of results, albeit with added noise of small frequency features. 
 
 ## External Comparison of Approach
 
@@ -597,27 +728,40 @@ men_data <- read.table("../data/MEN_dataset_natural_form_full.txt",
                        quote="\"", comment.char="", stringsAsFactors=FALSE)
 
 library(tidyr)
-bag_words_spread <- spread(bag_words[ , -c(4,5)], key = Word, value = Frequency, fill = 0)
+bag_words_spread <- spread(bag_words_nostop[ , -c(4,5)], key = Word, value = Frequency, fill = 0)
 bag_words_cosine <- cosine(as.matrix(bag_words_spread[ , -1]))
 bag_words_cosine <- as_tibble(bag_words_cosine)
 bag_words_cosine$cue <- colnames(bag_words_cosine)
 bag_words_cosine <- gather(bag_words_cosine, key = target, 
                            value = cosine, abstract:zebra)
 bag_words_cosine$key <- paste(bag_words_cosine$cue, bag_words_cosine$target, sep = " ")
+
+bag_words_spread_wstop <- spread(bag_words[ , -c(4,5)], key = Word, value = Frequency, fill = 0)
+bag_words_cosine_wstop <- cosine(as.matrix(bag_words_spread_wstop[ , -1]))
+bag_words_cosine_wstop <- as_tibble(bag_words_cosine_wstop)
+bag_words_cosine_wstop$cue <- colnames(bag_words_cosine_wstop)
+bag_words_cosine_wstop <- gather(bag_words_cosine_wstop, key = target, 
+                           value = cosine, abstract:zebra)
+bag_words_cosine_wstop$key <- paste(bag_words_cosine_wstop$cue, bag_words_cosine_wstop$target, sep = " ")
+
 men_data$key <- paste(men_data$V1, men_data$V2)
 colnames(men_data) <- c("cue", "target", "rating", "key")
   
 men_merge = merge(men_data, bag_words_cosine, by = "key")
+men_merge_wstop = merge(men_data, bag_words_cosine_wstop, by = "key")
 
 ##correlation
 cor_MEN <- cor.test(men_merge$rating, men_merge$cosine)
+cor_MEN_wstop <- cor.test(men_merge_wstop$rating, men_merge_wstop$cosine)
 ```
 
-The MEN dataset [@Bruni2014] contains cue-cue pairs of English words rating for similarity by Amazon Mechanical Turk participants. In their rating task, participants were shown two cue-cue pairs and asked to select the more related pair of the two presented. Each pair was rated by 50 participants, and thus, a score of 50 indicates high relatedness, while a score of 0 indicates no relatedness. A range of relatedness values were selected from this dataset with overlapping cues from @Buchanan2019, and these values were compared to the cosine calculated between cues using the bag of words method. The correlation between cosine on the processed data and the MEN ratings was `r apa_print(cor_MEN)$estimate`, *N* = `r cor_MEN$parameter+2`, indicating considerable agreement between raters and cosine values. 
+The MEN dataset [@Bruni2014] contains cue-cue pairs of English words rating for similarity by Amazon Mechanical Turk participants for stimuli taken from the @McRae2005 feature norms. In their rating task, participants were shown two cue-cue pairs and asked to select the more related pair of the two presented. Each pair was rated by 50 participants, and thus, a score of 50 indicates high relatedness, while a score of 0 indicates no relatedness. The ratings for the selected set of cues provided in this analysis was `r min(men_merge$rating)` - `r max(men_merge$rating)` with an average rating of `r printnum(mean(men_merge$rating))` (*SD* = `r printnum(sd(men_merge$rating))`). The ratings were compared to the cosine calculated between cues using the bag of words method with and without stopwords. The correlation between bag of words cosines with stopwords and the MEN ratings was `r apa_print(cor_MEN_wstop)$estimate`, *N* = `r cor_MEN_wstop$parameter+2`, indicating agreement between raters and cosine values. The agreement between ratings and bag of word cosine values was higher when stopwords were excluded, `r apa_print(cor_MEN)$estimate`.
 
 ## Future Directions
 
-Generally, coding ontology is cumbersome on the researcher, as it is normally performed by hand using a coding schema. @Wu2009 developed a hierarchical taxonomy for coding categories as part of the feature listing task, that has been used in several projects, notably the @McRae2005. Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and  introspective properties (emotion, evaluation). Coding ontology may be best performed systematically with look-up rules of previously decided upon factors, however, clustering analyses may provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncratic features as mentioned above, and thus, features smaller in number may be more difficult to group.
+An attractive property of the subjective feature listing task is that it results in transparent representations. As a result, many researchers have taken additional steps to group specific types of knowledge together, depending on semantic relations (e.g., taxonomy relations) or their mapping onto distinct brain regions [@Fairhall2013]. Typically this involves applying a hand-crafted coding scheme, which requires a substantial effort. One of the common ontologies is the one developed by @Wu2009. The ontology is structured as a  hierarchical taxonomy for coding categories as part of the feature listing task. It has been used in several projects, notably the @McRae2005. Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and  introspective properties (emotion, evaluation). Coding ontology may be best performed systematically with look-up rules of previously decided upon factors, however, clustering analyses may provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncratic features as mentioned above, and thus, features smaller in number may be more difficult to group.
+
+A recent project ... 
 
 # Discussion
 
@@ -626,6 +770,8 @@ Generally, coding ontology is cumbersome on the researcher, as it is normally pe
 - we've provided a workflow suggestion that a researcher can use to format their work, along with functions that can be detailed to match any hand processing results. 
 
 - weave this to match introduction 
+
+- how concrete or abstract the words are 
 
 \newpage
 
