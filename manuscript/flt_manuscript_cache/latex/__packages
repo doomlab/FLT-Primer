@@ -1,6 +1,8 @@
 base
 papaja
 kableExtra
+ggplot2
+cowplot
 hunspell
 sylly
 koRpus
@@ -12,6 +14,3 @@ readxl
 SnowballC
 lsa
 tidyr
-cluster
-ggplot2
-cowplot

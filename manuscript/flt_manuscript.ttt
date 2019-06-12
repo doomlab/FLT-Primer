@@ -77,14 +77,14 @@ Word & Feature & Frequency\\
 zebra & be\_horse & 1\\
 zebra & be\_similar\_horse & 1\\
 zebra & build\_horse & 1\\
-zebra & horse & 22\\
-zebra & horse-like & 1\\
+zebra & fast\_horse & 1\\
+zebra & horse & 19\\
 \addlinespace
+zebra & horse-like & 1\\
 zebra & look\_similar\_horse & 1\\
 zebra & related\_horse & 1\\
 zebra & resemble\_small\_horse & 1\\
 zebra & run\_fast\_horse & 1\\
-zebra & run\_horse & 1\\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -128,10 +128,10 @@ zebra & horse & 32\\
 \cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
 Statistics & $M$ & $SD$ & $r$ & $M$ & $SD$ & $r$\\
 \midrule
-Number of Cue-Features & 191.85 & 98.19 & 0.74 & 171.80 & 76.96 & 0.66\\
-Frequency of Idiosyncratic Response & 182.57 & 96.43 & 0.76 & 158.85 & 73.97 & 0.69\\
-Frequency of Cue-Feature Response & 2.14 & 3.46 & 0.73 & 2.73 & 4.80 & 0.83\\
-Percent of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
+Number of Cue-Features & 212.92 & 115.63 & 0.77 & 171.80 & 76.96 & 0.66\\
+Frequency of Idiosyncratic Response & 205.86 & 114.20 & 0.78 & 158.85 & 73.97 & 0.69\\
+Frequency of Cue-Feature Response & 1.80 & 2.61 & 0.75 & 2.73 & 4.80 & 0.83\\
+Percent of Cue-Feature Response & 2.95 & 3.88 & -0.66 & 4.34 & 4.80 & -0.62\\
 \bottomrule
 \multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and the}\\
 \multicolumn{7}{l}{sample size for the cue.}\\
@@ -163,6 +163,32 @@ V SD & .18 & .19 & .18 & .19\\
 \multicolumn{5}{l}{Buchanan et al. (2019). B: Buchanan et al. (2019), M: McRae et}\\
 \multicolumn{5}{l}{al. (2005), V: Vinson \& Vigliocco (2008). $N$ values are 226,}\\
 \multicolumn{5}{l}{61, and 68 respectively.}\\
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[t]
+
+\caption{\label{tab:tab8}Top Ten Ontology Labels}
+\centering
+\begin{tabular}{llll}
+\toprule
+Parts & Function & Location & Category\\
+\midrule
+brush use & brush hair & scissors cut & flute instrument\\
+lawn grass & river water & snow cold & snow white\\
+snail shell & branch tree & farm land & elephant animal\\
+river stream & chair sit & cabin wood & cabbage green\\
+radio music & leaf plant & rocket space & dagger knife\\
+\addlinespace
+elephant trunk & kitchen food & breakfast day & apple fruit\\
+door open & hammer nail & stone rock & hammer tool\\
+zebra stripe & oven cook & bacon pig & lion king\\
+river flow & garden flower & shoe foot & cabbage vegetable\\
+dragon fire & leaf green & tree leaf & furniture table\\
+\bottomrule
 \end{tabular}
 \end{table*}
 \efloatseparator

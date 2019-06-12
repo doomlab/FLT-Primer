@@ -41,7 +41,7 @@ draft             : no
 
 documentclass     : "apa6"
 classoption       : "man"
-output            : papaja::apa6_pdf #or _docx for word
+output            : papaja::apa6_docx #or _docx for word
 ---
 
 ```{r setup, include = FALSE}
@@ -761,7 +761,79 @@ The MEN dataset [@Bruni2014] contains cue-cue pairs of English words rating for 
 
 An attractive property of the subjective feature listing task is that it results in transparent representations. As a result, many researchers have taken additional steps to group specific types of knowledge together, depending on semantic relations (e.g., taxonomy relations) or their mapping onto distinct brain regions [@Fairhall2013]. Typically this involves applying a hand-crafted coding scheme, which requires a substantial effort. One of the common ontologies is the one developed by @Wu2009. The ontology is structured as a  hierarchical taxonomy for coding categories as part of the feature listing task. It has been used in several projects, notably the @McRae2005. Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and  introspective properties (emotion, evaluation). Coding ontology may be best performed systematically with look-up rules of previously decided upon factors, however, clustering analyses may provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncratic features as mentioned above, and thus, features smaller in number may be more difficult to group.
 
-A recent project ... 
+```{r strudel, include = F}
+strudel <- read.csv("../data/baked.strudel.csv", stringsAsFactors = F)
+
+strudel$feature <- gsub("-n$", "", strudel$feature)
+strudel$feature <- gsub("-j$", "", strudel$feature)
+strudel$feature <- gsub("-v$", "", strudel$feature)
+strudel$feature <- gsub("-", "_", strudel$feature)
+strudel$key <- paste(strudel$cue, strudel$feature, sep = " ")
+bag_words$key <- paste(bag_words$Word, bag_words$Feature, sep = " ")
+
+##merge together
+bag_strudel <- merge(bag_words, strudel, by = "key")
+
+##add ontology labels
+bag_strudel$ontology <- NA
+
+#part	P_of_C, C_’s_P, C_with_P, C_have_P, P_on_C
+## of+right, 's+left, with+left, have+left, on+right
+parts <- grep("of\\+right|\\'s\\+left|with\\+left|have\\+left|on\\+right",
+              bag_strudel$type1)
+bag_strudel$ontology[ parts ] <- "Parts"
+
+#category 	P_such_as_C, P_like_C, C_as_P, P_as_C, P_from_C
+## such_as+right, like+right, as+left, as+right, from+right
+category <- grep("such_as\\+right|like\\+right|as\\+left|as\\+right|from\\+right",
+              bag_strudel$type1)
+bag_strudel$ontology[ category ] <- "Category"
+
+#location 	C_on_P, P_with_C, C_in_P, C_from_P, C_to_P
+## on+left, with+right, in+left, from+left, to+left
+location <- grep("on\\+left|with\\+right|in\\+left|from\\+left|to\\+left",
+              bag_strudel$type1)
+bag_strudel$ontology[ location ] <- "Location"
+
+#function	C_of_P, P_from_C, C_for_P, P_in_C, P_by_C
+## of+left, from+right, for+left, in+right, by+right
+functiono <- grep("of\\+left|from\\+right|for\\+left|in\\+right|by\\+right",
+              bag_strudel$type1)
+bag_strudel$ontology[ functiono ] <- "Function"
+
+ontology_table <- table(bag_strudel$ontology)
+```
+
+```{r tab8, results = 'asis'}
+tableprint <- matrix(NA, nrow=10, ncol=4)
+colnames(tableprint) <-  c("Parts", "Function", "Location", "Category")
+tableprint <- as.data.frame(tableprint)
+parts_df <- subset(bag_strudel, ontology == "Parts")
+parts_df <- parts_df[order(parts_df$Percent, decreasing = T) , ]
+parts_df <- parts_df[!duplicated(parts_df$Feature), ]
+tableprint[1:10 , 1] <- parts_df$key[1:10]
+
+function_df <- subset(bag_strudel, ontology == "Function")
+function_df <- function_df[order(function_df$Percent, decreasing = T) , ]
+function_df <- function_df[!duplicated(function_df$Feature), ]
+tableprint[1:10 , 2] <- function_df$key[1:10]
+
+location_df <- subset(bag_strudel, ontology == "Location")
+location_df <- location_df[order(location_df$Percent, decreasing = T) , ]
+location_df <- location_df[!duplicated(location_df$Feature), ]
+tableprint[1:10 , 3] <- location_df$key[1:10]
+
+category_df <- subset(bag_strudel, ontology == "Category")
+category_df <- category_df[order(category_df$Percent, decreasing = T) , ]
+category_df <- category_df[!duplicated(category_df$Feature), ]
+tableprint[1:10 , 4] <- category_df$key[1:10]
+
+kable(tableprint, "latex", booktabs = T, row.names = F, 
+      caption = "Top Ten Ontology Labels")
+```
+
+
+Potentially, simple ontology can be mapped using results from Strudel [structured dimension extraction and labeling, @Baroni2010]. Strudel is a corpus-based semantic model wherein cue words are found in a large text corpus and matched to nouns, verbs, and adjectives that appear near a concept. Using specific patterns of expected feature listing, @Baroni2010 were able build a model of English concepts and their properties that aligned with semantic feature production norms. From this model, they were able to cluster properties based on their lexical patterns. For example, if a sentence included the phrase *fruit, such as an apple*, this lexical pattern would be classified as *such_as+right*, indicating that the concept (apple) was found to the right of the property (fruit) with the phrase such as connecting them. Using clustering, @Baroni2010 was able to assign four ontology labels to properties: part, category, location, and function. Using these results, we can match `r sum(table(bag_strudel$ontology))` of the bag of words features (`r round(sum(table(bag_strudel$ontology))/nrow(bag_words)*100,1)`%). These features were predominately parts (`r printnum(ontology_table["Parts"]/sum(ontology_table)*100, digits = 1)`), followed by function (`r printnum(ontology_table["Function"]/sum(ontology_table)*100, digits = 1)`), location (`r printnum(ontology_table["Location"]/sum(ontology_table)*100, digits = 1)`), and category (`r printnum(ontology_table["Category"]/sum(ontology_table)*100, digits = 1)`). Table \@ref(tab:tab8) indicates ten of the most frequent cue-feature pairs for each ontology label, excluding duplicate features across cues. An examination of the top results indicates coherent labels (parts: *zebra-stripe*, location: *shoe-foot*, and category: *furniture-table*); however, there are also a few mismatches (location: *scissors-cut*, function: *leaf-green*). This model represents an area in which one might begin to automate the labeling process, likely combined with other pre-defined rulesets. 
 
 # Discussion
 

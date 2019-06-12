@@ -528,14 +528,14 @@ Word & Feature & Frequency\\
 zebra & be\_horse & 1\\
 zebra & be\_similar\_horse & 1\\
 zebra & build\_horse & 1\\
-zebra & horse & 22\\
-zebra & horse-like & 1\\
+zebra & fast\_horse & 1\\
+zebra & horse & 19\\
 \addlinespace
+zebra & horse-like & 1\\
 zebra & look\_similar\_horse & 1\\
 zebra & related\_horse & 1\\
 zebra & resemble\_small\_horse & 1\\
 zebra & run\_fast\_horse & 1\\
-zebra & run\_horse & 1\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -645,10 +645,10 @@ The next two lines of Table \ref{tab:tab6} indicate cue-feature combination freq
 \cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
 Statistics & $M$ & $SD$ & $r$ & $M$ & $SD$ & $r$\\
 \midrule
-Number of Cue-Features & 191.85 & 98.19 & 0.74 & 171.80 & 76.96 & 0.66\\
-Frequency of Idiosyncratic Response & 182.57 & 96.43 & 0.76 & 158.85 & 73.97 & 0.69\\
-Frequency of Cue-Feature Response & 2.14 & 3.46 & 0.73 & 2.73 & 4.80 & 0.83\\
-Percent of Cue-Feature Response & 3.47 & 5.14 & -0.64 & 4.34 & 4.80 & -0.62\\
+Number of Cue-Features & 212.92 & 115.63 & 0.77 & 171.80 & 76.96 & 0.66\\
+Frequency of Idiosyncratic Response & 205.86 & 114.20 & 0.78 & 158.85 & 73.97 & 0.69\\
+Frequency of Cue-Feature Response & 1.80 & 2.61 & 0.75 & 2.73 & 4.80 & 0.83\\
+Percent of Cue-Feature Response & 2.95 & 3.88 & -0.66 & 4.34 & 4.80 & -0.62\\
 \bottomrule
 \multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and the}\\
 \multicolumn{7}{l}{sample size for the cue.}\\
@@ -691,17 +691,42 @@ V SD & .18 & .19 & .18 & .19\\
 \end{tabular}
 \end{table}
 
-Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the Buchanan et al. (2019): the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the Buchanan et al. (2019). If data were processed in an identical fashion, the cosine values would be nearly 1 for Buchanan et al. (2019) data or match the cosine values found for McRae et al. (2005) and Vinson and Vigliocco (2008) in the Buchanan et al. (2019) results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. Table \ref{tab:tab7} BLAH BLAH BLAH. Again, these values indicate that the data processed entirely in \emph{R} produces a comparable set of results, albeit with added noise of small frequency features.
+Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the Buchanan et al. (2019): the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the Buchanan et al. (2019). If data were processed in an identical fashion, the cosine values would be nearly 1 for Buchanan et al. (2019) data or match the cosine values found for McRae et al. (2005) and Vinson and Vigliocco (2008) in the Buchanan et al. (2019) results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. Table \ref{tab:tab7} indicates the cosine values for each cue paired with itself in different scenarios. On the left, the cosine values with stopwords are provided for both the original feature listed (i.e., no lemmatization) and the translated feature (i.e., hand lemmatization). The right side of the table includes the cosine values once stopwords have been removed. The removal of stopwords increases the match between sets indicating how removing these terms can improve comparison and quality. The cosine values for no stopwords indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results in the original feature sets. These values indicate that the data processed entirely in \emph{R} produces a comparable set of results, albeit with added noise of small frequency features.
 
 \hypertarget{external-comparison-of-approach}{%
 \subsection{External Comparison of Approach}\label{external-comparison-of-approach}}
 
-The MEN dataset (Bruni et al., 2014) contains cue-cue pairs of English words rating for similarity by Amazon Mechanical Turk participants. In their rating task, participants were shown two cue-cue pairs and asked to select the more related pair of the two presented. Each pair was rated by 50 participants, and thus, a score of 50 indicates high relatedness, while a score of 0 indicates no relatedness. A range of relatedness values were selected from this dataset with overlapping cues from Buchanan et al. (2019), and these values were compared to the cosine calculated between cues using the bag of words method. The correlation between cosine on the processed data and the MEN ratings was \(r = .69\), 95\% CI \([.61\), \(.76]\), \emph{N} = 179, indicating considerable agreement between raters and cosine values.
+The MEN dataset (Bruni et al., 2014) contains cue-cue pairs of English words rating for similarity by Amazon Mechanical Turk participants for stimuli taken from the McRae et al. (2005) feature norms. In their rating task, participants were shown two cue-cue pairs and asked to select the more related pair of the two presented. Each pair was rated by 50 participants, and thus, a score of 50 indicates high relatedness, while a score of 0 indicates no relatedness. The ratings for the selected set of cues provided in this analysis was 2 - 49 with an average rating of 25.79 (\emph{SD} = 12.00). The ratings were compared to the cosine calculated between cues using the bag of words method with and without stopwords. The correlation between bag of words cosines with stopwords and the MEN ratings was \(r = .54\), 95\% CI \([.42\), \(.63]\), \emph{N} = 179, indicating agreement between raters and cosine values. The agreement between ratings and bag of word cosine values was higher when stopwords were excluded, \(r = .69\), 95\% CI \([.61\), \(.76]\).
 
 \hypertarget{future-directions}{%
 \subsection{Future Directions}\label{future-directions}}
 
-Generally, coding ontology is cumbersome on the researcher, as it is normally performed by hand using a coding schema. Wu and Barsalou (2009) developed a hierarchical taxonomy for coding categories as part of the feature listing task, that has been used in several projects, notably the McRae et al. (2005). Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and introspective properties (emotion, evaluation). Coding ontology may be best performed systematically with look-up rules of previously decided upon factors, however, clustering analyses may provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncratic features as mentioned above, and thus, features smaller in number may be more difficult to group.
+An attractive property of the subjective feature listing task is that it results in transparent representations. As a result, many researchers have taken additional steps to group specific types of knowledge together, depending on semantic relations (e.g., taxonomy relations) or their mapping onto distinct brain regions ({\textbf{???}}). Typically this involves applying a hand-crafted coding scheme, which requires a substantial effort. One of the common ontologies is the one developed by Wu and Barsalou (2009). The ontology is structured as a hierarchical taxonomy for coding categories as part of the feature listing task. It has been used in several projects, notably the McRae et al. (2005). Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and introspective properties (emotion, evaluation). Coding ontology may be best performed systematically with look-up rules of previously decided upon factors, however, clustering analyses may provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncratic features as mentioned above, and thus, features smaller in number may be more difficult to group.
+
+\begin{table}[t]
+
+\caption{\label{tab:tab8}Top Ten Ontology Labels}
+\centering
+\begin{tabular}{llll}
+\toprule
+Parts & Function & Location & Category\\
+\midrule
+brush use & brush hair & scissors cut & flute instrument\\
+lawn grass & river water & snow cold & snow white\\
+snail shell & branch tree & farm land & elephant animal\\
+river stream & chair sit & cabin wood & cabbage green\\
+radio music & leaf plant & rocket space & dagger knife\\
+\addlinespace
+elephant trunk & kitchen food & breakfast day & apple fruit\\
+door open & hammer nail & stone rock & hammer tool\\
+zebra stripe & oven cook & bacon pig & lion king\\
+river flow & garden flower & shoe foot & cabbage vegetable\\
+dragon fire & leaf green & tree leaf & furniture table\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Potentially, simple ontology can be mapped using results from Strudel (structured dimension extraction and labeling, Baroni et al., 2010). Strudel is a corpus-based semantic model wherein cue words are found in a large text corpus and matched to nouns, verbs, and adjectives that appear near a concept. Using specific patterns of expected feature listing, Baroni et al. (2010) were able build a model of English concepts and their properties that aligned with semantic feature production norms. From this model, they were able to cluster properties based on their lexical patterns. For example, if a sentence included the phrase \emph{fruit, such as an apple}, this lexical pattern would be classified as \emph{such\_as+right}, indicating that the concept (apple) was found to the right of the property (fruit) with the phrase such as connecting them. Using clustering, Baroni et al. (2010) was able to assign four ontology labels to properties: part, category, location, and function. Using these results, we can match 2259 of the bag of words features (5\%). These features were predominately parts (39.9), followed by function (30.5), location (24.0), and category (5.5). Table \ref{tab:tab8} indicates ten of the most frequent cue-feature pairs for each ontology label, excluding duplicate features across cues. An examination of the top results indicates coherent labels (parts: \emph{zebra-stripe}, location: \emph{shoe-foot}, and category: \emph{furniture-table}); however, there are also a few mismatches (location: \emph{scissors-cut}, function: \emph{leaf-green}). This model represents an area in which one might begin to automate the labeling process, likely combined with other pre-defined rulesets.
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
