@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  12 JUN 2019 15:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  12 JUN 2019 22:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1224,7 +1224,7 @@ Underfull \vbox (badness 10000) detected at line 514
  []
 
 [10] [11] [12] [13] [14] [15] [16] [17] [18] [19]
-Overfull \hbox (14.23662pt too wide) in paragraph at lines 797--799
+Overfull \hbox (14.23662pt too wide) in paragraph at lines 803--805
  \T1/lmr/m/n/12 (-20) project.org/web/packages/hunspell/vignettes/intro.html{\#
 }setting{\_}a{\_}language[]  
  []
@@ -1252,7 +1252,7 @@ Overfull \hbox (8.38728pt too wide) in paragraph at lines 125--139
 
 ] [30
 
-]) (./flt_manuscript.fff <flow_chart.png, id=296, 794.97pt x 276.03125pt>
+]) (./flt_manuscript.fff <flow_chart.png, id=300, 794.97pt x 276.03125pt>
 File: flow_chart.png Graphic file (type png)
 <use flow_chart.png>
 Package pdftex.def Info: flow_chart.png used on input line 4.
@@ -1261,7 +1261,7 @@ Package pdftex.def Info: flow_chart.png used on input line 4.
 
 
  <./flow_chart.png>]
-<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=304, 566.115pt x 4
+<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=308, 566.115pt x 4
 18.56375pt>
 File: flt_manuscript_files/figure-latex/correlation-fig-1.pdf Graphic file (typ
 e pdf)
@@ -1272,17 +1272,17 @@ f used on input line 12.
 [32
 
  <./flt_manuscript_files/figure-latex/correlation-fig-1.pdf>])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 836.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 836.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 842.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 842.
 (./flt_manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 836.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 836.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 842.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 842.
 Package rerunfilecheck Info: File `flt_manuscript.out' has not changed.
 (rerunfilecheck)             Checksum: 740807D7E8478681DCABBD2517C22CD8;2172.
  ) 
 Here is how much of TeX's memory you used:
- 16342 strings out of 492995
- 241325 string characters out of 6132704
+ 16344 strings out of 492995
+ 241358 string characters out of 6132704
  364131 words of memory out of 5000000
  19430 multiletter control sequences out of 15000+600000
  53391 words of font info for 91 fonts, out of 8000000 for 9000
@@ -1301,10 +1301,10 @@ t/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2017/texmf-dist/fonts/ty
 pe1/public/lm/lmtt12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public
 /lm/lmtt8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtti10
 .pfb>
-Output written on flt_manuscript.pdf (32 pages, 398348 bytes).
+Output written on flt_manuscript.pdf (32 pages, 398639 bytes).
 PDF statistics:
- 386 PDF objects out of 1000 (max. 8388607)
- 333 compressed objects within 4 object streams
- 100 named destinations out of 1000 (max. 500000)
+ 390 PDF objects out of 1000 (max. 8388607)
+ 337 compressed objects within 4 object streams
+ 102 named destinations out of 1000 (max. 500000)
  6267 words of extra memory for PDF output out of 10000 (max. 10000000)
 

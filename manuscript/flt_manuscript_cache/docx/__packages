@@ -8,3 +8,9 @@ sylly
 koRpus
 koRpus.lang.en
 stringi
+dplyr
+stopwords
+readxl
+SnowballC
+lsa
+tidyr
