@@ -123,6 +123,22 @@ The data for this tutorial includes `r nrow(master)` unique concept-feature resp
 
 The data was collected using the instructions provided by @McRae2005, however, in contrast to the suggestions for consistency detailed above [@Devereux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants (e.g., asking participants to type one feature on each line), the suggested processing steps are reduced. 
 
+You can load the entire set of libraries for this tutorial using the `dependencies.R` script found in our online repository, as shown below^[A `packrat` project compliation is avaliable on GitHub for reproducibility [@Ushey2018]]. 
+
+```{r libraries, echo = T, size="scriptsize", messages = F}
+#Spelling
+library(hunspell) 
+#Lemmatization
+library(koRpus) 
+library(koRpus.lang.en)
+library(stringi)
+#Multi-Word Sequences
+library(dplyr)
+#Stopwords
+library(stopwords)
+```
+
+
 ## Spelling 
 
 The first step (see Figure \@ref(fig:flowchart)) in processing the features consists of identifying and replacing spelling mistakes. Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018]. Each `answer` can be checked for misspellings across an entire column of answers, which is in the `master` dataset. Because participants were recruited in the United States, we used the default American English dictionary. The `hunspell` vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the `"en_GB"` would convert to British English spellings. 
@@ -130,9 +146,6 @@ The first step (see Figure \@ref(fig:flowchart)) in processing the features cons
 ```{r check_spelling, echo = T, size="scriptsize", messages = F}
 ## Lower case to normalize
 master$answer <- tolower(master$answer)
-## Install the hunspell package if necessary
-#install.packages("hunspell")
-library(hunspell)
 ## Check the participant answers
 ## The output is a list of spelling errors for each line
 spelling_errors <- hunspell(master$answer, dict = dictionary("en_US"))
@@ -173,12 +186,6 @@ Lemmatization is the likely choice for processing property norms, and this proce
 
 ```{r lemma, echo = T, size="scriptsize", messages = F}
 lemmas <- spell_checked
-## Install the koRpus package
-#install.packages("koRpus")
-#install.packages("koRpus.lang.en")
-## You must load both packages separately
-library(koRpus)
-library(koRpus.lang.en)
 ## Install TreeTagger 
 #https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/
 ## Find all types for faster lookup
@@ -228,7 +235,6 @@ Similar to spelling correction `stri_replace_all_regex()`  is used to replace th
 ```{r string_replace, echo = T, size="scriptsize"}
 ## Install the stringi package
 #install.packages("stringi")
-library(stringi)
 ## Replace all the original tokens with new lemmas using \\b for word boundaries
 lemmas$answer <- stri_replace_all_regex(str = lemmas$answer, 
                        pattern = paste("\\b", replacement_lemmas$token, "\\b", sep = ""),
@@ -254,9 +260,6 @@ multi_words <- data.frame(Word=character(),
                         stringsAsFactors=FALSE) 
 ## Create unique word list to loop over 
 unique_concepts <- unique(lemmas$word)
-## Install dplyr
-#install.packages("dplyr")
-library(dplyr)
 ## Loop over each word
 for (i in 1:length(unique_concepts)){
   ## Create parts of speech for clustering together
@@ -370,9 +373,6 @@ kable(zebra[1:10, ], "latex", booktabs = T, row.names = F,
 As shown in Figure \@ref(fig:flowchart), the next stage of processing would be to exclude stopwords, such as *the, of, but*, for either the multi-word sequence or bag of word style processing. The `stopwords` package [@Benoit2017] includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subsetting the data to exclude stopwords as unigrams. 
 
 ``` {r stop_words_multi, echo = T, size="scriptsize"}
-## Install the stopwords package or use tm
-#install.packages("stopwords")
-library(stopwords)
 ## Remove stop words from either processing approach
 multi_words_nostop <- subset(multi_words, 
                       !(Feature %in% stopwords(language = "en", 
