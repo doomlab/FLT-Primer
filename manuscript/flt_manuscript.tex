@@ -110,7 +110,7 @@
 \shorttitle{Processing Norms}
 \affiliation{
 \vspace{0.5cm}
-\textsuperscript{1} Harrisburg University of Science and Technology\\\textsuperscript{2} The University of Adelaide\\\textsuperscript{3} University of Padua}
+\textsuperscript{1} Harrisburg University of Science and Technology\\\textsuperscript{2} The University of Melbourne\\\textsuperscript{3} University of Padua}
 \keywords{semantic, property norm task, tutorial}
 \usepackage{csquotes}
 \usepackage{upgreek}
@@ -147,7 +147,7 @@
 Correspondence concerning this article should be addressed to Erin M. Buchanan, 326 Market St., Harrisburg, PA 17101. E-mail: \href{mailto:ebuchanan@harrisburgu.edu}{\nolinkurl{ebuchanan@harrisburgu.edu}}}
 
 \abstract{
-Semantic property listing tasks require participants to generate short propositions (e.g., \textless{}barks\textgreater{}, \textless{}has fur\textgreater{}) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them. This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g.~reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). Example data and the impact of choice decisions will be provided. This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
+Semantic property listing tasks require participants to generate short propositions (e.g., \textless{}barks\textgreater{}, \textless{}has fur\textgreater{}) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them. This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g.~reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
 
 
 }
@@ -155,69 +155,23 @@ Semantic property listing tasks require participants to generate short propositi
 \begin{document}
 \maketitle
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Available feature norms and their format
-\end{enumerate}
+Semantic properties are assumed to be, entirely or in part, the building blocks of semantic representation -- the knowledge we have of the world - by a variety of theories (e.g., Collins \& Quillian, 1969, @Jackendoff; Jackendoff, 1992; Minsky, 1975; Norman \& Rumelhart, 1975; Saffran \& Sholl, 1999; Smith \& Medin, 1981) and computational models (Caramazza, Laudanna, \& Romani, 1988; Farah \& McClelland, 1991; Humphreys \& Forde, 2001). Within this perspective, the meaning of a concept is conceived as a distributed pattern of semantic properties, which convey multiple types of information (Cree \& McRae, 2003; Plaut, 2002; Rogers et al., 2004). For example, the concept HORSE can be described by encyclopaedic (), visual (, , , ), functional (), and motor () information. Given the relevance of semantic properties in shaping theories of semantic representation, researchers have recognized the value of collecting semantic property production norms. Typically, in the property generation task, participants are presented with a set of concepts and are asked to list the properties they think are characteristic for each concept meaning. Generally, in this task, the concepts are called cues, and the responses to the cue are called features\footnote{Throughout this article, features will be distinguished from cues using angular brackets.}. This method has a long history of use by researchers wishing to gain insight into semantic representations of concrete concepts and categories (McRae, Cree, Seidenberg, \& McNorgan, 2005; Rosch \& Mervis, 1975; Smith, Shoben, \& Rips, 1974), and more recently, events and abstract concepts (Katja Wiemer-Hastings \& Xu, 2005; Lebani, Bondielli, \& Lenci, 2016; Vinson \& Vigliocco, 2008).
 
-\begin{itemize}
-\tightlist
-\item
-  Property listing task original work: Toglia and Battig (1978); Toglia (2009); Rosch and Mervis (1975); Ashcraft (1978)
-\item
-  English: McRae, Cree, Seidenberg, and McNorgan (2005), Vinson and Vigliocco (2008), Buchanan, Holmes, Teasley, and Hutchison (2013), Devereux, Tyler, Geertzen, and Randall (2014), Buchanan, Valentine, and Maxwell (2019)
-\item
-  Italian: Montefinese, Ambrosini, Fairfield, and Mammarella (2013); Reverberi, Capitani, and Laiacona (2004), Kremer and Baroni (2011)
-\item
-  German: Kremer and Baroni (2011)
-\item
-  Portuguese: Stein and de Azevedo Gomes (2009)
-\item
-  Spanish: Vivas, Vivas, Comesaña, Coni, and Vorano (2017)
-\item
-  Dutch: Ruts et al. (2004)
-\item
-  Blind participants: Lenci, Baroni, Cazzolli, and Marotta (2013)
-\end{itemize}
+On the one hand, many studies adopted the property generation task itself to make inferences about word meaning and its computation (Katja Wiemer-Hastings \& Xu, 2005; Recchia \& Jones, 2012; Santos, Chaigneau, Simmons, \& Barsalou, 2011; Wu \& Barsalou, 2009). On the other hand, many researchers employed the property listing task in order to provide other researchers with a tool of standardized word stimuli and relative semantic measures. Indeed, based on data obtained from the property production task, it is then possible to calculate numerous measures and distributional statistics both at the feature and the concept level. For example, these feature data can be used to determine the semantic similarity/distance between concepts, often by calculating the feature overlap or number of shared features between concepts (Buchanan, Valentine, \& Maxwell, 2019; McRae et al., 2005; Montefinese, 2019; Montefinese, Zannino, \& Ambrosini, 2015; Vigliocco, Vinson, Lewis, \& Garrett, 2004), or how different types (Daniele Zannino, Perri, Pasqualetti, Caltagirone, \& Carlesimo, 2006; Kremer \& Baroni, 2011) and dimensions of feature informativeness, such as, distinctiveness (Garrard, Lambon Ralph, Hodges, \& Patterson, 2001), cue validity (Rosch \& Mervis, 1975), relevance (Sartori \& Lombardi, 2004), semantic richness (Pexman, Hargreaves, Siakaluk, Bodner, \& Pope, 2008) (Pexman et al., 2008) and significance (Montefinese, Ambrosini, Fairfield, \& Mammarella, 2014) are distributed across concepts.
 
-I'm sure there are more, here's what we cited recently.
+Efficient ways to collect data online have boosted the availability of large feature listing data sets. These semantic feature norms are now available across different languages: Dutch (De Deyne \& Storms, 2008; Ruts et al., 2004), English (Buchanan, Holmes, Teasley, \& Hutchison, 2013; Buchanan et al., 2019; Devereux, Tyler, Geertzen, \& Randall, 2014; Garrard et al., 2001; McRae et al., 2005; Vinson \& Vigliocco, 2008), German (Kremer \& Baroni, 2011), Italian (Catricalà et al., 2015; Kremer \& Baroni, 2011; Montefinese, Ambrosini, Fairfield, \& Mammarella, 2013; Zannino, Perri, Pasqualetti, Caltagirone, \& Carlesimo, 2006), Portuguese (Marques, Fonseca, Morais, \& Pinto, 2007), and Spanish (Vivas, Vivas, Comesaña, Coni, \& Vorano, 2017) as well as for blind participants (Lenci, Baroni, Cazzolli, \& Marotta, 2013). However, these norms vary substantially in the procedure of data collection and their pre-processing, and this does not facilitate performing cross-language comparisons and, thus, making inferences about how semantic representations are generalizable across languages.
 
-Define concept, feature for clarity throughout - make sure you use these two terms consistently.
+First, there is a lack of agreement in the instructions provided to the participants. Indeed, while some studies use an open-ended verbal feature production (Buchanan et al., 2013, 2019; De Deyne \& Storms, 2008; Montefinese et al., 2013) where participants can list the features related to the concept with any kind of semantic relation, other studies use a constrained verbal feature production (Devereux et al., 2014; Garrard et al., 2001) where participants were instructed to use specific semantic relations between cue concept and features, such as, for example, \textless{}is \ldots{}\textgreater{}, \textless{}has \ldots{}\textgreater{}, \textless{}does \ldots{}\textgreater{}, \textless{}made of \ldots{}\textgreater{}, and so forth. Moreover, some authors instruct the participants to produce a single word as a feature instead of a multiple-word description. This latter case could also determine a problem on subsequent coding steps that affect the identification of pieces of information. For example, if the participant listed the feature for the concept CAR, there is no consensus if this feature should be divided into and , under the assumption that the participant provided two bits of information, or rather if it should be considered as a unique feature. Second, some authors gave a time limit to provide the features descriptions (Kremer \& Baroni, 2011; Lenci et al., 2013; Marques et al., 2007) or a limited number of features to be listed (De Deyne \& Storms, 2008), with a possible influence on a number of feature-based measures (e.g., semantic richness or distinctiveness).
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  Pointers about how to collect the data
-\end{enumerate}
+Because the feature listing task is a verbal task and language is very productive (i.e., the same feature can be expressed in many different ways), few features will be listed in exactly the same way across participants. To be able to derive reliable quantitative measures, nearly all studies specify a series of pre-processing steps to group verbal utterances about the same underlying conceptual property together. The main problem is that there is no agreement about how to code/pre-process data derived from the feature listing task. Recoding features is sometimes done in manually (McRae et al., 2005) whereas others use semi-automatic procedures, especially for larger datasets (Buchanan et al., 2019). Further points of debate are related to the inclusion/exclusion of certain types of responses. For example, unlike previous semantic norms (McRae et al., 2005; Montefinese et al., 2013; Vivas et al., 2017), Buchanan et al. (2019) included idiosyncratic features (features produced only by one or a few number of participants) if they were in the top listed features, ambiguous words (words with multiple meanings), and created a special coding for affixes of the root words. Moreover, they discarded stop words, such as, the, an, of, and synonyms were treated as different entries.
 
-\begin{enumerate}
-\def\labelenumi{\alph{enumi}.}
-\tightlist
-\item
-  instructions, generation, verification, importance
-\end{enumerate}
+While hand-coding features leads to features that concise, easily interpretable and highly predictive of semantic behaviour, the increasing scale of recent studies and more powerful natural language processing techniques make automatic procedures an attractive alternative. Moreover, building standard automatic procedures to process feature-listing data would not only add transparency to the process but would also prevent human errors and allow a generalization of the data across languages.
 
-I really like the way the CSLB did it: \url{https://cslb.psychol.cam.ac.uk/propnorms}
-
-They showed the concept, then had a drop down menu for is/has/does, and then the participant typed in a final window. That type of system would solve about half the problems I am going to describe below about using multi-word sequences. Might be some other suggestions, but for that type of processing, you could do combinations and have more consistent data easily.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{2}
-\tightlist
-\item
-  Typical operations performed on features
-\end{enumerate}
+For the first time, in this study we propose an automatic procedure to code the raw feature data derived from a semantic feature listing task (SFL). The next sections provide a tutorial on how raw feature data might be processed to a more compact feature output. The tutorial is written for R and is fully documented, such that users can adapt it to their language of choice . Figure \ref{fig:flowchart} portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will evaluated and compared to previous norms to determine the usefulness of this approach.
 
 \begin{figure}
 \includegraphics[width=5.28in]{flow_chart} \caption{Flow chart illustrating how feature listings are recoded to obtain a standard feature format.}\label{fig:flowchart}
 \end{figure}
-
-Due to the productivity in language, a semantic feature can be expressed in a myriad of ways. Without any further processing, many features will be expressed in an idiosyncratic way, despite the fact that they capture the same meaning. For example, the fact that bicycles have two wheels is expressed as ,, , , . The next sections provide a tutorial on how data from the semantic feature listing (SFL) task might be processed from raw input to a more compact feature output. The tutorial is written for R and is fully documented, such that users can adapt it to their language of choice. Figure \ref{fig:flowchart} portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will compared to previous norms to determine the usefulness of this approach.
 
 \hypertarget{materials-and-data-format}{%
 \subsection{Materials and Data Format}\label{materials-and-data-format}}
@@ -241,14 +195,14 @@ airplane & wings  body  flies  travel\\
 \end{tabular}
 \end{table}
 
-The data for this tutorial includes 16544 unique concept-feature responses for 226 concepts from Buchanan et al. (2019). The concepts were taken from McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The concepts include 185 nouns, 25 verbs, and 16 adjectives. Concreteness ratings collected by Brysbaert, Warriner, and Kuperman (2014) were matched with the current data set. The concreteness ratings can range from 1 (\emph{abstract (language based)}) to 5 (\emph{concrete (experience based)}). The nouns were rated as most concrete: \emph{M} = 4.59 (\emph{SD} = 0.52), followed by adjectives: \emph{M} = 3.78 (\emph{SD} = 0.81), and verbs: \emph{M} = 3.57 (\emph{SD} = 0.79). The data consist of a text file where concept-feature observation is a row and each column is a variable. An example of this raw data is shown in Table \ref{tab:tab1}. The original data can be found at \url{https://osf.io/cjyzw/}.
+The data for this tutorial includes 16544 unique concept-feature responses for 226 concepts from Buchanan et al. (2019). The concepts were taken from McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The concepts include 185 nouns, 25 verbs, and 16 adjectives. Concreteness ratings collected by Brysbaert, Warriner, and Kuperman (2014) were matched with the current data set. The concreteness ratings capture the difference between abstract (language-based) and concrete (experience-based) concepts and were measured on a five-point scale. Nouns were rated as most concrete: \emph{M} = 4.59 (\emph{SD} = 0.52), followed by adjectives: \emph{M} = 3.78 (\emph{SD} = 0.81), and verbs: \emph{M} = 3.57 (\emph{SD} = 0.79). The SFL data consist of a text file where concept-feature observation is a row and each column is a variable. An example of these raw data are shown in Table \ref{tab:tab1}, where the \texttt{word} column is the cue, and the \texttt{answer} column denotes a single participant's response. The original data can be found at \url{https://osf.io/cjyzw/}.
 
-This data was collected using the instructions provided by McRae et al. (2005), however, in contrast to the suggestions for consistency detailed above (Devereux et al., 2014), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants, the suggested processing steps are reduced.
+The data was collected using the instructions provided by McRae et al. (2005), however, in contrast to the suggestions for consistency detailed above (Devereux et al., 2014), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants (e.g., asking participants to type one feature on each line), the suggested processing steps are reduced.
 
 \hypertarget{spelling}{%
 \subsection{Spelling}\label{spelling}}
 
-Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (Ooms, 2018). Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is located in the \texttt{master} dataset. The default dictionary is American English, and the \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
+The first step (see Figure \ref{fig:flowchart}) in processing the features consists of identifying and replacing spelling mistakes. Spell checking can be automated with the \texttt{hunspell} package in \emph{R} (Ooms, 2018). Each \texttt{answer} can be checked for misspellings across an entire column of answers, which is in the \texttt{master} dataset. Because participants were recruited in the United States, we used the default American English dictionary. The \texttt{hunspell} vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the \texttt{"en\_GB"} would convert to British English spellings.
 
 \scriptsize
 
@@ -691,7 +645,7 @@ V SD & .18 & .19 & .18 & .19\\
 \end{tabular}
 \end{table}
 
-Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the Buchanan et al. (2019): the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the Buchanan et al. (2019). If data were processed in an identical fashion, the cosine values would be nearly 1 for Buchanan et al. (2019) data or match the cosine values found for McRae et al. (2005) and Vinson and Vigliocco (2008) in the Buchanan et al. (2019) results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in this data to reduce the average cosine values. Table \ref{tab:tab7} indicates the cosine values for each cue paired with itself in different scenarios. On the left, the cosine values with stopwords are provided for both the original feature listed (i.e., no lemmatization) and the translated feature (i.e., hand lemmatization). The right side of the table includes the cosine values once stopwords have been removed. The removal of stopwords increases the match between sets indicating how removing these terms can improve comparison and quality. The cosine values for no stopwords indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results in the original feature sets. These values indicate that the data processed entirely in \emph{R} produces a comparable set of results, albeit with added noise of small frequency features.
+Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the Buchanan et al. (2019): the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the Buchanan et al. (2019). If data were processed in an identical fashion, the cosine values would be nearly 1 for Buchanan et al. (2019) data or match the cosine values found for McRae et al. (2005) and Vinson and Vigliocco (2008) in the Buchanan et al. (2019) results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in the data would reduce the average cosine values. Table \ref{tab:tab7} indicates the cosine values for each cue paired with itself in different scenarios. On the left, the cosine values with stopwords are provided for both the original feature listed (i.e., no lemmatization) and the translated feature (i.e., hand lemmatization). The right side of the table includes the cosine values once stopwords have been removed. The removal of stopwords increases the match between sets indicating how removing these terms can improve comparison and quality. The cosine values for no stopwords indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results in the original feature sets. These values indicate that the data processed entirely in \emph{R} produces a comparable set of results, albeit with added noise of small frequency features.
 
 \hypertarget{external-comparison-of-approach}{%
 \subsection{External Comparison of Approach}\label{external-comparison-of-approach}}
@@ -752,9 +706,6 @@ Potentially, simple ontology can be mapped using results from Strudel (structure
 \setlength{\leftskip}{0.5in}
 
 \hypertarget{refs}{}
-\leavevmode\hypertarget{ref-Ashcraft1978a}{}%
-Ashcraft, M. H. (1978). Property norms for typical and atypical items from 17 categories: A description and discussion. \emph{Memory \& Cognition}, \emph{6}(3), 227--232. doi:\href{https://doi.org/10.3758/BF03197450}{10.3758/BF03197450}
-
 \leavevmode\hypertarget{ref-Baroni2010}{}%
 Baroni, M., Murphy, B., Barbu, E., \& Poesio, M. (2010). Strudel: A Corpus-Based Semantic Model Based on Properties and Types. \emph{Cognitive Science}, \emph{34}(2), 222--254. doi:\href{https://doi.org/10.1111/j.1551-6709.2009.01068.x}{10.1111/j.1551-6709.2009.01068.x}
 
@@ -773,8 +724,23 @@ Buchanan, E. M., Holmes, J. L., Teasley, M. L., \& Hutchison, K. A. (2013). Engl
 \leavevmode\hypertarget{ref-Buchanan2019}{}%
 Buchanan, E. M., Valentine, K. D., \& Maxwell, N. P. (2019). English semantic feature production norms: An extended database of 4436 concepts. \emph{Behavior Research Methods}. doi:\href{https://doi.org/10.3758/s13428-019-01243-z}{10.3758/s13428-019-01243-z}
 
+\leavevmode\hypertarget{ref-Caramazza1988}{}%
+Caramazza, A., Laudanna, A., \& Romani, C. (1988). Lexical access and inflectional morphology. \emph{Cognition}, \emph{28}(3), 297--332. doi:\href{https://doi.org/10.1016/0010-0277(88)90017-0}{10.1016/0010-0277(88)90017-0}
+
+\leavevmode\hypertarget{ref-Catricala2015}{}%
+Catricalà, E., Della Rosa, P. A., Plebani, V., Perani, D., Garrard, P., \& Cappa, S. F. (2015). Semantic feature degradation and naming performance. Evidence from neurodegenerative disorders. \emph{Brain and Language}, \emph{147}, 58--65. doi:\href{https://doi.org/10.1016/J.BANDL.2015.05.007}{10.1016/J.BANDL.2015.05.007}
+
 \leavevmode\hypertarget{ref-Collins1969}{}%
 Collins, A. M., \& Quillian, M. R. (1969). Retrieval time from semantic memory. \emph{Journal of Verbal Learning and Verbal Behavior}, \emph{8}(2), 240--247. doi:\href{https://doi.org/10.1016/S0022-5371(69)80069-1}{10.1016/S0022-5371(69)80069-1}
+
+\leavevmode\hypertarget{ref-Cree2003}{}%
+Cree, G. S., \& McRae, K. (2003). Analyzing the factors underlying the structure and computation of the meaning of chipmunk, cherry, chisel, cheese, and cello (and many other such concrete nouns). \emph{Journal of Experimental Psychology: General}, \emph{132}(2), 163--201. doi:\href{https://doi.org/10.1037/0096-3445.132.2.163}{10.1037/0096-3445.132.2.163}
+
+\leavevmode\hypertarget{ref-DanieleZannino2006}{}%
+Daniele Zannino, G., Perri, R., Pasqualetti, P., Caltagirone, C., \& Carlesimo, G. A. (2006). Analysis of the semantic representations of living and nonliving concepts: a normative study. \emph{Cognitive Neuropsychology}, \emph{23}(4), 515--540.
+
+\leavevmode\hypertarget{ref-DeDeyne2008c}{}%
+De Deyne, S., \& Storms, G. (2008). Word associations: Norms for 1,424 Dutch words in a continuous task. \emph{Behavior Research Methods}, \emph{40}(1), 198--205. doi:\href{https://doi.org/10.3758/BRM.40.1.198}{10.3758/BRM.40.1.198}
 
 \leavevmode\hypertarget{ref-Devereux2014}{}%
 Devereux, B. J., Tyler, L. K., Geertzen, J., \& Randall, B. (2014). The Centre for Speech, Language and the Brain (CSLB) concept property norms. \emph{Behavior Research Methods}, \emph{46}(4), 1119--1127. doi:\href{https://doi.org/10.3758/s13428-013-0420-4}{10.3758/s13428-013-0420-4}
@@ -782,14 +748,38 @@ Devereux, B. J., Tyler, L. K., Geertzen, J., \& Randall, B. (2014). The Centre f
 \leavevmode\hypertarget{ref-Fairhall2013}{}%
 Fairhall, S. L., \& Caramazza, A. (2013). Category-selective neural substrates for person- and place-related concepts. \emph{Cortex}, \emph{49}(10), 2748--2757. doi:\href{https://doi.org/10.1016/j.cortex.2013.05.010}{10.1016/j.cortex.2013.05.010}
 
+\leavevmode\hypertarget{ref-Farah1991}{}%
+Farah, M. J., \& McClelland, J. L. (1991). A computational model of semantic memory impairment: Modality specificity and emergent category specificity. \emph{Journal of Experimental Psychology: General}, \emph{120}(4), 339--357. doi:\href{https://doi.org/10.1037/0096-3445.120.4.339}{10.1037/0096-3445.120.4.339}
+
 \leavevmode\hypertarget{ref-Gagolewski2019}{}%
 Gagolewski, M., \& Tartanus, B. (2019). stringi: Character String Processing Facilities. Retrieved from \url{https://cran.r-project.org/web/packages/stringi/index.html}
+
+\leavevmode\hypertarget{ref-Garrard2001}{}%
+Garrard, P., Lambon Ralph, M. A., Hodges, J. R., \& Patterson, K. (2001). Prototypicality, distinctiveness, and intercorrelation: Analyses of the semantic attributes of living and nonliving concepts. \emph{Cognitive Neuropsychology}, \emph{18}(2), 125--174. doi:\href{https://doi.org/10.1080/02643290125857}{10.1080/02643290125857}
+
+\leavevmode\hypertarget{ref-Humphreys2001}{}%
+Humphreys, G. W., \& Forde, E. M. (2001). Hierarchies, similarity, and interactivity in object recognition: "category-specific" neuropsychological deficits. \emph{The Behavioral and Brain Sciences}, \emph{24}(3), 453--476.
+
+\leavevmode\hypertarget{ref-Jackendoff}{}%
+Jackendoff, R. (1990). On Larson's Treatment of the Double Object Construction. The MIT Press. doi:\href{https://doi.org/10.2307/4178683}{10.2307/4178683}
+
+\leavevmode\hypertarget{ref-Jackendoff1992}{}%
+Jackendoff, R. (1992). \emph{Semantic Structures}. Boston, MA: MIT Press.
+
+\leavevmode\hypertarget{ref-KatjaWiemer-Hastings2005}{}%
+Katja Wiemer-Hastings, K., \& Xu, X. (2005). Content Differences for Abstract and Concrete Concepts. \emph{Cognitive Science}, \emph{29}(5), 719--736. doi:\href{https://doi.org/10.1207/s15516709cog0000_33}{10.1207/s15516709cog0000\_33}
 
 \leavevmode\hypertarget{ref-Kremer2011a}{}%
 Kremer, G., \& Baroni, M. (2011). A set of semantic norms for German and Italian. \emph{Behavior Research Methods}, \emph{43}(1), 97--109. doi:\href{https://doi.org/10.3758/s13428-010-0028-x}{10.3758/s13428-010-0028-x}
 
+\leavevmode\hypertarget{ref-Lebani2016}{}%
+Lebani, G. E., Bondielli, A., \& Lenci, A. (2016). You Are What you Do . An Empirical Characterization of the Semantic Content of the Thematic Roles for a Group of Italian Verbs, 399--428.
+
 \leavevmode\hypertarget{ref-Lenci2013}{}%
 Lenci, A., Baroni, M., Cazzolli, G., \& Marotta, G. (2013). BLIND: A set of semantic feature norms from the congenitally blind. \emph{Behavior Research Methods}, \emph{45}(4), 1218--1233. doi:\href{https://doi.org/10.3758/s13428-013-0323-4}{10.3758/s13428-013-0323-4}
+
+\leavevmode\hypertarget{ref-Marques2007a}{}%
+Marques, J. F., Fonseca, F. L., Morais, S., \& Pinto, I. A. (2007). Estimated age of acquisition norms for 834 Portuguese nouns and their relation with other psycholinguistic variables. \emph{Behavior Research Methods}, \emph{39}(3), 439--444. doi:\href{https://doi.org/10.3758/BF03193013}{10.3758/BF03193013}
 
 \leavevmode\hypertarget{ref-McRae2005}{}%
 McRae, K., Cree, G. S., Seidenberg, M. S., \& McNorgan, C. (2005). Semantic feature production norms for a large set of living and nonliving things. \emph{Behavior Research Methods}, \emph{37}(4), 547--559. doi:\href{https://doi.org/10.3758/BF03192726}{10.3758/BF03192726}
@@ -797,14 +787,38 @@ McRae, K., Cree, G. S., Seidenberg, M. S., \& McNorgan, C. (2005). Semantic feat
 \leavevmode\hypertarget{ref-Michalke2018}{}%
 Michalke, M. (2018). koRpus: An R Package for Text Analysis. Retrieved from \url{https://cran.r-project.org/web/packages/koRpus/index.html}
 
+\leavevmode\hypertarget{ref-Minsky1975}{}%
+Minsky, M. (1975). A framework for representing knowledge. In P. H. Winston (Ed.), \emph{The psychology of computer vision} (pp. 211--277). Winston, NY: McGraw Hill.
+
+\leavevmode\hypertarget{ref-Montefinese2019}{}%
+Montefinese, M. (2019). Semantic representation of abstract and concrete words: a minireview of neural evidence. \emph{Journal of Neurophysiology}, \emph{121}(5), 1585--1587. doi:\href{https://doi.org/10.1152/jn.00065.2019}{10.1152/jn.00065.2019}
+
 \leavevmode\hypertarget{ref-Montefinese2013}{}%
 Montefinese, M., Ambrosini, E., Fairfield, B., \& Mammarella, N. (2013). Semantic memory: A feature-based analysis and new norms for Italian. \emph{Behavior Research Methods}, \emph{45}(2), 440--461. doi:\href{https://doi.org/10.3758/s13428-012-0263-4}{10.3758/s13428-012-0263-4}
+
+\leavevmode\hypertarget{ref-Montefinese2014}{}%
+Montefinese, M., Ambrosini, E., Fairfield, B., \& Mammarella, N. (2014). Semantic significance: a new measure of feature salience. \emph{Memory \& Cognition}, \emph{42}(3), 355--369. doi:\href{https://doi.org/10.3758/s13421-013-0365-y}{10.3758/s13421-013-0365-y}
+
+\leavevmode\hypertarget{ref-Montefinese2015}{}%
+Montefinese, M., Zannino, G. D., \& Ambrosini, E. (2015). Semantic similarity between old and new items produces false alarms in recognition memory. \emph{Psychological Research}, \emph{79}(5), 785--794. doi:\href{https://doi.org/10.1007/s00426-014-0615-z}{10.1007/s00426-014-0615-z}
+
+\leavevmode\hypertarget{ref-Norman1975}{}%
+Norman, D. A., \& Rumelhart, D. E. (1975). \emph{Explorations in cognition}. San Francisco, CA: Freeman. Retrieved from \url{http://cds.cern.ch/record/210579}
 
 \leavevmode\hypertarget{ref-Ooms2018}{}%
 Ooms, J. (2018). The hunspell package: High-Performance Stemmer, Tokenizer, and Spell Checker for R. Retrieved from \href{https://cran.r-project.org/web/packages/hunspell/vignettes/intro.html\%7B/\#\%7Dsetting\%7B/_\%7Da\%7B/_\%7Dlanguage}{https://cran.r-project.org/web/packages/hunspell/vignettes/intro.html\{\textbackslash{}\#\}setting\{\textbackslash{}\_\}a\{\textbackslash{}\_\}language}
 
-\leavevmode\hypertarget{ref-Reverberi2004}{}%
-Reverberi, C., Capitani, E., \& Laiacona, E. (2004). Variabili semantico lessicali relative a tutti gli elementi di una categoria semantica: Indagine su soggetti normali italiani per la categoria ``frutta". \emph{Giornale Italiano Di Psicologia}, \emph{31}, 497--522.
+\leavevmode\hypertarget{ref-Pexman2008}{}%
+Pexman, P. M., Hargreaves, I. S., Siakaluk, P. D., Bodner, G. E., \& Pope, J. (2008). There are many ways to be rich: Effects of three measures of semantic richness on visual word recognition. \emph{Psychonomic Bulletin \& Review}, \emph{15}(1), 161--167. doi:\href{https://doi.org/10.3758/PBR.15.1.161}{10.3758/PBR.15.1.161}
+
+\leavevmode\hypertarget{ref-Plaut2002}{}%
+Plaut, D. C. (2002). Graded modality-specific specialisation in semantics: A computational account of optic aphasia. \emph{Cognitive Neuropsychology}, \emph{19}(7), 603--639. doi:\href{https://doi.org/10.1080/02643290244000112}{10.1080/02643290244000112}
+
+\leavevmode\hypertarget{ref-Recchia2012}{}%
+Recchia, G., \& Jones, M. N. (2012). The semantic richness of abstract concepts. \emph{Frontiers in Human Neuroscience}, \emph{6}, 315. doi:\href{https://doi.org/10.3389/fnhum.2012.00315}{10.3389/fnhum.2012.00315}
+
+\leavevmode\hypertarget{ref-Rogers2004}{}%
+Rogers, T. T., Lambon Ralph, M. A., Garrard, P., Bozeat, S., McClelland, J. L., Hodges, J. R., \& Patterson, K. (2004). Structure and deterioration of semantic memory: A neuropsychological and computational investigation. \emph{Psychological Review}, \emph{111}(1), 205--235. doi:\href{https://doi.org/10.1037/0033-295X.111.1.205}{10.1037/0033-295X.111.1.205}
 
 \leavevmode\hypertarget{ref-Rosch1975}{}%
 Rosch, E., \& Mervis, C. B. (1975). Family resemblances: Studies in the internal structure of categories. \emph{Cognitive Psychology}, \emph{7}(4), 573--605. doi:\href{https://doi.org/10.1016/0010-0285(75)90024-9}{10.1016/0010-0285(75)90024-9}
@@ -812,17 +826,26 @@ Rosch, E., \& Mervis, C. B. (1975). Family resemblances: Studies in the internal
 \leavevmode\hypertarget{ref-Ruts2004}{}%
 Ruts, W., De Deyne, S., Ameel, E., Vanpaemel, W., Verbeemen, T., \& Storms, G. (2004). Dutch norm data for 13 semantic categories and 338 exemplars. \emph{Behavior Research Methods, Instruments, \& Computers}, \emph{36}(3), 506--515. doi:\href{https://doi.org/10.3758/BF03195597}{10.3758/BF03195597}
 
+\leavevmode\hypertarget{ref-Saffran1999}{}%
+Saffran, E., \& Sholl, A. (1999). Clues to the function and neural architecture of word meaning. In P. Hogoort \& C. Brown (Eds.), \emph{The neurocognition of language}. Oxford University Press.
+
+\leavevmode\hypertarget{ref-Santos2011}{}%
+Santos, A., Chaigneau, S. E., Simmons, W. K., \& Barsalou, L. W. (2011). Property generation reflects word association and situated simulation. \emph{Language and Cognition}, \emph{3}(1), 83--119. doi:\href{https://doi.org/10.1515/langcog.2011.004}{10.1515/langcog.2011.004}
+
+\leavevmode\hypertarget{ref-Sartori2004}{}%
+Sartori, G., \& Lombardi, L. (2004). Semantic Relevance and Semantic Disorders, 439--452.
+
 \leavevmode\hypertarget{ref-Schmid1994}{}%
 Schmid, H. (1994). Probabilistic Part-of-Speech Tagging Using Decision Trees. doi:\href{https://doi.org/10.1.1.28.1139}{10.1.1.28.1139}
 
-\leavevmode\hypertarget{ref-Stein2009}{}%
-Stein, L., \& de Azevedo Gomes, C. (2009). Normas Brasileiras para listas de palavras associadas: Associação semântica, concretude, frequência e emocionalidade. \emph{Psicologia: Teoria E Pesquisa}, \emph{25}, 537--546. doi:\href{https://doi.org/10.1590/S0102-37722009000400009}{10.1590/S0102-37722009000400009}
+\leavevmode\hypertarget{ref-Smith1974}{}%
+Smith, E. E., Shoben, E. J., \& Rips, L. J. (1974). Structure and process in semantic memory: A featural model for semantic decisions. \emph{Psychological Review}, \emph{81}(3), 214--241. doi:\href{https://doi.org/10.1037/h0036351}{10.1037/h0036351}
 
-\leavevmode\hypertarget{ref-Toglia2009}{}%
-Toglia, M. P. (2009). Withstanding the test of time: The 1978 semantic word norms. \emph{Behavior Research Methods}, \emph{41}(2), 531--533. doi:\href{https://doi.org/10.3758/BRM.41.2.531}{10.3758/BRM.41.2.531}
+\leavevmode\hypertarget{ref-Smith1981}{}%
+Smith, E., \& Medin, D. L. (1981). \emph{Categories and concepts (Vol. 9)}. Cambridge, MA: Harvard University Press.
 
-\leavevmode\hypertarget{ref-Toglia1978}{}%
-Toglia, M. P., \& Battig, W. F. (1978). \emph{Handbook of semantic word norms}. Hillside, NJ: Earlbaum.
+\leavevmode\hypertarget{ref-Vigliocco2004}{}%
+Vigliocco, G., Vinson, D. P., Lewis, W., \& Garrett, M. F. (2004). Representing the meanings of object and action words: The featural and unitary semantic space hypothesis. \emph{Cognitive Psychology}, \emph{48}(4), 422--488. doi:\href{https://doi.org/10.1016/j.cogpsych.2003.09.001}{10.1016/j.cogpsych.2003.09.001}
 
 \leavevmode\hypertarget{ref-Vinson2008}{}%
 Vinson, D. P., \& Vigliocco, G. (2008). Semantic feature production norms for a large set of objects and events. \emph{Behavior Research Methods}, \emph{40}(1), 183--190. doi:\href{https://doi.org/10.3758/BRM.40.1.183}{10.3758/BRM.40.1.183}
@@ -835,6 +858,9 @@ Wickham, H., Francios, R., Henry, L., Muller, K., \& Rstudio. (2019). dplyr: A G
 
 \leavevmode\hypertarget{ref-Wu2009}{}%
 Wu, L.-l., \& Barsalou, L. W. (2009). Perceptual simulation in conceptual combination: Evidence from property generation. \emph{Acta Psychologica}, \emph{132}(2), 173--189. doi:\href{https://doi.org/10.1016/j.actpsy.2009.02.002}{10.1016/j.actpsy.2009.02.002}
+
+\leavevmode\hypertarget{ref-Zannino2006}{}%
+Zannino, G. D., Perri, R., Pasqualetti, P., Caltagirone, C., \& Carlesimo, G. A. (2006). (Category-specific) semantic deficit in Alzheimer's patients: The role of semantic distance. \emph{Neuropsychologia}, \emph{44}(1), 52--61. doi:\href{https://doi.org/10.1016/J.NEUROPSYCHOLOGIA.2005.04.008}{10.1016/J.NEUROPSYCHOLOGIA.2005.04.008}
 
 \endgroup
 
