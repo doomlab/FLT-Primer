@@ -85,48 +85,12 @@ knitr::include_graphics("flow_chart.png")
 
 ## Materials and Data Format
 
-```{r data, include = F}
-## Importing the data in the provided data folder
-master <- read.csv("../data/tidy_words.csv", stringsAsFactors = F)
-## Show data structure
-## Data is in tidy format with concept in the word column
-## Participant answer in the answer column
-head(master)
-
-## Importing the information from Buchanan 2019 to get types of words
-b_data <- read.csv("../data/final words 2017.csv", stringsAsFactors = F)
-
-## Figure out the POS for our list
-b_map <- b_data[ , c("cue", "pos_cue")]
-b_map <- unique(b_map)
-b_map <- b_map[b_map$cue %in% master$word , ]
-b_table <- table(b_map$pos_cue)
-
-## Importing concreteness ratings
-concrete <- read.delim("../data/concrete.txt")
-
-## Merging rating
-colnames(b_map)[1] = "Word"
-b_map_merge <- merge(b_map, concrete, by = c("Word"))
-
-b_map_M <- tapply(b_map_merge$Conc.M, b_map_merge$pos_cue, mean, na.rm = T)
-b_map_SD <- tapply(b_map_merge$Conc.M, b_map_merge$pos_cue, sd, na.rm = T)
-```
-
-```{r tab1, echo = F, results = 'asis'}
-kable(head(master), "latex", booktabs = T, row.names = F, 
-      caption = "Example of Data Formatted for Tidy Data") %>% 
-  column_spec(2, width = "30em")
-```
-
-The data for this tutorial includes `r nrow(master)` unique concept-feature responses for `r length(unique(master$word))` concepts from @Buchanan2019. The concepts were taken from @McRae2005, @Vinson2008, and @Bruni2014. The concepts include `r b_table["noun"]` nouns, `r b_table["verb"]` verbs, and `r b_table["adjective"]` adjectives. Concreteness ratings collected by @Brysbaert2014 were matched with the current data set. The concreteness ratings capture the difference between abstract (language-based) and concrete (experience-based) concepts and were measured on a five-point scale. Nouns were rated as most concrete: *M* = `r printnum(b_map_M["noun"])` (*SD* = `r printnum(b_map_SD["noun"])`), followed by adjectives: *M* = `r printnum(b_map_M["adjective"])` (*SD* = `r printnum(b_map_SD["adjective"])`), and verbs: *M* = `r printnum(b_map_M["verb"])` (*SD* = `r printnum(b_map_SD["verb"])`). The SFL data consist of a text file where concept-feature observation is a row and each column is a variable. An example of these raw data are shown in Table \@ref(tab:tab1), where the `word` column is the cue, and the `answer` column denotes a single participant's response. The original data can be found at https://osf.io/cjyzw/. 
-
-The data was collected using the instructions provided by @McRae2005, however, in contrast to the suggestions for consistency detailed above [@Devereux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants (e.g., asking participants to type one feature on each line), the suggested processing steps are reduced. 
-
-You can load the entire set of libraries for this tutorial using the `dependencies.R` script found in our online repository, as shown below^[A `packrat` project compliation is avaliable on GitHub for reproducibility [@Ushey2018]]. 
+You can load the entire set of libraries for this tutorial as shown below using `dependencies.R` found online^[A `packrat` project compliation is avaliable on GitHub for reproducibility [@Ushey2018]]. 
 
 ```{r libraries, echo = T, size="scriptsize", messages = F}
+library(here)
 #Spelling
+library(tidytext)
 library(hunspell) 
 #Lemmatization
 library(koRpus) 
@@ -138,20 +102,62 @@ library(dplyr)
 library(stopwords)
 ```
 
+The data can then be imported with `importData.R`. Additionally, the answers from participants may need to be normalized into lowercase for consistency. 
+
+```{r importdata, echo = T, size="scriptsize", messages = F}
+# Importing the raw feature lists
+X <- read.csv("../raw_data/tidy_words.csv", stringsAsFactors = F)
+## Lower case to normalize
+X$answer <- tolower(X$answer)
+```
+
+```{r data, include = F}
+## Importing the information from Buchanan 2019 to get types of words
+b_data <- read.csv("../raw_data/final words 2017.csv", stringsAsFactors = F)
+
+## Figure out the POS for our list
+b_map <- b_data[ , c("cue", "pos_cue")]
+b_map <- unique(b_map)
+b_map <- b_map[b_map$cue %in% X$word , ]
+b_table <- table(b_map$pos_cue)
+
+## Importing concreteness ratings
+concrete <- read.delim("../raw_data/concrete.txt")
+
+## Merging rating
+colnames(b_map)[1] = "Word"
+b_map_merge <- merge(b_map, concrete, by = c("Word"))
+
+b_map_M <- tapply(b_map_merge$Conc.M, b_map_merge$pos_cue, mean, na.rm = T)
+b_map_SD <- tapply(b_map_merge$Conc.M, b_map_merge$pos_cue, sd, na.rm = T)
+```
+
+```{r tab1, echo = F, results = 'asis'}
+kable(head(X), "latex", booktabs = T, row.names = F, 
+      caption = "Example of Data Formatted for Tidy Data") %>% 
+  column_spec(2, width = "30em")
+```
+
+The data for this tutorial includes `r nrow(X)` unique concept-feature responses for `r length(unique(X$word))` concepts from @Buchanan2019. The concepts were taken from @McRae2005, @Vinson2008, and @Bruni2014. The concepts include `r b_table["noun"]` nouns, `r b_table["verb"]` verbs, and `r b_table["adjective"]` adjectives. Concreteness ratings collected by @Brysbaert2014 were matched with the current data set. The concreteness ratings capture the difference between abstract (language-based) and concrete (experience-based) concepts and were measured on a five-point scale. Nouns were rated as most concrete: *M* = `r printnum(b_map_M["noun"])` (*SD* = `r printnum(b_map_SD["noun"])`), followed by adjectives: *M* = `r printnum(b_map_M["adjective"])` (*SD* = `r printnum(b_map_SD["adjective"])`), and verbs: *M* = `r printnum(b_map_M["verb"])` (*SD* = `r printnum(b_map_SD["verb"])`). The SFL data consist of a text file where concept-feature observation is a row and each column is a variable. An example of these raw data are shown in Table \@ref(tab:tab1), where the `word` column is the cue, and the `answer` column denotes a single participant's response. The original data can be found at https://osf.io/cjyzw/. 
+
+The data was collected using the instructions provided by @McRae2005, however, in contrast to the suggestions for consistency detailed above [@Devereux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants (e.g., asking participants to type one feature on each line), the suggested processing steps are reduced. 
 
 ## Spelling 
 
-The first step (see Figure \@ref(fig:flowchart)) in processing the features consists of identifying and replacing spelling mistakes. Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018]. Each `answer` can be checked for misspellings across an entire column of answers, which is in the `master` dataset. Because participants were recruited in the United States, we used the default American English dictionary. The `hunspell` vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the `"en_GB"` would convert to British English spellings. 
+The first step (see Figure \@ref(fig:flowchart)) in processing the features consists of identifying and replacing spelling mistakes. Spell checking can be automated with the `hunspell` package in *R* [@Ooms2018] using `spellCheck.R`. Each `answer` can be checked for misspellings across an entire column of answers, which is in the `X` dataset. Because participants were recruited in the United States, we used the default American English dictionary. The `hunspell` vignettes provide details on how to import your own dictionary for non-English languages. The choice of dictionary should also normalize between multiple varieties of the same language, for example, the `"en_GB"` would convert to British English spellings. 
 
 ```{r check_spelling, echo = T, size="scriptsize", messages = F}
-## Lower case to normalize
-master$answer <- tolower(master$answer)
-## Check the participant answers
-## The output is a list of spelling errors for each line
-spelling_errors <- hunspell(master$answer, dict = dictionary("en_US"))
+# Extract a list of words
+tokens = unnest_tokens(tbl = X, output = token, input = answer)
+wordlist = unique(tokens$token)
+
+# Spell check the words
+spelling.errors <- hunspell(wordlist)
+spelling.errors <- unique(unlist(spelling.errors))
+spelling.sugg <- hunspell_suggest(spelling.errors, dict = dictionary("en_US"))
 ```
 
-The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to *`r master$word[173]`*, a participant wrote *`r trimws(gsub("  ", " ", master$answer[173]))`*, and the spelling errors were denoted as *`r paste0(spelling_errors[[173]], collapse = " ")`*. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error.
+The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to *`r X$word[173]`*, a participant wrote *`r trimws(gsub("  ", " ", X$answer[173]))`*, and the spelling errors were denoted as *`r paste0(spelling_errors[[173]], collapse = " ")`*. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error.
 
 ```{r get_suggestions, echo = T, size="scriptsize"}
 ## Check for suggestions
@@ -162,7 +168,7 @@ For *`r spelling_errors[[173]][1]`*, both *`r paste0(unlist(spelling_suggest[[17
 
 ```{r fix_errors, echo = T, size="scriptsize"}
 ## Replace with most likely suggestion
-spell_checked <- master
+spell_checked <- X
 ### Loop over the dataframe
 for (i in 1:nrow(spell_checked)){
   ### See if there are spelling errors
@@ -391,7 +397,7 @@ More cue-feature combinations are listed for the multi-word approach, due to dif
 The next two lines of Table \@ref(tab:tab6) indicate cue-feature combination frequencies, such as the number of times *zebra-stripes* or *apple-red* were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. The correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \@ref(fig:correlation-fig) displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear. The size of the points indicates the variability (standard deviation of each cue word's average frequency or percent). Variability appears to increase linearly with sample size for average frequency, however, it is somewhat mixed for average percent. 
 
 ```{r desc_stats, echo = F, include = F}
-sample_sizes <- as.data.frame(tapply(master$word, master$word, length))
+sample_sizes <- as.data.frame(tapply(X$word, X$word, length))
 sample_sizes$Word <- rownames(sample_sizes)
 colnames(sample_sizes)[1] <- "Sample_Size"
 
@@ -710,7 +716,7 @@ Cosine is often used as a measure of semantic similarity, indicating the feature
 ## External Comparison of Approach
 
 ```{r compare_men, echo = F}
-men_data <- read.table("../data/MEN_dataset_natural_form_full.txt",
+men_data <- read.table("../raw_data/MEN_dataset_natural_form_full.txt",
                        quote="\"", comment.char="", stringsAsFactors=FALSE)
 
 library(tidyr)
@@ -748,7 +754,7 @@ The MEN dataset [@Bruni2014] contains cue-cue pairs of English words rating for 
 An attractive property of the subjective feature listing task is that it results in transparent representations. As a result, many researchers have taken additional steps to group specific types of knowledge together, depending on semantic relations (e.g., taxonomy relations) or their mapping onto distinct brain regions [@Fairhall2013]. Typically this involves applying a hand-crafted coding scheme, which requires a substantial effort. One of the common ontologies is the one developed by @Wu2009. The ontology is structured as a  hierarchical taxonomy for coding categories as part of the feature listing task. It has been used in several projects, notably the @McRae2005. Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and  introspective properties (emotion, evaluation). Coding ontology may be best performed systematically with look-up rules of previously decided upon factors, however, clustering analyses may provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncratic features as mentioned above, and thus, features smaller in number may be more difficult to group.
 
 ```{r strudel, include = F}
-strudel <- read.csv("../data/baked.strudel.csv", stringsAsFactors = F)
+strudel <- read.csv("../raw_data/baked.strudel.csv", stringsAsFactors = F)
 
 strudel$feature <- gsub("-n$", "", strudel$feature)
 strudel$feature <- gsub("-j$", "", strudel$feature)

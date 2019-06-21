@@ -1,6 +1,8 @@
 # Dependencies -------------------------------------------------------------
 
+library(here)
 #Spelling
+library(tidytext)
 library(hunspell) 
 #Lemmatization
 library(koRpus) 

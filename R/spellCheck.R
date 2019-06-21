@@ -1,10 +1,6 @@
+# Spell checking ----------------------------------------------------------
+
 # Perform spell checking on the raw feature listings consisting of a word column and an answer column
-
-library(here)
-library(hunspell)
-
-# Importing the raw feature lists
-X <- read.csv("./raw_data/tidy_words.csv", stringsAsFactors = F)
 
 # Extract a list of words
 tokens = unnest_tokens(tbl = X, output = token, input = answer)
