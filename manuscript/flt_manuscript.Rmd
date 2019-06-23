@@ -150,53 +150,71 @@ The first step (see Figure \@ref(fig:flowchart)) in processing the features cons
 # Extract a list of words
 tokens = unnest_tokens(tbl = X, output = token, input = answer)
 wordlist = unique(tokens$token)
-
 # Spell check the words
 spelling.errors <- hunspell(wordlist)
 spelling.errors <- unique(unlist(spelling.errors))
 spelling.sugg <- hunspell_suggest(spelling.errors, dict = dictionary("en_US"))
 ```
 
-The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to *`r X$word[173]`*, a participant wrote *`r trimws(gsub("  ", " ", X$answer[173]))`*, and the spelling errors were denoted as *`r paste0(spelling_errors[[173]], collapse = " ")`*. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error.
+The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to `r toupper(X$word[173])`, a participant wrote <`r trimws(gsub("  ", " ", X$answer[173]))`>, and the spelling errors were denoted as <`r paste0(spelling.errors[grep("yelloe|cara", spelling.errors)], collapse = "> <")`>. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error. For <yelloe>, both <`r paste0(unlist(spelling.sugg[[38]]), collapse = "> <")`> were suggested, and <`r paste0(unlist(spelling.sugg[[39]]), collapse = "> <")`> were suggested for <caramell>. 
 
-```{r get_suggestions, echo = T, size="scriptsize"}
-## Check for suggestions
-spelling_suggest <- lapply(spelling_errors, hunspell_suggest)
+Answers are provided in the most probable order, therefore, the first suggestion is selected as the correct answer. These answers are compiled into a spelling dictionary, which is saved for reproducibility. A specialized dictionary with pre-coded error responses and corrections could be implemented at this stage by adding entries to the `spelling.dict`. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms and provides context sensitive corrections (e.g., keeping *Apple* as a response to computer, but not as a response to green).
+
+```{r}
+# Pick the first suggestion
+spelling.sugg <- unlist(lapply(spelling.sugg, function(x) x[1]))
+spelling.dict <- as.data.frame(cbind(spelling.errors,spelling.sugg))
+spelling.dict$spelling.pattern <- paste0("\\b", spelling.dict$spelling.errors, "\\b")
+# Write out spelling dictionary
+write.csv(x = spelling.dict, file = '../output_data/spelling.dict.csv', 
+          fileEncoding = 'utf8',row.names = F)
 ```
 
-For *`r spelling_errors[[173]][1]`*, both *`r paste0(unlist(spelling_suggest[[173]][1]), collapse = " ")`* were suggested, and *`r paste0(unlist(spelling_suggest[[173]][2]), collapse = " ")`* were suggested for *`r spelling_errors[[173]][2]`*. The suggestions are presented in most probable order, and using a few loops with the substitute (`gsub()`) function, we can replace all errors with the most likely replacement in a new dataset `spell_checked`. A specialized dictionary with pre-coded error responses and corrections could be implemented at this stage. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms and provides context sensitive corrections (e.g., keeping *Apple* as a response to computer, but not as a response to green).
+As noted, data was collected with a large text box, allowing participants to free respond to the target cue. Participants often used extra spacing, tabs or other punctionuation to denote separate answers to the cue. The `unnest_tokens()` function from `tidytext` can be used to split their answers into separate response lines and `trimws()` to remove all extra whitespaces [@DeQueiroz2019].
 
-```{r fix_errors, echo = T, size="scriptsize"}
-## Replace with most likely suggestion
-spell_checked <- X
-### Loop over the dataframe
-for (i in 1:nrow(spell_checked)){
-  ### See if there are spelling errors
-  if (length(spelling_errors[[i]]) > 0) {
-    ### Loop over all errors
-    for (q in 1:length(spelling_errors[[i]])){
-      ### Replace with the first answer
-      spell_checked$answer[i] <- gsub(spelling_errors[[i]][q], 
-                                      spelling_suggest[[i]][[q]][1],
-                                      spell_checked$answer[i])
-    }
-  }
-}
+```{r check_spelling2, echo = T, size="scriptsize", messages = F}
+# Parse features
+tokens <- unnest_tokens(tbl = X, output = token, 
+                        input = answer, token = stringr::str_split, 
+                        pattern = "  |\\, |\\.|\\,|\\;")
+tokens$token <- trimws(tokens$token, 
+                       which = c("both", "left", "right"), 
+                       whitespace = "[ \t\r\n]")
+```
+
+To finalize our data cleaning, we can remove blank lines, and use `stri_replace_all_regex()` is used to replace the spelling errors with their corrections from the `stringi` package [@Gagolewski2019]. The spell checked dataframe is then output to a comma delimited file to preserve each workflow step. 
+
+```{r check_spelling3, echo = T, size="scriptsize", messages = F}
+# Remove empty features
+tokens <- tokens[!tokens$token =='',]
+tokens$corrected <- stri_replace_all_regex(str = tokens$token,
+                                          pattern = spelling.dict$spelling.pattern,
+                                          replacement = spelling.dict$spelling.sugg,
+                                          vectorize_all = FALSE)
+# Rename columns
+tokens <- tokens %>% 
+  rename(cue = word,feature = corrected) %>% 
+  select(cue, feature)
+# Write processed file
+write.csv(x = tokens,file = '../output_data/spellchecked.features.csv',
+          fileEncoding = 'utf8',row.names = F)
 ```
 
 ## Lemmatization
 
 The next step approaches the grouping different word forms that share the same lemma. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the language, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. 
 
-Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` package in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple languages. The koRpus package includes functionality to use TreeTagger in *R*. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation. 
+Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` package in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple languages. The koRpus package includes functionality to use TreeTagger in *R*. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation, as shown in `lemmatization.R`. 
 
 ```{r lemma, echo = T, size="scriptsize", messages = F}
-lemmas <- spell_checked
-## Install TreeTagger 
-#https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/
-## Find all types for faster lookup
-all_answers <- tokenize(lemmas$answer, format = "obj", tag = F)
-all_answers <- unique(all_answers)
+# Open the spell checked data
+X <- read.csv("./output_data/spellchecked.features.csv", stringsAsFactors = F)
+
+# Extract the list of cues
+tokens <- unnest_tokens(tbl = X, output = word, input = feature)
+wordlist <- unique(tokens$word)
+
+
 ```
 
 The `treetag()` function calls the installation of TreeTagger to provide part of speech tags and lemmas for each token. Importantly, the `path` option should be the directory of the TreeTagger installation. 
@@ -236,7 +254,7 @@ kable(head(replacement_lemmas[ , 2:6]), "latex", booktabs = T, row.names = F,
       caption = "Lemma and Part of Speech Information from TreeTagger")
 ```
 
-Similar to spelling correction `stri_replace_all_regex()`  is used to replace the wordforms with their corresponding lemmas from the `stringi` package [@Gagolewski2019]. Table \@ref(tab:tab3) shows the processed data at this stage. 
+Similar to spelling correction `stri_replace_all_regex()` is used to replace the wordforms with their corresponding lemmas from the `stringi` package. Table \@ref(tab:tab3) shows the processed data at this stage. 
 
 ```{r string_replace, echo = T, size="scriptsize"}
 ## Install the stringi package

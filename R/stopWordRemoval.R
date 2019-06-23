@@ -1,6 +1,9 @@
 # Stopwords and Other Exclusions ------------------------------------------
-library('stopwords')
-library('stringi')
+source("dependencies.R")
+
+# Open the lemmatized data
+X <- read.csv("./output_data/lemmatized.features.csv", stringsAsFactors = F)
+
 
 ## Remove stopwords from lemmas
 X <- read.csv("./output_data/spellchecked.features.csv", stringsAsFactors = F)

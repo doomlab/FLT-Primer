@@ -2,12 +2,13 @@
 
 library(here)
 #Spelling
+library(hunspell)
 library(tidytext)
-library(hunspell) 
+library(stringi)
 #Lemmatization
 library(koRpus) 
 library(koRpus.lang.en)
-library(stringi)
+library(tokenizers)
 #Multi-Word Sequences
 library(dplyr)
 #Stopwords
