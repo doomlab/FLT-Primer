@@ -1,6 +1,7 @@
 # Dependencies -------------------------------------------------------------
 
 library(here)
+library(dplyr)
 #Spelling
 library(hunspell)
 library(tidytext)
@@ -9,7 +10,5 @@ library(stringi)
 library(koRpus) 
 library(koRpus.lang.en)
 library(tokenizers)
-#Multi-Word Sequences
-library(dplyr)
 #Stopwords
 library(stopwords)

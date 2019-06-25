@@ -26,39 +26,17 @@ airplane & wings  body  flies  travel\\
 
 \caption{\label{tab:tab2}Lemma and Part of Speech Information from TreeTagger}
 \centering
-\begin{tabular}{lllrl}
+\begin{tabular}{llll}
 \toprule
-token & tag & lemma & lttr & wclass\\
+cue & feature & pos & lemma\\
 \midrule
-is & VBZ & be & 2 & verb\\
-are & VBP & be & 3 & verb\\
-trained & VBN & train & 7 & verb\\
-lots & NNS & lot & 4 & noun\\
-seats & NNS & seat & 5 & noun\\
+airplane & is & verb & be\\
+airplane & fast & adverb & fast\\
+airplane & they & pronoun & they\\
+airplane & are & verb & be\\
+airplane & expensive & adjective & expensive\\
 \addlinespace
-wings & NNS & wing & 5 & noun\\
-\bottomrule
-\end{tabular}
-\end{table*}
-\efloatseparator
- 
-\begin{table*}[hbt]
-\ifnextchar[{\eatarg}{}
-[t]
-
-\caption{\label{tab:tab3}Original Data with Lemmatization}
-\centering
-\begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
-\toprule
-word & answer\\
-\midrule
-airplane & you fly in it  its big  it be fast  they be expensive  they be at an airport  you have to be train to fly it  there be lot of seat  they get very high up\\
-airplane & wing engine pilot cockpit tail\\
-airplane & wing  it fly  modern technology  have passenger  require a pilot  can be dangerous  run on gas  use for travel\\
-airplane & wing  fly  pilot  cockpit  use gas  fast travel\\
-airplane & wing  engine  passenger  pilot(s)  vary in size and color\\
-\addlinespace
-airplane & wing  body  fly  travel\\
+airplane & they & pronoun & they\\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -72,19 +50,15 @@ airplane & wing  body  fly  travel\\
 \centering
 \begin{tabular}{llr}
 \toprule
-Word & Feature & Frequency\\
+cue & combined.lemmas & n\\
 \midrule
-zebra & be\_horse & 1\\
-zebra & be\_similar\_horse & 1\\
-zebra & build\_horse & 1\\
-zebra & fast\_horse & 1\\
-zebra & horse & 19\\
+zebra & horse & 27\\
+zebra & horse like & 1\\
+zebra & look similar horse & 1\\
+zebra & relate horse & 2\\
+zebra & resemble small horse & 1\\
 \addlinespace
-zebra & horse-like & 1\\
-zebra & look\_similar\_horse & 1\\
-zebra & related\_horse & 1\\
-zebra & resemble\_small\_horse & 1\\
-zebra & run\_fast\_horse & 1\\
+zebra & stripe similar horse & 1\\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -98,19 +72,19 @@ zebra & run\_fast\_horse & 1\\
 \centering
 \begin{tabular}{llr}
 \toprule
-Word & Feature & Frequency\\
+cue & lemma & n\\
 \midrule
-zebra & stripe & 71\\
+zebra & stripe & 64\\
 zebra & black & 63\\
 zebra & white & 61\\
-zebra & be & 56\\
 zebra & animal & 54\\
-\addlinespace
-zebra & have & 54\\
-zebra & a & 46\\
-zebra & and & 46\\
-zebra & in & 41\\
 zebra & horse & 32\\
+\addlinespace
+zebra & africa & 28\\
+zebra & zoo & 22\\
+zebra & leg & 20\\
+zebra & life & 20\\
+zebra & eat & 17\\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -128,13 +102,13 @@ zebra & horse & 32\\
 \cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
 Statistics & $M$ & $SD$ & $r$ & $M$ & $SD$ & $r$\\
 \midrule
-Number of Cue-Features & 212.92 & 115.63 & 0.77 & 171.80 & 76.96 & 0.66\\
-Frequency of Idiosyncratic Response & 205.86 & 114.20 & 0.78 & 158.85 & 73.97 & 0.69\\
-Frequency of Cue-Feature Response & 1.80 & 2.61 & 0.75 & 2.73 & 4.80 & 0.83\\
-Percent of Cue-Feature Response & 2.95 & 3.88 & -0.66 & 4.34 & 4.80 & -0.62\\
+Number of Cue-Features & 192.27 & 99.14 & .78 & 173.44 & 77.21 & .67\\
+Frequency of Idiosyncratic Response & 183.29 & 97.38 & .80 & 160.57 & 74.26 & .69\\
+Frequency of Cue-Feature Response & 2.09 & 3.39 & .65 & 2.70 & 4.76 & .83\\
+Percent of Cue-Feature Response & 3.41 & 5.10 & -.64 & 4.30 & 4.76 & -.62\\
 \bottomrule
-\multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and the}\\
-\multicolumn{7}{l}{sample size for the cue.}\\
+\multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and}\\
+\multicolumn{7}{l}{the sample size for the cue.}\\
 \end{tabular}
 \end{table*}
 \efloatseparator
@@ -151,13 +125,13 @@ Percent of Cue-Feature Response & 2.95 & 3.88 & -0.66 & 4.34 & 4.80 & -0.62\\
 \cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
 Statistic & Original & Translated & Original & Translated\\
 \midrule
-B Mean & .54 & .57 & .69 & .72\\
-B SD & .16 & .17 & .17 & .16\\
-M Mean & .32 & .48 & .38 & .58\\
-M SD & .15 & .14 & .18 & .14\\
-V Mean & .50 & .49 & .59 & .58\\
+B Mean & .55 & .58 & .69 & .74\\
+B SD & .16 & .16 & .16 & .15\\
+M Mean & .33 & .50 & .39 & .59\\
+M SD & .15 & .13 & .18 & .13\\
+V Mean & .50 & .50 & .60 & .59\\
 \addlinespace
-V SD & .18 & .19 & .18 & .19\\
+V SD & .18 & .18 & .18 & .19\\
 \bottomrule
 \multicolumn{5}{l}{\textsuperscript{} $Note$. Translated values are hand coded lemmatization from}\\
 \multicolumn{5}{l}{Buchanan et al. (2019). B: Buchanan et al. (2019), M: McRae et}\\
@@ -184,10 +158,10 @@ river stream & chair sit & cabin wood & cabbage green\\
 radio music & leaf plant & rocket space & dagger knife\\
 \addlinespace
 elephant trunk & kitchen food & breakfast day & apple fruit\\
-door open & hammer nail & stone rock & hammer tool\\
-zebra stripe & oven cook & bacon pig & lion king\\
-river flow & garden flower & shoe foot & cabbage vegetable\\
-dragon fire & leaf green & tree leaf & furniture table\\
+zebra stripe & hammer nail & stone rock & hammer tool\\
+river flow & garden flower & bacon pig & lion king\\
+door open & oven cook & shoe foot & cabbage vegetable\\
+dragon fire & leaf green & toy play & furniture table\\
 \bottomrule
 \end{tabular}
 \end{table*}

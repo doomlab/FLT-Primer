@@ -1,5 +1,5 @@
 # Lemmatization and Multi-Word Sequences ----------------------------------
-source("dependencies.R")
+source("./R/dependencies.R")
 
 # Open the spell checked data
 X <- read.csv("./output_data/spellchecked.features.csv", stringsAsFactors = F)
@@ -37,7 +37,12 @@ for (i in 1:length(cuelist)){
 tokens.tagged <- tokens.tagged %>% 
   rename(cue = doc_id, feature = token, pos = wclass)
 
+# Clean up unknown lookups
+tokens.tagged$lemma[tokens.tagged$lemma == "<unknown>"] <- tokens.tagged$feature[tokens.tagged$lemma == "<unknown>"]
+tokens.tagged$lemma[tokens.tagged$lemma == "@card@"] <- tokens.tagged$feature[tokens.tagged$lemma == "@card@"]
+tokens.tagged$lemma <- tolower(tokens.tagged$lemma)
+
 # Write processed file
-write.csv(x = tokens.tagged, file = './output_data/lemmatized.features.csv', 
-          fileEncoding = 'utf8', row.names = F)
+write.csv(x = tokens.tagged, file = "./output_data/lemmatized.features.csv", 
+          fileEncoding = "utf8", row.names = F)
 

@@ -1,7 +1,7 @@
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
-\includegraphics[width=5.28in]{flow_chart} \caption{Flow chart illustrating how feature listings are recoded to obtain a standard feature format.}\label{fig:flowchart}
+\includegraphics[width=5.24in]{flow_chart} \caption{Flow chart illustrating how feature listings are recoded to obtain a standard feature format.}\label{fig:flowchart}
 \end{figure*}
 \efloatseparator
  

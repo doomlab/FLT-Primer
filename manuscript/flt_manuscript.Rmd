@@ -21,11 +21,8 @@ affiliation:
   - id            : "3"
     institution   : "University of Padua"
 
-authornote: |
-  Any suggested author note?
-
 abstract: |
-  Semantic property listing tasks require participants to generate short propositions (e.g., \<*barks*\>, \<*has fur*\>) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them. This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g. reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
+  Semantic property listing tasks require participants to generate short propositions (e.g., \<*barks*\>, \<*has fur*\>) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them. This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g., reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
   
 keywords          : "semantic, property norm task, tutorial"
 
@@ -67,7 +64,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 })
 ```
 
-Semantic properties are assumed to be, entirely or in part, the building blocks of semantic representation – the knowledge we have of the world - by a variety of theories [e.g., @Collins1969, @Jackendoff; @Jackendoff1992; @Minsky1975; @Norman1975; @Saffran1999; @Smith1981] and computational models [@Caramazza1988; @Farah1991; @Humphreys2001]. Within this perspective, the meaning of a concept is conceived as a distributed pattern of semantic properties, which convey multiple types of information [@Cree2003; @Plaut2002; @Rogers2004]. For example, the concept HORSE can be described by encyclopaedic (<*is a mammal*>), visual (<*is furry*>, <*has legs*>, <*has a tail*>, <*has a mane*>), functional (<*used for racing*>), and motor (<*gallops*>) information. Given the relevance of semantic properties in shaping theories of semantic representation, researchers have recognized the value of collecting semantic property production norms. Typically, in the property generation task, participants are presented with a set of concepts and are asked to list the properties they think are characteristic for each concept meaning. Generally, in this task, the concepts are called *cues*, and the responses to the cue are called *features*^[Throughout this article, features will be distinguished from cues using angular brackets.]. This method has a long history of use by researchers wishing to gain insight into semantic representations of concrete concepts and categories [@Rosch1975; @McRae2005; @Smith1974], and more recently, events and abstract concepts [@Lebani2016; @KatjaWiemer-Hastings2005; @Vinson2008].
+Semantic properties are assumed to be, entirely or in part, the building blocks of semantic representation – the knowledge we have of the world - by a variety of theories [e.g., @Collins1969, @Jackendoff; @Jackendoff1992; @Minsky1975; @Norman1975; @Saffran1999; @Smith1981] and computational models [@Caramazza1988; @Farah1991; @Humphreys2001]. Within this perspective, the meaning of a concept is conceived as a distributed pattern of semantic properties, which convey multiple types of information [@Cree2003; @Plaut2002; @Rogers2004]. For example, the concept HORSE can be described by encyclopedic (<*is a mammal*>), visual (<*is furry*>, <*has legs*>, <*has a tail*>, <*has a mane*>), functional (<*used for racing*>), and motor (<*gallops*>) information. Given the relevance of semantic properties in shaping theories of semantic representation, researchers have recognized the value of collecting semantic property production norms. Typically, in the property generation task, participants are presented with a set of concepts and are asked to list the properties they think are characteristic for each concept meaning. Generally, in this task, the concepts are called *cues*, and the responses to the cue are called *features*^[Throughout this article, features will be distinguished from cues using angular brackets.]. This method has a long history of use by researchers wishing to gain insight into semantic representations of concrete concepts and categories [@Rosch1975; @McRae2005; @Smith1974], and more recently, events and abstract concepts [@Lebani2016; @KatjaWiemer-Hastings2005; @Vinson2008].
 
 On the one hand, many studies adopted the property generation task itself to make inferences about word meaning and its computation [@Recchia2012; @KatjaWiemer-Hastings2005; @Wu2009; @Santos2011]. On the other hand, researchers employed the property listing task in order to provide other researchers with a tool of standardized word stimuli and relative semantic measures. Indeed, based on data obtained from the property production task, it is then possible to calculate numerous measures and distributional statistics both at the feature and the concept level. For example, these feature data can be used to determine the semantic similarity/distance between concepts, often by calculating the feature overlap or number of shared features between concepts [@Buchanan2019; @McRae2005; @Vigliocco2004; @Montefinese2015; @Montefinese2019], or how different types [@Kremer2011a; @DanieleZannino2006] and dimensions of feature informativeness, such as, distinctiveness [@Garrard2001], cue validity [@Rosch1975], relevance [@Sartori2004], semantic richness [@Pexman2008], and significance [@Montefinese2014] are distributed across concepts. 
 
@@ -77,7 +74,7 @@ First, there is a lack of agreement in the instructions provided to the particip
 
 Because the feature listing task is a verbal task and language is very productive (i.e., the same feature can be expressed in many different ways), few features will be listed in exactly the same way across participants. To be able to derive reliable quantitative measures, nearly all studies specify a series of pre-processing steps to group verbal utterances about the same underlying conceptual property together. The main problem is that there is no agreement about how to code/pre-process data derived from the feature listing task. Recoding features is sometimes done in manually [@McRae2005] whereas others use semi-automatic procedures, especially for larger datasets [@Buchanan2019]. Further points of debate are related to the inclusion/exclusion of certain types of responses. For example, unlike previous semantic norms [@Vivas2017; @McRae2005; @Montefinese2013], @Buchanan2019 included idiosyncratic features (features produced only by one or a few number of participants) if they were in the top listed features, ambiguous words (words with multiple meanings), and created a special coding for affixes of the root words. Moreover, they discarded stop words, such as, the, an, of, and synonyms were treated as different entries. 
 
-While hand-coding features leads to features that concise, easily interpretable, and highly predictive of semantic behaviour, the increasing scale of recent studies and more powerful natural language processing techniques make automatic procedures an attractive alternative. Moreover, building standard automatic procedures to process feature-listing data would not only add transparency to the process but would also prevent human errors and allow a generalization of the data across languages. For the first time, in this study we propose an automatic procedure to code the raw feature data derived from a semantic feature listing task (SFL). The next sections provide a tutorial on how raw feature data might be processed to a more compact feature output. The tutorial is written for *R* and is fully documented, such that users can adapt it to their language of choice (https://github.com/doomlab/FLT-Primer). Figure \@ref(fig:flowchart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will evaluated and compared to previous norms to determine the usefulness of this approach.
+While hand-coding features leads to features that concise, easily interpretable, and highly predictive of semantic behavior, the increasing scale of recent studies and more powerful natural language processing techniques make automatic procedures an attractive alternative. Moreover, building standard automatic procedures to process feature-listing data would not only add transparency to the process but would also prevent human errors and allow a generalization of the data across languages. For the first time, in this study we propose an automatic procedure to code the raw feature data derived from a semantic feature listing task (SFL). The next sections provide a tutorial on how raw feature data might be processed to a more compact feature output. The tutorial is written for *R* and is fully documented, such that users can adapt it to their language of choice (https://github.com/doomlab/FLT-Primer). Figure \@ref(fig:flowchart) portrays the proposed set of steps including spell checking, lemmatization, exclusion of stop words, and final processing in a multi-word sequence approach or a bag of words approach. After detailing these steps, the final data form will evaluated and compared to previous norms to determine the usefulness of this approach.
 
 ```{r flowchart, echo=FALSE, fig.cap ="Flow chart illustrating how feature listings are recoded to obtain a standard feature format.", fig.height=3, fig.width=4}
 knitr::include_graphics("flow_chart.png")
@@ -85,19 +82,19 @@ knitr::include_graphics("flow_chart.png")
 
 ## Materials and Data Format
 
-You can load the entire set of libraries for this tutorial as shown below using `dependencies.R` found online^[A `packrat` project compliation is avaliable on GitHub for reproducibility [@Ushey2018]]. 
+You can load the entire set of libraries for this tutorial as shown below using `dependencies.R` found online^[A `packrat` project compilation is available on GitHub for reproducibility [@Ushey2018]]. 
 
 ```{r libraries, echo = T, size="scriptsize", messages = F}
 library(here)
+library(dplyr)
 #Spelling
+library(hunspell)
 library(tidytext)
-library(hunspell) 
+library(stringi)
 #Lemmatization
 library(koRpus) 
 library(koRpus.lang.en)
-library(stringi)
-#Multi-Word Sequences
-library(dplyr)
+library(tokenizers)
 #Stopwords
 library(stopwords)
 ```
@@ -112,6 +109,7 @@ X$answer <- tolower(X$answer)
 ```
 
 ```{r data, include = F}
+X_master <- read.csv("../raw_data/tidy_words.csv", stringsAsFactors = F)
 ## Importing the information from Buchanan 2019 to get types of words
 b_data <- read.csv("../raw_data/final words 2017.csv", stringsAsFactors = F)
 
@@ -156,21 +154,21 @@ spelling.errors <- unique(unlist(spelling.errors))
 spelling.sugg <- hunspell_suggest(spelling.errors, dict = dictionary("en_US"))
 ```
 
-The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to `r toupper(X$word[173])`, a participant wrote <`r trimws(gsub("  ", " ", X$answer[173]))`>, and the spelling errors were denoted as <`r paste0(spelling.errors[grep("yelloe|cara", spelling.errors)], collapse = "> <")`>. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error. For <yelloe>, both <`r paste0(unlist(spelling.sugg[[38]]), collapse = "> <")`> were suggested, and <`r paste0(unlist(spelling.sugg[[39]]), collapse = "> <")`> were suggested for <caramell>. 
+The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to `r toupper(X$word[173])`, a participant wrote <*`r trimws(gsub("  ", " ", X$answer[173]))`*>, and the spelling errors were denoted as <*`r paste0(spelling.errors[grep("yelloe|cara", spelling.errors)], collapse = "> <")`*>. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error. For <*yelloe*>, both <*`r paste0(unlist(spelling.sugg[[38]]), collapse = "> <")`*> were suggested, and <*`r paste0(unlist(spelling.sugg[[39]]), collapse = "> <")`*> were suggested for <*caramell*>. 
 
-Answers are provided in the most probable order, therefore, the first suggestion is selected as the correct answer. These answers are compiled into a spelling dictionary, which is saved for reproducibility. A specialized dictionary with pre-coded error responses and corrections could be implemented at this stage by adding entries to the `spelling.dict`. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms and provides context sensitive corrections (e.g., keeping *Apple* as a response to computer, but not as a response to green).
+Answers are provided in the most probable order, therefore, the first suggestion is selected as the correct answer. These answers are compiled into a spelling dictionary, which is saved for reproducibility. In addition to the hunspell dictionary, an auxiliary dictionary with pre-coded error responses and corrections could also be added at this stage to catch any false positives by adding entries to the `spelling.dict`. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms and provides context sensitive corrections (e.g., keeping *Apple* as a response to computer, but not as a response to green).
 
-```{r}
+```{r replace_spell, echo = T, size="scriptsize", messages = F}
 # Pick the first suggestion
 spelling.sugg <- unlist(lapply(spelling.sugg, function(x) x[1]))
 spelling.dict <- as.data.frame(cbind(spelling.errors,spelling.sugg))
 spelling.dict$spelling.pattern <- paste0("\\b", spelling.dict$spelling.errors, "\\b")
 # Write out spelling dictionary
-write.csv(x = spelling.dict, file = '../output_data/spelling.dict.csv', 
-          fileEncoding = 'utf8',row.names = F)
+write.csv(x = spelling.dict, file = "../output_data/spelling.dict.csv", 
+          fileEncoding = "utf8", row.names = F)
 ```
 
-As noted, data was collected with a large text box, allowing participants to free respond to the target cue. Participants often used extra spacing, tabs or other punctionuation to denote separate answers to the cue. The `unnest_tokens()` function from `tidytext` can be used to split their answers into separate response lines and `trimws()` to remove all extra whitespaces [@DeQueiroz2019].
+As noted, data was collected with a large text box, allowing participants to free respond to the target cue. Participants often used extra spacing, tabs or other punctuation to denote separate answers to the cue. The `unnest_tokens()` function from `tidytext` can be used to split their answers into separate response lines and `trimws()` to remove all extra white spaces [@DeQueiroz2019].
 
 ```{r check_spelling2, echo = T, size="scriptsize", messages = F}
 # Parse features
@@ -186,7 +184,7 @@ To finalize our data cleaning, we can remove blank lines, and use `stri_replace_
 
 ```{r check_spelling3, echo = T, size="scriptsize", messages = F}
 # Remove empty features
-tokens <- tokens[!tokens$token =='',]
+tokens <- tokens[!tokens$token =="",]
 tokens$corrected <- stri_replace_all_regex(str = tokens$token,
                                           pattern = spelling.dict$spelling.pattern,
                                           replacement = spelling.dict$spelling.sugg,
@@ -196,235 +194,234 @@ tokens <- tokens %>%
   rename(cue = word,feature = corrected) %>% 
   select(cue, feature)
 # Write processed file
-write.csv(x = tokens,file = '../output_data/spellchecked.features.csv',
-          fileEncoding = 'utf8',row.names = F)
+write.csv(x = tokens,file = "../output_data/spellchecked.features.csv",
+          fileEncoding = "utf8",row.names = F)
 ```
 
 ## Lemmatization
 
-The next step approaches the grouping different word forms that share the same lemma. The process of lemmatizing words involves using a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to convert into a common lemma (i.e., *be*) from a trained dictionary. In contrast, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the language, as simply removing an affix does not necessarily produce the lemma. For example, in response to *airplane*, *flying* can be easily converted to *fly* by removing the *ing* inflection. However, this same heuristic converts the feature *wings* into *w* after removing both the *s* for a plural marker and the *ing* participle marker. 
-
-Lemmatization is the likely choice for processing property norms, and this process can be achieved by installing `TreeTagger` [@Schmid1994] and the `koRpus` package in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple languages. The koRpus package includes functionality to use TreeTagger in *R*. After installing the package and TreeTagger, we will create a unique set of tokenized words to lemmatize to speed computation, as shown in `lemmatization.R`. 
+The next step groups different word forms that share the same lemma. The process of lemmatizing words uses a trained dictionary to convert all tokens part of a  a lexeme set (i.e., all words forms that have the same meaning, *am, are, is*) to a common lemma (i.e., *be*)^[We mainly focus on lemmatization and do not proceed stemming the word because it introduces additional ambiguity. More specifically, stemming involves processing words using heuristics to remove affixes or inflections, such as *ing* or *s*. The stem or root word may not reflect an actual word in the language, as simply removing an affix does not necessarily produce the lemma. For example, in response to AIRPLANE, <*flying*> can be easily converted to <*fly*> by removing the *ing* inflection. However, this same heuristic converts the feature <*wings*> into <*w*> after removing both the *s* for a plural marker and the *ing* participle marker.]. Lemmatization is performed using the `TreeTagger` program [@Schmid1994] and implemented through the `koRpus` package in *R* [@Michalke2018]. TreeTagger is a trained tagger designed to annotate part of speech and lemma information in text, and parameter files are available for multiple languages. We will create a unique set of tokenized words to lemmatize to speed computation, as shown in `lemmatization.R`. 
 
 ```{r lemma, echo = T, size="scriptsize", messages = F}
 # Open the spell checked data
-X <- read.csv("./output_data/spellchecked.features.csv", stringsAsFactors = F)
-
-# Extract the list of cues
+X <- read.csv("../output_data/spellchecked.features.csv", stringsAsFactors = F)
+# Extract the list of updated tokens
 tokens <- unnest_tokens(tbl = X, output = word, input = feature)
-wordlist <- unique(tokens$word)
-
-
+cuelist <- unique(tokens$cue)
 ```
 
 The `treetag()` function calls the installation of TreeTagger to provide part of speech tags and lemmas for each token. Importantly, the `path` option should be the directory of the TreeTagger installation. 
 
 ```{r lemma_treetag, echo = T, size="scriptsize"}
-## This example has both suppressWarnings & suppressMessages
-## You should first view these to ensure proper processing
-temp_tag <- suppressWarnings(
-  suppressMessages(
-    ## Note: the NULL option is to control for the <unknown> that appears
-    ## to occur with the last word in each text
-    treetag(c(all_answers, "NULL"), 
-            ## Control the parameters of treetagger
-            treetagger="manual", format="obj",
-            TT.tknz=FALSE, lang="en",
-            TT.options=list(path="~/TreeTagger", preset="en"))))
+# Create a dataframe for lemmas
+tokens.tagged <- data.frame(doc_id=character(),
+                          token=character(),
+                          wclass=character(),
+                          lemma=character(),
+                          stringsAsFactors=FALSE)
+# Loop over cues and create lemmas + POS tags 
+for (i in 1:length(cuelist)){
+  temp.tag <- suppressWarnings(
+    suppressMessages(
+      treetag(c(X$feature[X$cue == cuelist[i]], "NULL"),
+              treetagger="manual", format="obj",
+              TT.tknz=FALSE, lang="en", doc_id = cuelist[i],
+              # These parameters are based on your computer
+              TT.options=list(path="~/TreeTagger", preset="en"))))
+  temp.tag <- temp.tag@TT.res %>% 
+    mutate_if(is.factor, as.character)
+  tokens.tagged <- tokens.tagged %>% 
+    bind_rows(temp.tag %>% 
+                select(doc_id, token, wclass, lemma))
+  }
 ```
 
-This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. The goal would be to replace inflected words with their lemmas, and therefore, unknown values, number tags, and equivalent values are ignored by subsetting out these from the dataset. Table \@ref(tab:tab2) portrays the results from TreeTagger. 
+This function returns a tagged corpus object, which can be converted into a dataframe of the token-lemma information. TreeTagger will return `<unknown>` for unknown values and `@card@` for numbers, and these values were replaced with the original token. Table \@ref(tab:tab2) portrays example results from TreeTagger.  
 
 ```{r lemma_remove, echo = T, size="scriptsize"}
-## Remove all tags not using
-replacement_lemmas <- temp_tag@TT.res
-replacement_lemmas <- subset(replacement_lemmas, 
-                             #ignore punctuation
-                             wclass != "punctuation" &
-                             #unknown values
-                             lemma != "<unknown>" & 
-                             #numbers
-                             lemma!= "@card@" & 
-                             #token should change more than case
-                             tolower(token) != tolower(lemma)) 
+tokens.tagged <- tokens.tagged %>% 
+  rename(cue = doc_id, feature = token, pos = wclass)
+# Clean up unknown lookups
+tokens.tagged$lemma[tokens.tagged$lemma == "<unknown>"] <- tokens.tagged$feature[tokens.tagged$lemma == "<unknown>"]
+tokens.tagged$lemma[tokens.tagged$lemma == "@card@"] <- tokens.tagged$feature[tokens.tagged$lemma == "@card@"]
+tokens.tagged$lemma <- tolower(tokens.tagged$lemma)
+# Write processed file
+write.csv(x = tokens.tagged, file = "../output_data/lemmatized.features.csv", 
+          fileEncoding = "utf8", row.names = F)
 ```
 
 ```{r tab2, echo = F, results = 'asis'}
-kable(head(replacement_lemmas[ , 2:6]), "latex", booktabs = T, row.names = F, 
+kable(tokens.tagged[8:13 , ], "latex", booktabs = T, row.names = F, 
       caption = "Lemma and Part of Speech Information from TreeTagger")
 ```
 
-Similar to spelling correction `stri_replace_all_regex()` is used to replace the wordforms with their corresponding lemmas from the `stringi` package. Table \@ref(tab:tab3) shows the processed data at this stage. 
+## Stopwords
 
-```{r string_replace, echo = T, size="scriptsize"}
-## Install the stringi package
-#install.packages("stringi")
-## Replace all the original tokens with new lemmas using \\b for word boundaries
-lemmas$answer <- stri_replace_all_regex(str = lemmas$answer, 
-                       pattern = paste("\\b", replacement_lemmas$token, "\\b", sep = ""),
-                       replacement = replacement_lemmas$lemma,
-                       vectorize_all = F, list(case_insensitive = TRUE))
-```
+As shown in Figure \@ref(fig:flowchart), the next stage of processing would be to exclude stopwords, such as *the, of, but*. The `stopwords` package [@Benoit2017] includes a list of stopwords for more than 50 languages. At this stage, the `feature` (original tokens, not lemmatized) or `lemma` (lemmatized tokens) column can be used depending on researcher selection. This code is included in `stopWordRemoval.R`.  
 
-```{r tab3, echo = F, results = 'asis'}
-kable(head(lemmas), "latex", booktabs = T, row.names = F, 
-      caption = "Original Data with Lemmatization") %>%  
-  column_spec(2, width = "30em")
+``` {r stop_words, echo = T, size="scriptsize"}
+# Open the lemmatized data
+X <- read.csv("../output_data/lemmatized.features.csv", stringsAsFactors = F)
+# Remove punctuation and stopwords from lemmas
+X$lemma <- gsub("\\-", " ", X$lemma)
+X$lemma <- gsub("^$|\002", NA, trimws(X$lemma))
+X.nostop <- X %>% 
+  filter(!grepl("[[:punct:]]", lemma)) %>% 
+  filter(!lemma %in% stopwords(language = "en", source = "snowball")) %>% 
+  filter(!is.na(lemma)) 
+# Write processed file
+write.csv(x = X.nostop, file = "../output_data/nostop.lemmas.csv", 
+          fileEncoding = "utf8", row.names = F)
 ```
 
 ## Multi-word Sequences
 
-Multi-word sequences are often coded to mimic a @Collins1969 style model, with "is-a" and "has-a" type markers. If data were collected to include these markers, this step would be pre-encoded into the output data, rendering the following code unnecessary. A potential solution for processing messy data could be to search for specific part of speech sequences that mimic the "is-a" and "has-a" strings, and a more complex set of regular expressions has been implented in Strudel by @Baroni2010. An examination of the coding in @McRae2005 and @Devereux2014 indicates that the feature tags are often verb-noun or verb-adjective-noun sequences. Using TreeTagger on each concept's answer set, we can obtain the parts of speech in context for each lemma. With `dplyr` [@Wickham2019], new columns are added to tagged data to show all bigram and trigram sequences. All verb-noun and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the `table()` function is used to tabulate the final count of n-grams and their frequency. 
+Multi-word sequences are often coded to mimic a @Collins1969 semantic network, where words are nodes and edges are labelled with relations such as "is-a" or "has-a". Some instructions specify the use of specific relation types [@Garrard2001; @Devereux2014], in which case pre-encoded the following step can be omitted. A potential solution for processing unstructured data involves identifying patterns that mimic "is-a" and "has-a" strings. Examples of such an approach is the Strudel model [@Baroni2010] in which meaningful relations are grouped together using a small set of highly specific regular expressions. An examination of the coding in @McRae2005 and @Devereux2014 indicates that the feature tags are often adverb-adjective, verb-noun, or verb-adjective-noun sequences. Using TreeTagger on each concept’s answer set, we can obtain the parts of speech in context for each lemma. With `dplyr` [@Wickham2019], new columns are added to tagged data to show all bigram and trigram sequences. All adverb-adjective, verb-noun, and verb-adjective-noun combinations are selected, and any words not part of these multi-word sequences are treated as unigrams. Finally, the `count()` function is used to tabulate the final count of n-grams and their frequency (`multiwordSequences.R`).
 
 ```{r multi_words, echo = T, size="scriptsize", message = F}
-## Create an empty dataframe 
-multi_words <- data.frame(Word=character(),
-                        Feature=character(), 
-                        Frequency=numeric(), 
-                        stringsAsFactors=FALSE) 
-## Create unique word list to loop over 
-unique_concepts <- unique(lemmas$word)
-## Loop over each word
-for (i in 1:length(unique_concepts)){
-  ## Create parts of speech for clustering together
-  temp_tag <- suppressWarnings(
-    suppressMessages(
-      treetag(c(lemmas$answer[lemmas$word  == unique_concepts[i]], "NULL"), 
-          ## Control the parameters of treetagger
-          treetagger="manual", format="obj",
-          TT.tknz=FALSE, lang="en",
-          TT.options=list(path="~/TreeTagger", preset="en"))))
-  ## Save only the dataframe, remove NULL
-  temp_tag <- temp_tag@TT.res[-nrow(temp_tag@TT.res) , ]
-  ## Subset out information you don't need
-  temp_tag <- subset(temp_tag, 
-                     wclass != "comma" & wclass != "determiner" & 
-                       wclass != "preposition" & wclass != "modal" &
-                       wclass != "predeterminer" & wclass != "particle" &
-                       wclass != "to" & wclass != "punctuation" & 
-                       wclass != "fullstop" & wclass != "conjunction" & 
-                       wclass != "pronoun")
-  ## Create a temporary tibble 
-  temp_tag_tibble <- as_tibble(temp_tag)
-  ## Create part of speech and features combined
-  temp_tag_tibble <- mutate(temp_tag_tibble, 
-                            two_words = paste(token, 
-                                              lead(token), sep = "_"))
-  temp_tag_tibble <- mutate(temp_tag_tibble, 
-                            three_words = paste(token, 
-                                                lead(token), lead(token, n = 2L), 
-                                                sep = "_"))
-  temp_tag_tibble <- mutate(temp_tag_tibble, 
-                            two_words_pos = paste(wclass, 
-                                                  lead(wclass), sep = "_"))
-  temp_tag_tibble <- mutate(temp_tag_tibble, 
-                            three_words_pos = paste(wclass, 
-                                                    lead(wclass), lead(wclass, n = 2L), 
-                                                    sep = "_"))
-  ## Find adjective, noun, verb combinations to cluster on
-  verb_nouns <- grep("\\bverb_noun", temp_tag_tibble$two_words_pos)
-  adj_nouns <- grep("\\badjective_noun", temp_tag_tibble$two_words_pos)
-  verb_adj_nouns <- grep("\\bverb_adjective_noun", temp_tag_tibble$three_words_pos)
-  ## Use combined and left over features
-  features_for_table <- c(temp_tag_tibble$two_words[verb_nouns], 
-                          temp_tag_tibble$two_words[adj_nouns], 
-                          temp_tag_tibble$three_words[verb_adj_nouns],
-                          temp_tag_tibble$token[-c(verb_nouns, verb_nouns+1, 
-                                                   adj_nouns, adj_nouns+1,
-                                                   verb_adj_nouns, verb_adj_nouns+1, 
-                                                   verb_adj_nouns+2)])
-  ## Create a table of frequencies
-  word_table <- as.data.frame(table(features_for_table))
-  ## Clean up the table
-  word_table$Word <- unique_concepts[i]
-  colnames(word_table) = c("Feature", "Frequency", "Word")
-  multi_words <- rbind(multi_words, word_table[ , c(3, 1, 2)])
-}
+# Open the no stop words data
+X <- read.csv("../output_data/nostop.lemmas.csv", stringsAsFactors = F)
+# Combine lemmas and POS
+X <- X %>% 
+  mutate(two.words = paste(lemma, lead(lemma), sep = " "), 
+         three.words = paste(lemma, lead(lemma), 
+                             lead(lemma, n = 2L), sep = " "), 
+         two.words.pos = paste(pos, lead(pos), sep = "."),
+         three.words.pos = paste(pos, lead(pos), 
+                                 lead(pos, n = 2L), sep = "."))
+# Patterns
+adverb.adj <- grep("\\badverb.adj", X$two.words.pos)
+verb.nouns <- grep("\\bverb.noun", X$two.words.pos)
+verb.adj.nouns <- grep("\\bverb.adjective.noun", X$three.words.pos)
+# Use combined and left over lemmas
+X$combined.lemmas <- NA
+X$combined.lemmas[c(adverb.adj, verb.nouns)] <- X$two.words[c(adverb.adj,verb.nouns)]
+X$combined.lemmas[verb.adj.nouns] <- X$three.words[verb.adj.nouns]
+X$combined.lemmas[-c(verb.nouns, verb.nouns+1, verb.adj.nouns, 
+                     verb.adj.nouns+1, verb.adj.nouns+2)] <- X$lemma[-c(verb.nouns, verb.nouns+1,
+                                                                        verb.adj.nouns, verb.adj.nouns+1, 
+                                                                        verb.adj.nouns+2)]
+#Create cue-lemma frequency
+multi.words <- X %>% 
+  filter(!is.na(combined.lemmas)) %>% 
+  group_by(cue) %>% 
+  count(combined.lemmas) 
+# Write processed file
+write.csv(x = multi.words, file = "../output_data/multi.nostop.lemmas.csv",
+          fileEncoding = "utf8", row.names = F)
 ```
 
-This procedure produces mostly positive output, such as *fingers-have_fingernails* and *couches-have_cushions*. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for *zebra* shown below may require fuzzy logic matching to ensure that the different codings for *is-a-horse* are all combined together, as shown in Table \@ref(tab:tab4).
+This procedure produces mostly positive output, such as FINGERS <*have fingernails*> and COUCHES <*have cushions*>. One obvious limitation is the potential necessity to match this coding system to previous codes, which were predominately hand processed. Further, many similar phrases, such as the ones for *zebra* shown below may require flexible regular expressions to ensure that the different codings for <*is a horse*> are all combined together, as shown in Table \@ref(tab:tab4).
 
 ```{r tab4, echo = F, results = 'asis'}
-zebra <- multi_words[ grep("horse", multi_words$Feature) , ]
-zebra <- zebra[zebra$Word == "zebra", ]
+zebra <- multi.words[ grep("horse", multi.words$combined.lemmas) , ]
+zebra <- zebra[zebra$cue == "zebra", ]
 
-kable(zebra[1:10, ], "latex", booktabs = T, row.names = F, 
+kable(zebra, "latex", booktabs = T, row.names = F, 
       caption = "Multi-Word Sequence Examples for Zebra") 
 ```
 
 ## Bag of Words 
 
-The bag of words approach simply treats each token as a separate feature to be tabulated for analysis. After stemming and lemmatization, the data can be processed as single word tokens into a table of frequencies for each cue word. The resulting dataframe is each cue-feature combination with a total for each feature.
+To be able to evaluate the role of identifying multi-word sequences, we now describe an approach where this information is not retained. This bag of words approach simply treats each token as a separate feature to be tabulated for analysis. After stemming and lemmatization, the data can be processed as single word tokens into a table of frequencies for each cue word. The resulting dataframe is each cue-feature combination with a total for each feature from `bagOfWords.R`. Table \@ref(tab:tab5) shows the top ten most frequent responses to *zebra* given the bag of words approach.
 
 ```{r bag_words, echo = T, size="scriptsize", message = F}
-## Create an empty dataframe 
-bag_words <- data.frame(Word=character(),
-                        Feature=character(), 
-                        Frequency=numeric(), 
-                        stringsAsFactors=FALSE) 
-## Loop over each word
-for (i in 1:length(unique_concepts)){
-  ## Create a table of frequencies
-  word_table <- as.data.frame(table(
-    ## Tokenize the words
-    tokenize(
-      ## Put all answers together in one character string
-      paste0(lemmas$answer[lemmas$word == unique_concepts[i]], collapse = " "), 
-      format = "obj", tag = F)))
-  
-  ## Clean up the table
-  word_table$Word <- unique_concepts[i]
-  colnames(word_table) = c("Feature", "Frequency", "Word")
-  
-  bag_words <- rbind(bag_words, word_table[ , c(3, 1, 2)])
-}
-## Remove punctuation
-bag_words <- bag_words[-c(grep('^[[:punct:]]',bag_words$Feature)), ]
+# Open the no stop words data
+X <- read.csv("../output_data/nostop.lemmas.csv", stringsAsFactors = F)
+# Create cue-lemma frequency 
+bag.words <- X %>% 
+  group_by(cue) %>% 
+  count(lemma) 
+# Write processed file
+write.csv(x = bag.words, file = "../output_data/bag.nostop.lemmas.csv",
+          fileEncoding = "utf8", row.names = F)
 ```
 
-Table \@ref(tab:tab5) shows the top ten most frequent responses to *zebra* given the bag of words approach. The top ten features in zebra indicate a match to the multi-word sequence approach but the inclusion of words such as *be, in, a* indicate the need to remove irrelevant words listed with features. 
-
 ```{r tab5, echo = F, results = 'asis'}
-zebra <- bag_words[ bag_words$Word == "zebra" , ]
-zebra <- zebra[order(zebra$Frequency, decreasing = T), ]
+zebra <- bag.words[ bag.words$cue == "zebra" , ]
+zebra <- zebra[order(zebra$n, decreasing = T), ]
 
 kable(zebra[1:10, ], "latex", booktabs = T, row.names = F, 
       caption = "Bag of Words Examples for Zebra") 
 ```
 
-## Stopwords
-
-As shown in Figure \@ref(fig:flowchart), the next stage of processing would be to exclude stopwords, such as *the, of, but*, for either the multi-word sequence or bag of word style processing. The `stopwords` package [@Benoit2017] includes a list of stopwords for more than 50 languages. For multi-word sequence processing, these values can be removed by subsetting the data to exclude stopwords as unigrams. 
-
-``` {r stop_words_multi, echo = T, size="scriptsize"}
-## Remove stop words from either processing approach
-multi_words_nostop <- subset(multi_words, 
-                      !(Feature %in% stopwords(language = "en", 
-                                               source = "snowball")))
-bag_words_nostop <- subset(bag_words, 
-                    !(Feature %in% stopwords(language = "en", 
-                                             source = "snowball")))
-```
-
 ## Descriptive Statistics
 
-The finalized data now represents a a processed set of cue-feature combinations with their frequencies for analysis. Given the differences in sample size across data collection points from @Buchanan2019, this information was merged with the sample data. Table \@ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for *zebra* might be 100, while *apple* might be 45, and these values were averaged. 
+The finalized data now represents a processed set of cue-feature combinations with their frequencies for analysis. The data from @Buchanan2019 was collected over multiple years with multiple sample sizes. The sample size for each cue was then merged with the finalized cue-feature information to control for differences in potential maximum frequency. Table \@ref(tab:tab6) includes descriptive statistics for the processed cue-feature set. 
 
-More cue-feature combinations are listed for the multi-word approach, due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. The correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. A large number of cue-features are generated by a small number of participants, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired. Additionally, feature weighting using statistics such as pointwise mutual information could be implemented to discount rare features without excluding them. 
+### Number of response types
 
-The next two lines of Table \@ref(tab:tab6) indicate cue-feature combination frequencies, such as the number of times *zebra-stripes* or *apple-red* were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent was calculated for each cue, and then averaged over all cues. The correlation represents the average frequency/percent for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. The correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies. Additionally, the correlation between percent of response and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller percent likelihoods. Figure \@ref(fig:correlation-fig) displays the correlations for the average cue-frequency responses and the percent cue-frequency responses by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear. The size of the points indicates the variability (standard deviation of each cue word's average frequency or percent). Variability appears to increase linearly with sample size for average frequency, however, it is somewhat mixed for average percent. 
+First, the number of cue-feature combinations was calculated by taking the average number of cue-feature listings for each cue. Therefore, the total number of features listed for ZEBRA might be 100, while APPLE might be 45, and these values were averaged. More cue-feature combinations are listed for the multi-word approach, due to differences in combinations for some overlapping features as shown in Table \@ref(tab:tab4). The large standard deviation for both approaches indicates that cues have a wide range of possible features listed. For example for the cue ZEBRA, we find a total of `r nrow(bag.words[bag.words$cue == "zebra", ])` features, whereas for APPLE we find `r nrow(bag.words[bag.words$cue == "apple", ])` features. We expect that the number of different responses tokens is a function of the number of times a cue was presented in the study. To investigate this relation, we calculated the correlation provided represents the relation between sample size for a cue and the number of features listed for that cue. These values are high and positive, indicating that the number of unique features increases with each participant. 
+
+### Idiosyncratic responses
+
+Potentially, many of the cue-feature combinations could be considered idiosyncratic. The next row of the table denotes the average number of cue-feature responses listed by less than 10% of the participants. This percent of responses is somewhat arbitrary, as each researcher has determined where the optimal criterion should be. For example, @McRae2005 used 16% or 5/30 participants as a minimum standard, and @Buchanan2019 recently used a similar criteria. Many cue-features are generated by a small number of participants, indicating that these are potentially idiosyncratic or part of long tailed distribution of feature responses with many low frequency features. The advantage to the suggested data processing pipeline and code provided here is the ability of each researcher to determine their own level of response necessary, if desired.
+
+### Response strength
+
+The next two lines of Table \@ref(tab:tab6) indicate cue-feature combination frequencies, such as the number of times ZEBRA <*stripes*> or APPLE <*red*> were listed by participants. The percent of responses is the frequency divided by sample size for each cue, to normalize over different sample sizes present in the data. These average frequency/percent can be seen as a measure of response strength and were calculated for each cue, and then averaged over all cues. The correlation represents the average response strength for each cue related to the sample size for that cue. These frequencies are low, matching the results for a large number of idiosyncratic responses. The correlation between frequency of response and sample size is positive, indicating that larger sample sizes produce items with larger frequencies.
+
+Additionally, the correlation between response strength and sample size is negative, suggesting that larger sample sizes are often paired with more items with smaller response strengths. Figure \@ref(fig:correlation-fig) displays the correlations for the average cue-frequency responses and the response strength by sample size. It appears that the relationship between sample size and percent is likely curvilinear, rather than linear. The size of the points indicates the variability (standard deviation of each cue word's average frequency or percent). Variability appears to increase linearly with sample size for average frequency, however, it is somewhat mixed for average percent. These results may imply a necessity to discuss common sample sizes for data collection (*ns* ~ 30) to determine the optimal sample size for an appropriate body of data for each cue word. 
+
+```{r withstopwords, echo = F, include = F}
+X <- read.csv("../output_data/lemmatized.features.csv", stringsAsFactors = F)
+# Remove punctuation from lemmas
+X$lemma <- gsub("\\-", " ", X$lemma)
+X$lemma <- gsub("^$|\002", NA, trimws(X$lemma))
+X.nopunct <- X %>% 
+  filter(!grepl("[[:punct:]]", lemma)) %>% 
+  #filter(!lemma %in% stopwords(language = "en", source = "snowball")) %>% 
+  filter(!is.na(lemma)) 
+
+##multiwords
+
+# Combine lemmas and POS
+X.multi <- X.nopunct %>% 
+  mutate(two.words = paste(lemma, lead(lemma), sep = " "), 
+         three.words = paste(lemma, lead(lemma), 
+                             lead(lemma, n = 2L), sep = " "), 
+         two.words.pos = paste(pos, lead(pos), sep = "."),
+         three.words.pos = paste(pos, lead(pos), 
+                                 lead(pos, n = 2L), sep = "."))
+# Patterns
+adverb.adj <- grep("\\badverb.adj", X.multi$two.words.pos)
+verb.nouns <- grep("\\bverb.noun", X.multi$two.words.pos)
+verb.adj.nouns <- grep("\\bverb.adjective.noun", X.multi$three.words.pos)
+# Use combined and left over lemmas
+X.multi$combined.lemmas <- NA
+X.multi$combined.lemmas[c(adverb.adj, verb.nouns)] <- X.multi$two.words[c(adverb.adj,verb.nouns)]
+X.multi$combined.lemmas[verb.adj.nouns] <- X.multi$three.words[verb.adj.nouns]
+X.multi$combined.lemmas[-c(verb.nouns, verb.nouns+1, verb.adj.nouns, 
+                     verb.adj.nouns+1, verb.adj.nouns+2)] <- X.multi$lemma[-c(verb.nouns, verb.nouns+1,
+                                                                        verb.adj.nouns, verb.adj.nouns+1, 
+                                                                        verb.adj.nouns+2)]
+#Create cue-lemma frequency
+multi.words.withstop <- X.multi %>% 
+  filter(!is.na(combined.lemmas)) %>% 
+  group_by(cue) %>% 
+  count(combined.lemmas) 
+
+# Create cue-lemma frequency 
+bag.words.withstop <- X.nopunct %>% 
+  group_by(cue) %>% 
+  count(lemma) 
+```
 
 ```{r desc_stats, echo = F, include = F}
-sample_sizes <- as.data.frame(tapply(X$word, X$word, length))
+sample_sizes <- as.data.frame(tapply(X_master$word, X_master$word, length))
 sample_sizes$Word <- rownames(sample_sizes)
-colnames(sample_sizes)[1] <- "Sample_Size"
+colnames(sample_sizes) <- c("Sample_Size", "cue")
 
-multi_words_nostop <- merge(multi_words_nostop, sample_sizes, by = "Word")
-bag_words_nostop <- merge(bag_words_nostop, sample_sizes, by = "Word")
+multi_words_nostop <- merge(multi.words, sample_sizes, by = "cue")
+bag_words_nostop <- merge(bag.words, sample_sizes, by = "cue")
 
 ## For later showing that removing stop helps
-multi_words <- merge(multi_words, sample_sizes, by = "Word")
-bag_words <- merge(bag_words, sample_sizes, by = "Word")
+multi_words <- merge(multi.words.withstop, sample_sizes, by = "cue")
+bag_words <- merge(bag.words.withstop, sample_sizes, by = "cue")
+
+## redo column names to match code below
+columnnames <- c("Word", "Feature", "Frequency", "Sample_Size")
+colnames(multi_words_nostop) <- colnames(bag_words_nostop) <- colnames(multi_words) <- colnames(bag_words) <- columnnames
 
 #number of features
 no_feat_m <- tapply(multi_words_nostop$Frequency, multi_words_nostop$Word, length)
@@ -497,7 +494,11 @@ tableprint[4, ] <- c("Percent of Cue-Feature Response",
                      cor(per_resp_bM, sample_sizes$Sample_Size))
 
 for (i in 2:7){
-  tableprint[ , i] <- printnum(as.numeric(tableprint[ , i]))
+  if (i == 4 | i == 7){
+    
+    tableprint[ , i] <- printnum(as.numeric(tableprint[ , i]), gt1 = F)
+    
+  } else {tableprint[ , i] <- printnum(as.numeric(tableprint[ , i]))}
 }
 
 kable(tableprint, "latex", booktabs = T, row.names = F,
@@ -553,45 +554,45 @@ prow
 
 ## Internal Comparison of Approach
 
-In this section, we show that the bag of words approach processed completely through code matches a bag of words approach that was hand coded from @Buchanan2019. In @Buchanan2019, the @McRae2005 and @Vinson2008 datasets were recoded in a bag of words approach, and the comparison between all three is provided below. The multi-word sequence approach would be comparable if one or more datasets used the same structured data collection approach or with considerable hand coded rules for feature combinations. The data from open ended responses, such as the @Buchanan2019, could potentially be compared in the demonstrated multi-word sequence approach, if the raw data from other such projects were available. 
+In this section, we show that the bag of words approach matches the data from @McRae2005, @Vinson2008, and  @Buchanan2019, which compares data processed completely through code to datasets that were primarily hand coded. In @Buchanan2019, the @McRae2005 and @Vinson2008 datasets were recoded in a bag of words approach, and the comparison between all three is provided below. The multi-word sequence approach would be comparable if one or more datasets used the same structured data collection approach or with considerable hand coded rules for feature combinations. The data from open ended responses, such as the @Buchanan2019, could potentially be compared in the demonstrated multi-word sequence approach, if the raw data from other such projects were available. 
 
 ```{r compare_b, echo = F, include = F}
 library(readxl)
 ## b data imported earlier 
 
 ## Reduce down only to overlap words
-b_data <- subset(b_data, cue %in% unique_concepts)
+b_data <- subset(b_data, cue %in% cuelist)
 b_data <- b_data[ , c("where", "cue", "feature", "translated",
                       "frequency_feature", "frequency_translated") ]
 
 library(lsa)
 
-cosine_values <- data.frame(word=unique_concepts,
-                            raw_b=1:length(unique_concepts), 
-                            raw_m=1:length(unique_concepts),
-                            raw_v=1:length(unique_concepts),
-                            translated_b=1:length(unique_concepts), 
-                            translated_m=1:length(unique_concepts), 
-                            translated_v=1:length(unique_concepts), 
+cosine_values <- data.frame(word=cuelist,
+                            raw_b=1:length(cuelist), 
+                            raw_m=1:length(cuelist),
+                            raw_v=1:length(cuelist),
+                            translated_b=1:length(cuelist), 
+                            translated_m=1:length(cuelist), 
+                            translated_v=1:length(cuelist), 
                             stringsAsFactors=FALSE)
 
-cosine_values_wstop <- data.frame(word=unique_concepts,
-                            raw_b=1:length(unique_concepts), 
-                            raw_m=1:length(unique_concepts),
-                            raw_v=1:length(unique_concepts),
-                            translated_b=1:length(unique_concepts), 
-                            translated_m=1:length(unique_concepts), 
-                            translated_v=1:length(unique_concepts), 
+cosine_values_wstop <- data.frame(word=cuelist,
+                            raw_b=1:length(cuelist), 
+                            raw_m=1:length(cuelist),
+                            raw_v=1:length(cuelist),
+                            translated_b=1:length(cuelist), 
+                            translated_m=1:length(cuelist), 
+                            translated_v=1:length(cuelist), 
                             stringsAsFactors=FALSE)
 
-for (i in 1:length(unique_concepts)){
+for (i in 1:length(cuelist)){
  
-  temp_b <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "b", ]
-  temp_m <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "m", ] 
-  temp_v <- b_data[b_data$cue == unique_concepts[i] & b_data$where == "v", ]
-  temp_bag <- bag_words_nostop[bag_words_nostop$Word == unique_concepts[i], ]
+  temp_b <- b_data[b_data$cue == cuelist[i] & b_data$where == "b", ]
+  temp_m <- b_data[b_data$cue == cuelist[i] & b_data$where == "m", ] 
+  temp_v <- b_data[b_data$cue == cuelist[i] & b_data$where == "v", ]
+  temp_bag <- bag_words_nostop[bag_words_nostop$Word == cuelist[i], ]
   colnames(temp_bag)[2] = "feature"
-  temp_bag_wstop <- bag_words[bag_words$Word == unique_concepts[i], ]
+  temp_bag_wstop <- bag_words[bag_words$Word == cuelist[i], ]
   colnames(temp_bag_wstop)[2] = "feature"
   
   ## Based on unprocessed data 
@@ -729,7 +730,7 @@ kable(tableprint, "latex", booktabs = T, row.names = F,
   add_footnote("$Note$. Translated values are hand coded lemmatization from Buchanan et al. (2019). B: Buchanan et al. (2019), M: McRae et al. (2005), V: Vinson \\& Vigliocco (2008). $N$ values are 226, 61, and 68 respectively. ", notation="none", escape = F) 
 ```
 
-Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). There are two potential cosine values from the @Buchanan2019: the raw cosine, which included all features as listed without lemmatization or stemming, and the translated cosine, which included hand lemmatization processing. Each cue in the sample data for this project was compared to the corresponding cue in the @Buchanan2019. If data were processed in an identical fashion, the cosine values would be nearly 1 for @Buchanan2019 data or match the cosine values found for @McRae2005 and @Vinson2008 in the @Buchanan2019 results (original feature cosine = .54-.55, translated features = .66-.67). However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in the data would reduce the average cosine values. Table \@ref(tab:tab7) indicates the cosine values for each cue paired with itself in different scenarios. On the left, the cosine values with stopwords are provided for both the original feature listed (i.e., no lemmatization) and the translated feature (i.e., hand lemmatization). The right side of the table includes the cosine values once stopwords have been removed. The removal of stopwords increases the match between sets indicating how removing these terms can improve comparison and quality. The cosine values for no stopwords indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results in the original feature sets. These values indicate that the data processed entirely in *R* produces a comparable set of results, albeit with added noise of small frequency features. 
+Cosine is often used as a measure of semantic similarity, indicating the feature overlap between two sets of cue-feature lists. These values can range from 0 (no overlap) to 1 (perfect overlap). Two cosine values can be derived from the @Buchanan2019 data: the raw cosine, which included all features as listed and the cosine for lemmatized responses. Each cue in the sample data for this project was compared to the corresponding cue in the @Buchanan2019. If data were processed in an identical fashion, the cosine values would be nearly 1 for @Buchanan2019 data or match the cosine values found for @McRae2005 and @Vinson2008 in the @Buchanan2019 results: original feature cosine = .54-.55, and lemmatized^[These results were lemmatized by creating a lookup dictionary from the features listed in the @Buchanan2019 norms] features = .66-.67. However, all previous datasets have been reduced by eliminating idiosyncratic features at various points, and therefore, we might expect that noise in the data would reduce the average cosine values. Table \@ref(tab:tab7) shows the role of using a cut-off for low-frequent or idiosyncratic responses by calculating the cosine values when using varying cut-offs or stopword filtering. On the left, the cosine values with stopwords are provided for both the original feature listed (i.e., no lemmatization) and the lemmatized features. The right side of the table includes the cosine values once stopwords have been removed. The removal of stopwords increases the match between sets indicating how removing these terms can improve prediction. The cosine values for no stopwords indicate a somewhat comparable set of data, with lower values for McRae et al. (2005) than previous results in the original feature sets. These values indicate that the data processed entirely in *R* produces a comparable set of results, albeit with added noise of small frequency features. 
 
 ## External Comparison of Approach
 
@@ -767,7 +768,11 @@ cor_MEN_wstop <- cor.test(men_merge_wstop$rating, men_merge_wstop$cosine)
 
 The MEN dataset [@Bruni2014] contains cue-cue pairs of English words rating for similarity by Amazon Mechanical Turk participants for stimuli taken from the @McRae2005 feature norms. In their rating task, participants were shown two cue-cue pairs and asked to select the more related pair of the two presented. Each pair was rated by 50 participants, and thus, a score of 50 indicates high relatedness, while a score of 0 indicates no relatedness. The ratings for the selected set of cues provided in this analysis was `r min(men_merge$rating)` - `r max(men_merge$rating)` with an average rating of `r printnum(mean(men_merge$rating))` (*SD* = `r printnum(sd(men_merge$rating))`). The ratings were compared to the cosine calculated between cues using the bag of words method with and without stopwords. The correlation between bag of words cosines with stopwords and the MEN ratings was `r apa_print(cor_MEN_wstop)$estimate`, *N* = `r cor_MEN_wstop$parameter+2`, indicating agreement between raters and cosine values. The agreement between ratings and bag of word cosine values was higher when stopwords were excluded, `r apa_print(cor_MEN)$estimate`.
 
-## Future Directions
+# Discussion
+
+Semantic feature listing tasks are used across various disciplines and are likely to remain an important source of information about the subjective meaning of concepts. In this article we have outlined a workflow to process large datasets where features consist of unstructured short propositions derived from written language. The advantage to this workflow is two-fold. First, science practices are shifting to open procedures and practices [@Nosek2015], and reproducible research is key [@Peng2011]. Second, automated processing provides faster data analysis than hand-coded systems, and the ability to examine how processing steps affect results. We have shown that the automated procedure provides a comparable set of results to the hand-coded systems from @Buchanan2019, @McRae2005, and @Vinson2008. The addition of specialized lemmas and other word exclusions (i.e., <*sometimes*>, <*usually*>, <*lot*> or idiosyncratic features) would provide more reduction, and thus, more overlap between hand and automated processing. Further, the automated data processing showed strong correlations with external subjective ratings of cue-cue relatedness in the MEN dataset. We suggest the workflow shown in Figure \@ref(fig:flowchart) and the suggested *R* code can provide a framework for researchers to use on their own data.
+
+### Extending the approach
 
 An attractive property of the subjective feature listing task is that it results in transparent representations. As a result, many researchers have taken additional steps to group specific types of knowledge together, depending on semantic relations (e.g., taxonomy relations) or their mapping onto distinct brain regions [@Fairhall2013]. Typically this involves applying a hand-crafted coding scheme, which requires a substantial effort. One of the common ontologies is the one developed by @Wu2009. The ontology is structured as a  hierarchical taxonomy for coding categories as part of the feature listing task. It has been used in several projects, notably the @McRae2005. Examples of the categories include taxonomic (synonyms, subordinates), entity (internal components, behavior, spatial relations), situation (location, time), and  introspective properties (emotion, evaluation). Coding ontology may be best performed systematically with look-up rules of previously decided upon factors, however, clustering analyses may provide a potential avenue to explore categorizing features within the current dataset. One limitation to this method the sheer size of the idiosyncratic features as mentioned above, and thus, features smaller in number may be more difficult to group.
 
@@ -842,18 +847,11 @@ kable(tableprint, "latex", booktabs = T, row.names = F,
       caption = "Top Ten Ontology Labels")
 ```
 
+Potentially, a simple ontology can be mapped using an approach similar to Strudel [structured dimension extraction and labeling, @Baroni2010]. Strudel is a corpus-based semantic model wherein cue words are found in a large text corpus and matched to nouns, verbs, and adjectives that appear near a concept. Using specific patterns of expected feature listing, @Baroni2010 were able build a model of English concepts and their properties that aligned with semantic feature production norms. From this model, they were able to cluster properties based on their lexical patterns. For example, if a sentence included the phrase *fruit, such as an apple*, this lexical pattern would be classified as *such_as+right*, indicating that the concept (apple) was found to the right of the property (fruit) with the phrase such as connecting them. Using clustering, @Baroni2010 was able to assign four ontology labels to properties: part, category, location, and function. Using these results, we can match `r sum(table(bag_strudel$ontology))` of the bag of words features (`r round(sum(table(bag_strudel$ontology))/nrow(bag_words)*100,1)`%). These features were predominately parts (`r printnum(ontology_table["Parts"]/sum(ontology_table)*100, digits = 1)`), followed by function (`r printnum(ontology_table["Function"]/sum(ontology_table)*100, digits = 1)`), location (`r printnum(ontology_table["Location"]/sum(ontology_table)*100, digits = 1)`), and category (`r printnum(ontology_table["Category"]/sum(ontology_table)*100, digits = 1)`). Table \@ref(tab:tab8) indicates ten of the most frequent cue-feature pairs for each ontology label, excluding duplicate features across cues. An examination of the top results indicates coherent labels (parts: ZEBRA <*stripe*>, location: SHOE <*foot*>, and category: FURNITURE <*table*>); however, there are also a few mismatches (location: SCISSORS <*cut*>, function: LEAF <*green*>). This model represents an area in which one might begin to automate the labeling process, likely combined with other pre-defined rule sets. 
 
-Potentially, simple ontology can be mapped using results from Strudel [structured dimension extraction and labeling, @Baroni2010]. Strudel is a corpus-based semantic model wherein cue words are found in a large text corpus and matched to nouns, verbs, and adjectives that appear near a concept. Using specific patterns of expected feature listing, @Baroni2010 were able build a model of English concepts and their properties that aligned with semantic feature production norms. From this model, they were able to cluster properties based on their lexical patterns. For example, if a sentence included the phrase *fruit, such as an apple*, this lexical pattern would be classified as *such_as+right*, indicating that the concept (apple) was found to the right of the property (fruit) with the phrase such as connecting them. Using clustering, @Baroni2010 was able to assign four ontology labels to properties: part, category, location, and function. Using these results, we can match `r sum(table(bag_strudel$ontology))` of the bag of words features (`r round(sum(table(bag_strudel$ontology))/nrow(bag_words)*100,1)`%). These features were predominately parts (`r printnum(ontology_table["Parts"]/sum(ontology_table)*100, digits = 1)`), followed by function (`r printnum(ontology_table["Function"]/sum(ontology_table)*100, digits = 1)`), location (`r printnum(ontology_table["Location"]/sum(ontology_table)*100, digits = 1)`), and category (`r printnum(ontology_table["Category"]/sum(ontology_table)*100, digits = 1)`). Table \@ref(tab:tab8) indicates ten of the most frequent cue-feature pairs for each ontology label, excluding duplicate features across cues. An examination of the top results indicates coherent labels (parts: *zebra-stripe*, location: *shoe-foot*, and category: *furniture-table*); however, there are also a few mismatches (location: *scissors-cut*, function: *leaf-green*). This model represents an area in which one might begin to automate the labeling process, likely combined with other pre-defined rulesets. 
+### Some limitations
 
-# Discussion
-
-- this sort of thing is great for replication purposes, which is pretty important because of the garden of forking paths which applies not just to statistical analyses but also to processing.
-
-- we've provided a workflow suggestion that a researcher can use to format their work, along with functions that can be detailed to match any hand processing results. 
-
-- weave this to match introduction 
-
-- how concrete or abstract the words are 
+So far we have not investigated to what extend the automatic procedure leads to equally good representations for different types of concepts. More specifically, abstract concepts tend to have a larger number of features, and especially for these types of concepts, pooling together features might improve the quality of the final representation. Potentially, this might require additional steps in which features are not only grouped based on surface properties but might also benefit from grouping synonymous words. Within this framework, the properties could be added within a lookup dictionary to further promote an open and transparent coding for data processing. 
 
 \newpage
 
