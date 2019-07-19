@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  18 JUL 2019 22:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  19 JUL 2019 08:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1202,18 +1202,16 @@ LaTeX Font Info:    Try loading font information for T1+lmtt on input line 177.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [6]
+)
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <8> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 183.
+[6]
 \openout3 = `flt_manuscript.ttt'.
 
 (flt_manuscript.ttt)
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1881) has occurred while \output is active []
 
-[7] [8]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[9] [10] [11] [12]
+[7] [8] [9] [10] [11] [12]
 Underfull \vbox (badness 10000) detected at line 477
  []
 
@@ -1250,7 +1248,7 @@ d Tables [28] (./flt_manuscript.ttt [29
 
 ] [35
 
-]) (./flt_manuscript.fff <flow_chart.png, id=396, 788.9475pt x 213.79875pt>
+]) (./flt_manuscript.fff <flow_chart.png, id=405, 788.9475pt x 213.79875pt>
 File: flow_chart.png Graphic file (type png)
 <use flow_chart.png>
 Package pdftex.def Info: flow_chart.png used on input line 4.
@@ -1259,7 +1257,7 @@ Package pdftex.def Info: flow_chart.png used on input line 4.
 
 
  <./flow_chart.png>]
-<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=403, 566.115pt x 4
+<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=412, 566.115pt x 4
 18.56375pt>
 File: flt_manuscript_files/figure-latex/correlation-fig-1.pdf Graphic file (typ
 e pdf)
@@ -1270,22 +1268,22 @@ f used on input line 12.
 [37
 
  <./flt_manuscript_files/figure-latex/correlation-fig-1.pdf>])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 854.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 854.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 869.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 869.
 (./flt_manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 854.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 854.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 869.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 869.
 Package rerunfilecheck Info: File `flt_manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 8C998F5783B57B8B5B87B6727C8944B5;2844.
+(rerunfilecheck)             Checksum: 79C6928FE877013CBAD03F82B211B77D;3075.
  ) 
 Here is how much of TeX's memory you used:
- 16436 strings out of 492995
- 242238 string characters out of 6132704
- 359170 words of memory out of 5000000
- 19443 multiletter control sequences out of 15000+600000
- 88123 words of font info for 133 fonts, out of 8000000 for 9000
+ 16448 strings out of 492995
+ 242426 string characters out of 6132704
+ 359265 words of memory out of 5000000
+ 19445 multiletter control sequences out of 15000+600000
+ 88472 words of font info for 136 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,12n,47p,2103b,492s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,12n,47p,2111b,492s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/
 texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/20
 17/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2017/texmf-dist/
@@ -1301,10 +1299,10 @@ ype1/public/lm/lmss8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public
 .pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr
 /local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on flt_manuscript.pdf (37 pages, 511733 bytes).
+Output written on flt_manuscript.pdf (37 pages, 513857 bytes).
 PDF statistics:
- 504 PDF objects out of 1000 (max. 8388607)
- 441 compressed objects within 5 object streams
- 142 named destinations out of 1000 (max. 500000)
- 12443 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 515 PDF objects out of 1000 (max. 8388607)
+ 452 compressed objects within 5 object streams
+ 146 named destinations out of 1000 (max. 500000)
+ 12451 words of extra memory for PDF output out of 14400 (max. 10000000)
 

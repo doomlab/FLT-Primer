@@ -24,7 +24,7 @@ airplane & wings  body  flies  travel\\
 \ifnextchar[{\eatarg}{}
 [t]
 
-\caption{\label{tab:tab2}Lemma and Part of Speech Information from TreeTagger}
+\caption{\label{tab:tab2}Lemma and Part of Speech (POS) Information from TreeTagger}
 \centering
 \begin{tabular}{llll}
 \toprule
@@ -46,7 +46,7 @@ airplane & they & pronoun & they\\
 \ifnextchar[{\eatarg}{}
 [t]
 
-\caption{\label{tab:tab4}Multi-Word Sequence Examples for Zebra}
+\caption{\label{tab:tab4}Multi-Word Sequence Examples for zebra}
 \centering
 \begin{tabular}{llr}
 \toprule
@@ -68,7 +68,7 @@ zebra & stripe similar horse & 1\\
 \ifnextchar[{\eatarg}{}
 [t]
 
-\caption{\label{tab:tab5}Bag of Words Examples for Zebra}
+\caption{\label{tab:tab5}Bag of Words Examples for zebra}
 \centering
 \begin{tabular}{llr}
 \toprule
