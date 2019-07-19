@@ -206,7 +206,7 @@ The data can then be imported with \texttt{importData.R}. Additionally, the answ
 \CommentTok{# Importing the raw feature lists}
 \NormalTok{X <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"../raw_data/tidy_words.csv"}\NormalTok{, }\DataTypeTok{stringsAsFactors =}\NormalTok{ F)}
 \CommentTok{## Lower case to normalize}
-\NormalTok{X}\OperatorTok{$}\NormalTok{answer <-}\StringTok{ }\KeywordTok{tolower}\NormalTok{(X}\OperatorTok{$}\NormalTok{answer)}
+\NormalTok{X}\OperatorTok{$}\NormalTok{feature_response <-}\StringTok{ }\KeywordTok{tolower}\NormalTok{(X}\OperatorTok{$}\NormalTok{feature_response)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -231,7 +231,7 @@ airplane & wings  body  flies  travel\\
 \end{tabular}
 \end{table}
 
-The data for this tutorial includes 16544 unique concept-feature responses for 226 concepts from Buchanan et al. (2019). The concepts were taken from McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The concepts include 185 nouns, 25 verbs, and 16 adjectives. Concreteness ratings collected by Brysbaert, Warriner, and Kuperman (2014) were matched with the current data set. The concreteness ratings capture the difference between abstract (language-based) and concrete (experience-based) concepts and were measured on a five-point scale. Nouns were rated as most concrete: \emph{M} = 4.59 (\emph{SD} = 0.52), followed by adjectives: \emph{M} = 3.78 (\emph{SD} = 0.81), and verbs: \emph{M} = 3.57 (\emph{SD} = 0.79). The SFL data consist of a text file where concept-feature observation is a row and each column is a variable. An example of these raw data are shown in Table \ref{tab:tab1}, where the \texttt{word} column is the cue, and the \texttt{answer} column denotes a single participant's response. The original data can be found at \url{https://osf.io/cjyzw/}.
+The data for this tutorial includes 16544 unique concept-feature responses for 226 concepts from Buchanan et al. (2019). The concepts were taken from McRae et al. (2005), Vinson and Vigliocco (2008), and Bruni, Tran, and Baroni (2014). The concepts include 185 nouns, 25 verbs, and 16 adjectives. Concreteness ratings collected by Brysbaert, Warriner, and Kuperman (2014) were matched with the current data set. The concreteness ratings capture the difference between abstract (language-based) and concrete (experience-based) concepts and were measured on a five-point scale. Nouns were rated as most concrete: \emph{M} = 4.59 (\emph{SD} = 0.52), followed by adjectives: \emph{M} = 3.78 (\emph{SD} = 0.81), and verbs: \emph{M} = 3.57 (\emph{SD} = 0.79). The SFL data consist of a text file where concept-feature observation is a row and each column is a variable. An example of these raw data are shown in Table \ref{tab:tab1}, where the \texttt{cue} column is the cue, and the \texttt{feature\_response} column denotes a single participant's response. The original data can be found at \url{https://osf.io/cjyzw/}.
 
 The data was collected using the instructions provided by McRae et al. (2005), however, in contrast to the suggestions for consistency detailed above (Devereux et al., 2014), each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants (e.g., asking participants to type one feature on each line), the suggested processing steps are reduced.
 
@@ -245,7 +245,7 @@ The first step (see Figure \ref{fig:flowchart}) in processing the features consi
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Extract a list of words}
-\NormalTok{tokens =}\StringTok{ }\KeywordTok{unnest_tokens}\NormalTok{(}\DataTypeTok{tbl =}\NormalTok{ X, }\DataTypeTok{output =}\NormalTok{ token, }\DataTypeTok{input =}\NormalTok{ answer)}
+\NormalTok{tokens =}\StringTok{ }\KeywordTok{unnest_tokens}\NormalTok{(}\DataTypeTok{tbl =}\NormalTok{ X, }\DataTypeTok{output =}\NormalTok{ token, }\DataTypeTok{input =}\NormalTok{ feature_response)}
 \NormalTok{wordlist =}\StringTok{ }\KeywordTok{unique}\NormalTok{(tokens}\OperatorTok{$}\NormalTok{token)}
 \CommentTok{# Spell check the words}
 \NormalTok{spelling.errors <-}\StringTok{ }\KeywordTok{hunspell}\NormalTok{(wordlist)}

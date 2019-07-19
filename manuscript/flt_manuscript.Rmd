@@ -11,7 +11,7 @@ author:
   - name          : "Simon De Deyne"
     affiliation   : "2"
   - name          : "Maria Montefinese"
-    affiliation   : "3"    
+    affiliation   : "3,4"    
 
 affiliation:
   - id            : "1"
@@ -19,7 +19,9 @@ affiliation:
   - id            : "2"
     institution   : "The University of Melbourne"
   - id            : "3"
-    institution   : "University of Padua"
+    institution   : "University of Padova"
+  - id            : "4"
+    institution   : "University College London"
 
 abstract: |
   Semantic property listing tasks require participants to generate short propositions (e.g., \<*barks*\>, \<*has fur*\>) for a specific concept (e.g., dog). This task is the cornerstone of the creation of semantic property norms which are essential for modelling, stimuli creation, and understanding similarity between concepts. However, despite the wide applicability of semantic property norms for a large variety of concepts across different groups of people, the methodological aspects of the property listing task have received less attention, even though the procedure and processing of the data can substantially affect the nature and quality of the measures derived from them. The goal of this paper is to provide a practical primer on how to collect and process semantic property norms. We will discuss the key methods to elicit semantic properties and compare different methods to derive meaningful representations from them. This will cover the role of instructions and test context, property pre-processing (e.g., lemmatization), property weighting, and relationship encoding using ontologies. With these choices in mind, we propose and demonstrate a processing pipeline that transparently documents these steps resulting in improved comparability across different studies. The impact of these choices will be demonstrated using intrinsic (e.g., reliability, number of properties) and extrinsic measures (e.g., categorization, semantic similarity, lexical processing). This practical primer will offer potential solutions to several longstanding problems and allow researchers to develop new property listing norms overcoming the constraints of previous studies.
@@ -105,7 +107,7 @@ The data can then be imported with `importData.R`. Additionally, the answers fro
 # Importing the raw feature lists
 X <- read.csv("../raw_data/tidy_words.csv", stringsAsFactors = F)
 ## Lower case to normalize
-X$answer <- tolower(X$answer)
+X$feature_response <- tolower(X$feature_response)
 ```
 
 ```{r data, include = F}
@@ -116,7 +118,7 @@ b_data <- read.csv("../raw_data/final words 2017.csv", stringsAsFactors = F)
 ## Figure out the POS for our list
 b_map <- b_data[ , c("cue", "pos_cue")]
 b_map <- unique(b_map)
-b_map <- b_map[b_map$cue %in% X$word , ]
+b_map <- b_map[b_map$cue %in% X$cue , ]
 b_table <- table(b_map$pos_cue)
 
 ## Importing concreteness ratings
@@ -136,7 +138,7 @@ kable(head(X), "latex", booktabs = T, row.names = F,
   column_spec(2, width = "30em")
 ```
 
-The data for this tutorial includes `r nrow(X)` unique concept-feature responses for `r length(unique(X$word))` concepts from @Buchanan2019. The concepts were taken from @McRae2005, @Vinson2008, and @Bruni2014. The concepts include `r b_table["noun"]` nouns, `r b_table["verb"]` verbs, and `r b_table["adjective"]` adjectives. Concreteness ratings collected by @Brysbaert2014 were matched with the current data set. The concreteness ratings capture the difference between abstract (language-based) and concrete (experience-based) concepts and were measured on a five-point scale. Nouns were rated as most concrete: *M* = `r printnum(b_map_M["noun"])` (*SD* = `r printnum(b_map_SD["noun"])`), followed by adjectives: *M* = `r printnum(b_map_M["adjective"])` (*SD* = `r printnum(b_map_SD["adjective"])`), and verbs: *M* = `r printnum(b_map_M["verb"])` (*SD* = `r printnum(b_map_SD["verb"])`). The SFL data consist of a text file where concept-feature observation is a row and each column is a variable. An example of these raw data are shown in Table \@ref(tab:tab1), where the `word` column is the cue, and the `answer` column denotes a single participant's response. The original data can be found at https://osf.io/cjyzw/. 
+The data for this tutorial includes `r nrow(X)` unique concept-feature responses for `r length(unique(X$cue))` concepts from @Buchanan2019. The concepts were taken from @McRae2005, @Vinson2008, and @Bruni2014. The concepts include `r b_table["noun"]` nouns, `r b_table["verb"]` verbs, and `r b_table["adjective"]` adjectives. Concreteness ratings collected by @Brysbaert2014 were matched with the current data set. The concreteness ratings capture the difference between abstract (language-based) and concrete (experience-based) concepts and were measured on a five-point scale. Nouns were rated as most concrete: *M* = `r printnum(b_map_M["noun"])` (*SD* = `r printnum(b_map_SD["noun"])`), followed by adjectives: *M* = `r printnum(b_map_M["adjective"])` (*SD* = `r printnum(b_map_SD["adjective"])`), and verbs: *M* = `r printnum(b_map_M["verb"])` (*SD* = `r printnum(b_map_SD["verb"])`). The SFL data consist of a text file where concept-feature observation is a row and each column is a variable. An example of these raw data are shown in Table \@ref(tab:tab1), where the `cue` column is the cue, and the `feature_response` column denotes a single participant's response. The original data can be found at https://osf.io/cjyzw/. 
 
 The data was collected using the instructions provided by @McRae2005, however, in contrast to the suggestions for consistency detailed above [@Devereux2014], each participant was simply given a large text box to include their answer. Each answer includes multiple embedded features, and the tutorial proceeds to demonstrate potential processing addressing the data in this nature. With structured data entry for participants (e.g., asking participants to type one feature on each line), the suggested processing steps are reduced. 
 
@@ -146,7 +148,7 @@ The first step (see Figure \@ref(fig:flowchart)) in processing the features cons
 
 ```{r check_spelling, echo = T, size="scriptsize", messages = F}
 # Extract a list of words
-tokens = unnest_tokens(tbl = X, output = token, input = answer)
+tokens = unnest_tokens(tbl = X, output = token, input = feature_response)
 wordlist = unique(tokens$token)
 # Spell check the words
 spelling.errors <- hunspell(wordlist)
@@ -154,7 +156,7 @@ spelling.errors <- unique(unlist(spelling.errors))
 spelling.sugg <- hunspell_suggest(spelling.errors, dict = dictionary("en_US"))
 ```
 
-The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to `r toupper(X$word[173])`, a participant wrote <*`r trimws(gsub("  ", " ", X$answer[173]))`*>, and the spelling errors were denoted as <*`r paste0(spelling.errors[grep("yelloe|cara", spelling.errors)], collapse = "> <")`*>. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error. For <*yelloe*>, both <*`r paste0(unlist(spelling.sugg[[38]]), collapse = "> <")`*> were suggested, and <*`r paste0(unlist(spelling.sugg[[39]]), collapse = "> <")`*> were suggested for <*caramell*>. 
+The result from the `hunspell()` function is a list object of spelling errors for each row of data. For example, when responding to `r toupper(X$cue[173])`, a participant wrote <*`r trimws(gsub("  ", " ", X$feature_response[173]))`*>, and the spelling errors were denoted as <*`r paste0(spelling.errors[grep("yelloe|cara", spelling.errors)], collapse = "> <")`*>. After checking for errors, the `hunspell_suggest()` function was used to determine the most likely replacement for each error. For <*yelloe*>, both <*`r paste0(unlist(spelling.sugg[[38]]), collapse = "> <")`*> were suggested, and <*`r paste0(unlist(spelling.sugg[[39]]), collapse = "> <")`*> were suggested for <*caramell*>. 
 
 Answers are provided in the most probable order, therefore, the first suggestion is selected as the correct answer. These answers are compiled into a spelling dictionary, which is saved for reproducibility. In addition to the hunspell dictionary, an auxiliary dictionary with pre-coded error responses and corrections could also be added at this stage to catch any false positives by adding entries to the `spelling.dict`. Other paid alternatives, such as Bing Spell Check, can be a useful avenue for datasets that may contain brand names (i.e, *apple* versus *Apple*) or slang terms and provides context sensitive corrections (e.g., keeping *Apple* as a response to computer, but not as a response to green).
 
@@ -252,7 +254,7 @@ write.csv(x = tokens.tagged, file = "../output_data/lemmatized.features.csv",
 
 ```{r tab2, echo = F, results = 'asis'}
 kable(tokens.tagged[8:13 , ], "latex", booktabs = T, row.names = F, 
-      caption = "Lemma and Part of Speech Information from TreeTagger")
+      caption = "Lemma and Part of Speech (POS) Information from TreeTagger")
 ```
 
 ## Stopwords
@@ -318,7 +320,7 @@ zebra <- multi.words[ grep("horse", multi.words$combined.lemmas) , ]
 zebra <- zebra[zebra$cue == "zebra", ]
 
 kable(zebra, "latex", booktabs = T, row.names = F, 
-      caption = "Multi-Word Sequence Examples for Zebra") 
+      caption = "Multi-Word Sequence Examples for zebra") 
 ```
 
 ## Bag of Words 
@@ -342,7 +344,7 @@ zebra <- bag.words[ bag.words$cue == "zebra" , ]
 zebra <- zebra[order(zebra$n, decreasing = T), ]
 
 kable(zebra[1:10, ], "latex", booktabs = T, row.names = F, 
-      caption = "Bag of Words Examples for Zebra") 
+      caption = "Bag of Words Examples for zebra") 
 ```
 
 ## Descriptive Statistics
