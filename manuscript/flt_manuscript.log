@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  19 JUL 2019 08:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  24 JUL 2019 11:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1248,7 +1248,7 @@ d Tables [28] (./flt_manuscript.ttt [29
 
 ] [35
 
-]) (./flt_manuscript.fff <flow_chart.png, id=405, 788.9475pt x 213.79875pt>
+]) (./flt_manuscript.fff <flow_chart.png, id=408, 788.9475pt x 213.79875pt>
 File: flow_chart.png Graphic file (type png)
 <use flow_chart.png>
 Package pdftex.def Info: flow_chart.png used on input line 4.
@@ -1257,7 +1257,7 @@ Package pdftex.def Info: flow_chart.png used on input line 4.
 
 
  <./flow_chart.png>]
-<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=412, 566.115pt x 4
+<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=415, 566.115pt x 4
 18.56375pt>
 File: flt_manuscript_files/figure-latex/correlation-fig-1.pdf Graphic file (typ
 e pdf)
@@ -1279,7 +1279,7 @@ Package rerunfilecheck Info: File `flt_manuscript.out' has not changed.
 Here is how much of TeX's memory you used:
  16448 strings out of 492995
  242426 string characters out of 6132704
- 359265 words of memory out of 5000000
+ 359439 words of memory out of 5000000
  19445 multiletter control sequences out of 15000+600000
  88472 words of font info for 136 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1299,10 +1299,10 @@ ype1/public/lm/lmss8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public
 .pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr
 /local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on flt_manuscript.pdf (37 pages, 513857 bytes).
+Output written on flt_manuscript.pdf (37 pages, 514112 bytes).
 PDF statistics:
- 515 PDF objects out of 1000 (max. 8388607)
- 452 compressed objects within 5 object streams
+ 518 PDF objects out of 1000 (max. 8388607)
+ 455 compressed objects within 5 object streams
  146 named destinations out of 1000 (max. 500000)
  12451 words of extra memory for PDF output out of 14400 (max. 10000000)
 
