@@ -68,7 +68,7 @@ zebra & stripe similar horse & 1\\
 \ifnextchar[{\eatarg}{}
 [t]
 
-\caption{\label{tab:tab5}Bag of Words Examples for zebra}
+\caption{\label{tab:tab5}Bag of Words Examples for Zebra}
 \centering
 \begin{tabular}{llr}
 \toprule

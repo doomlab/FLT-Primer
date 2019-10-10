@@ -350,7 +350,7 @@ zebra <- bag.words[ bag.words$cue == "zebra" , ]
 zebra <- zebra[order(zebra$n, decreasing = T), ]
 
 kable(zebra[1:10, ], "latex", booktabs = T, row.names = F, 
-      caption = "Bag of Words Examples for zebra",
+      caption = "Bag of Words Examples for Zebra",
       col.names = c("Cue", "Lemma", "N")) 
 ```
 
