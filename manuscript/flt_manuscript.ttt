@@ -6,7 +6,7 @@
 \centering
 \begin{tabular}{l>{\raggedright\arraybackslash}p{30em}}
 \toprule
-word & answer\\
+Cue & Participant Answer\\
 \midrule
 airplane & you fly in it  its big  it is fast  they are expensive  they are at an airport  you have to be trained to fly it  there are lots of seats  they get very high up\\
 airplane & wings engine pilot cockpit tail\\
@@ -28,7 +28,7 @@ airplane & wings  body  flies  travel\\
 \centering
 \begin{tabular}{llll}
 \toprule
-cue & feature & pos & lemma\\
+Cue & Feature & POS & Lemma\\
 \midrule
 airplane & is & verb & be\\
 airplane & fast & adverb & fast\\
@@ -46,11 +46,11 @@ airplane & they & pronoun & they\\
 \ifnextchar[{\eatarg}{}
 [t]
 
-\caption{\label{tab:tab4}Multi-Word Sequence Examples for zebra}
+\caption{\label{tab:tab4}Multi-Word Sequence Examples for Zebra}
 \centering
 \begin{tabular}{llr}
 \toprule
-cue & combined.lemmas & n\\
+Cue & Combined Lemmas & N\\
 \midrule
 zebra & horse & 27\\
 zebra & horse like & 1\\
@@ -72,7 +72,7 @@ zebra & stripe similar horse & 1\\
 \centering
 \begin{tabular}{llr}
 \toprule
-cue & lemma & n\\
+Cue & Lemma & N\\
 \midrule
 zebra & stripe & 64\\
 zebra & black & 63\\

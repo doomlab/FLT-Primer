@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  24 JUL 2019 11:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  10 OCT 2019 18:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1202,43 +1202,38 @@ LaTeX Font Info:    Try loading font information for T1+lmtt on input line 177.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
+) [6]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <8> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 183.
-[6]
 \openout3 = `flt_manuscript.ttt'.
 
 (flt_manuscript.ttt)
-Underfull \vbox (badness 1881) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[7] [8] [9] [10] [11] [12]
-Underfull \vbox (badness 10000) detected at line 477
+[7] [8]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[9]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[10]
+Overfull \vbox (1.35739pt too high) detected at line 368
  []
 
+[11] [12] [13] [14] [15]
+Underfull \vbox (badness 1360) has occurred while \output is active []
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[13] [14] [15]
-Underfull \vbox (badness 2384) has occurred while \output is active []
-
-[16] [17]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[18]
+[16] [17] [18] [19]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 641.
+(hyperref)                than one, level fixed on input line 649.
 
-[19]
+
 Underfull \vbox (badness 2384) has occurred while \output is active []
 
-[20] [21] [22] [23] [24] [25] [26] [27] AED endfloat: Processing end Figures an
-d Tables [28] (./flt_manuscript.ttt [29
+[20] [21] [22] [23] [24] [25] [26] [27] [28] [29] AED endfloat: Processing end 
+Figures and Tables [30] (./flt_manuscript.ttt [31
 
-
-] [30
-
-] [31
 
 ] [32
 
@@ -1248,16 +1243,20 @@ d Tables [28] (./flt_manuscript.ttt [29
 
 ] [35
 
-]) (./flt_manuscript.fff <flow_chart.png, id=408, 788.9475pt x 213.79875pt>
+] [36
+
+] [37
+
+]) (./flt_manuscript.fff <flow_chart.png, id=426, 788.9475pt x 213.79875pt>
 File: flow_chart.png Graphic file (type png)
 <use flow_chart.png>
 Package pdftex.def Info: flow_chart.png used on input line 4.
 (pdftex.def)             Requested size: 378.69049pt x 102.62222pt.
-[36
+[38
 
 
  <./flow_chart.png>]
-<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=415, 566.115pt x 4
+<flt_manuscript_files/figure-latex/correlation-fig-1.pdf, id=433, 566.115pt x 4
 18.56375pt>
 File: flt_manuscript_files/figure-latex/correlation-fig-1.pdf Graphic file (typ
 e pdf)
@@ -1265,44 +1264,49 @@ e pdf)
 Package pdftex.def Info: flt_manuscript_files/figure-latex/correlation-fig-1.pd
 f used on input line 12.
 (pdftex.def)             Requested size: 469.76303pt x 347.32478pt.
-[37
+[39
 
  <./flt_manuscript_files/figure-latex/correlation-fig-1.pdf>])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 869.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 869.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 880.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 880.
 (./flt_manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 869.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 869.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 880.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 880.
 Package rerunfilecheck Info: File `flt_manuscript.out' has not changed.
 (rerunfilecheck)             Checksum: 79C6928FE877013CBAD03F82B211B77D;3075.
  ) 
 Here is how much of TeX's memory you used:
- 16448 strings out of 492995
- 242426 string characters out of 6132704
+ 16450 strings out of 492995
+ 242441 string characters out of 6132704
  359439 words of memory out of 5000000
  19445 multiletter control sequences out of 15000+600000
- 88472 words of font info for 136 fonts, out of 8000000 for 9000
+ 88301 words of font info for 135 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,12n,47p,2111b,492s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,12n,47p,2259b,492s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/
-texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/20
-17/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2017/texmf-dist/
-fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type
-1/public/lm/lmmi12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/l
-m/lmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmr12.pfb
-></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local
-/texlive/2017/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/201
-7/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2017/texmf-di
-st/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2017/texmf-dist/fonts/t
-ype1/public/lm/lmss8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public
-/lm/lmtk10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt10
-.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr
-/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texl
-ive/2017/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on flt_manuscript.pdf (37 pages, 514112 bytes).
+texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/20
+17/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2017/texmf-d
+ist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/2017/texmf-dist/fonts/
+enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2017/texmf-dist/fonts/type1/public/l
+m/lmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmex10.p
+fb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/l
+ocal/texlive/2017/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texliv
+e/2017/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2017/texm
+f-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2017/texmf-dist/font
+s/type1/public/lm/lmr7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/publ
+ic/lm/lmr8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmri10
+.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texl
+ive/2017/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2017/t
+exmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2017/texmf-dist/
+fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type
+1/public/lm/lmtt12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/l
+m/lmtt8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/lm/lmtti10.p
+fb>
+Output written on flt_manuscript.pdf (39 pages, 528682 bytes).
 PDF statistics:
- 518 PDF objects out of 1000 (max. 8388607)
- 455 compressed objects within 5 object streams
- 146 named destinations out of 1000 (max. 500000)
+ 547 PDF objects out of 1000 (max. 8388607)
+ 479 compressed objects within 5 object streams
+ 150 named destinations out of 1000 (max. 500000)
  12451 words of extra memory for PDF output out of 14400 (max. 10000000)
 
