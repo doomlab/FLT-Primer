@@ -136,9 +136,10 @@ b_map_SD <- tapply(b_map_merge$Conc.M, b_map_merge$pos_cue, sd, na.rm = T)
 ```
 
 ```{r tab1, echo = F, results = 'asis'}
-kable(head(X), "latex", booktabs = T, row.names = F, 
-      caption = "Example of Data Formatted for Tidy Data",
-      col.names = c("Cue", "Participant Answer")) %>% 
+kable(x = head(X), format = "latex", 
+          booktabs = T, row.names = F, 
+          caption = "Example of Data Formatted for Tidy Data",
+          col.names = c("Cue", "Participant Answer")) %>% 
   column_spec(2, width = "30em")
 ```
 
@@ -861,7 +862,8 @@ category_df <- category_df[!duplicated(category_df$Feature), ]
 tableprint[1:10 , 4] <- category_df$key[1:10]
 
 kable(tableprint, "latex", booktabs = T, row.names = F, 
-      caption = "Top Ten Ontology Labels")
+      caption = "Top Ten Ontology Labels", 
+      col.names = c("Parts", "Function", "Location", "Category"))
 ```
 
 Potentially, a simple ontology can be mapped using an approach similar to Strudel [structured dimension extraction and labeling, @Baroni2010]. Strudel is a corpus-based semantic model wherein cue words are found in a large text corpus and matched to nouns, verbs, and adjectives that appear near a concept. Using specific patterns of expected feature listing, @Baroni2010 were able build a model of English concepts and their properties that aligned with semantic feature production norms. From this model, they were able to cluster properties based on their lexical patterns. For example, if a sentence included the phrase *fruit, such as an apple*, this lexical pattern would be classified as *such_as+right*, indicating that the concept (apple) was found to the right of the property (fruit) with the phrase such as connecting them. Using clustering, @Baroni2010 were able to assign four ontology labels to properties: part, category, location, and function. Using these results, we can match `r sum(table(bag_strudel$ontology))` of the bag of words features (`r round(sum(table(bag_strudel$ontology))/nrow(bag_words)*100,1)`%). These features were predominately parts (`r printnum(ontology_table["Parts"]/sum(ontology_table)*100, digits = 1)`), followed by function (`r printnum(ontology_table["Function"]/sum(ontology_table)*100, digits = 1)`), location (`r printnum(ontology_table["Location"]/sum(ontology_table)*100, digits = 1)`), and category (`r printnum(ontology_table["Category"]/sum(ontology_table)*100, digits = 1)`). Table \@ref(tab:tab8) indicates ten of the most frequent cue-feature pairs for each ontology label, excluding duplicate features across cues. An examination of the top results indicates coherent labels (parts: ZEBRA <*stripe*>, location: SHOE <*foot*>, and category: FURNITURE <*table*>); however, there are also a few mismatches (location: SCISSORS <*cut*>, function: LEAF <*green*>). This model represents an area in which one might begin to automate the labeling process, likely combined with other pre-defined rule sets. Taxonomic labeling often represents a large time demand on a researcher or team and by shifting the burden of the taxonomic labelling to a semi-automated process, this time may be reduced. With the addition of ontology labels to property norm data, theoretical questions about semantic representation can be explored [@Santos2011; @Jones2012b]
