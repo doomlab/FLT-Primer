@@ -94,21 +94,21 @@ zebra & eat & 17\\
 \ifnextchar[{\eatarg}{}
 [t]
 
-\caption{\label{tab:tab6}Descriptive Statistics of Text Processing Style}
+\caption{\label{tab:tab6}Descriptive Statistics for Multi-word Sequences and Bag-of-words Approaches}
 \centering
 \begin{tabular}{lllllll}
 \toprule
 \multicolumn{1}{c}{ } & \multicolumn{3}{c}{Multi-Word Sequences} & \multicolumn{3}{c}{Bag of Words} \\
 \cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
-Statistics & $M$ & $SD$ & $r$ & $M$ & $SD$ & $r$\\
+Statistics & $Mean$ & $SD$ & $r$ & $Mean$ & $SD$ & $r$\\
 \midrule
 Number of Cue-Features & 192.27 & 99.14 & .78 & 173.44 & 77.21 & .67\\
 Frequency of Idiosyncratic Response & 183.29 & 97.38 & .80 & 160.57 & 74.26 & .69\\
 Frequency of Cue-Feature Response & 2.09 & 3.39 & .65 & 2.70 & 4.76 & .83\\
 Percent of Cue-Feature Response & 3.41 & 5.10 & -.64 & 4.30 & 4.76 & -.62\\
 \bottomrule
-\multicolumn{7}{l}{\textsuperscript{} $Note$. Correlation represents the relation between the statistic listed for that row and}\\
-\multicolumn{7}{l}{the sample size for the cue.}\\
+\multicolumn{7}{l}{\textsuperscript{} $Note$. The correlation (r) represents the relation between frequency of response and sample}\\
+\multicolumn{7}{l}{size.}\\
 \end{tabular}
 \end{table*}
 \efloatseparator
