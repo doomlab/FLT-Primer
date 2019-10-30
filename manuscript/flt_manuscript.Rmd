@@ -560,6 +560,11 @@ p4 <- ggplot(data = NULL, aes(per_resp_mM, sample_sizes$Sample_Size)) +
 
 prow <- plot_grid(p1, p2, p3, p4, hjust = -1, nrow = 2)
 prow
+
+#tiff(filename = "correlation-fig-1.tiff", res = 150, width = 8, 
+#    height = 6, units = 'in', compression = "lzw")
+#prow
+#dev.off()
 ```
 
 ## Internal Comparison of Approach
