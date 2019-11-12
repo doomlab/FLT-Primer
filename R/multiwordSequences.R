@@ -1,8 +1,8 @@
 # Multi-word sequences ------------------------------------------------------
-source("./R/dependencies.R")
+source("../R/dependencies.R")
 
 # Open the no stop words data
-X <- read.csv("./output_data/nostop.lemmas.csv", stringsAsFactors = F)
+X <- read.csv("../output_data/nostop.lemmas.csv", stringsAsFactors = F)
 
 # Combine lemmas and POS
 X <- X %>% 
@@ -34,5 +34,5 @@ multi.words <- X %>%
   count(combined.lemmas) 
 
 # Write processed file
-write.csv(x = multi.words, file = "./output_data/multi.nostop.lemmas.csv",
+write.csv(x = multi.words, file = "../output_data/multi.nostop.lemmas.csv",
           fileEncoding = "utf8", row.names = F)

@@ -1,8 +1,8 @@
 # Stopwords and Other Exclusions ------------------------------------------
-source("./R/dependencies.R")
+source("../R/dependencies.R")
 
 # Open the lemmatized data
-X <- read.csv("./output_data/lemmatized.features.csv", stringsAsFactors = F)
+X <- read.csv("../output_data/lemmatized.features.csv", stringsAsFactors = F)
 
 # Remove punctuation and stopwords from lemmas
 X$lemma <- gsub("\\-", " ", X$lemma)
@@ -14,5 +14,5 @@ X.nostop <- X %>%
   filter(!is.na(lemma)) 
 
 # Write processed file
-write.csv(x = X.nostop, file = "./output_data/nostop.lemmas.csv", 
+write.csv(x = X.nostop, file = "../output_data/nostop.lemmas.csv", 
           fileEncoding = "utf8", row.names = F)
