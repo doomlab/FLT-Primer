@@ -15,3 +15,5 @@ Erin M. Buchanan, Simon De Deyne, & Maria Montefinese
 **R**: R scripts detailed in the manuscript for individual use in the processing pipeline steps.
 
 **Raw_data**: Data used to demonstrate the processing pipeline and the convergence with other similar projects. 
+
+**Update**: If you have issues with `TreeTagger`, please check out our discussion on `udpipe` [here](https://github.com/doomlab/FLT-Primer/issues/1).
